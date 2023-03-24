@@ -1,0 +1,2 @@
+export const ID = '412a6524fa79b727806ff5099b26253d'
+export const SECRET = '649e8cd8901de32b938c705960ad69ee93f1a9a287877fc2fd402b9d527c1e6b'

@@ -1,0 +1,6 @@
+
+[eval]:1
+setInterval(() => {throw 'a'}, 1000)
+                   ^
+a
+(Use `node --trace-uncaught ...` to show where the exception was thrown)

@@ -1,0 +1,4 @@
+.env
+*.sh
+*.service
+node_modules
