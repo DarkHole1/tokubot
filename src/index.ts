@@ -2,10 +2,10 @@ import * as api from './mal/api'
 import { ItemWithListStatus } from './mal/types/animelist'
 import { Bot, Context } from 'grammy'
 import { Animes } from './erai/animes'
-import { readFileSync } from 'fs'
 import * as statics from './static'
 import { hydrateReply, ParseModeFlavor } from '@grammyjs/parse-mode'
 import { loadConfig } from './config'
+import { throttle } from "./utils"
 
 const config = loadConfig()
 
@@ -13,7 +13,9 @@ const TOKU_NAME = 'Sanso'
 const ANIMES = Animes.fromFile('titles.json')
 const DARK_HOLE = 369810644
 const TOKU_CHAT = -1001311183194
+const TOKU_CHANNEL = -1001446681491
 const EGOID = 1016239817
+const BOT_ID = 5627801063
 
 const ANIME_RECOMMENDATIONS = [
     31646,
@@ -186,13 +188,19 @@ bot.command('recommend', async ctx => {
     })
 })
 
-bot.hears(/(с)?пасиб(о|a)/gim, async ctx => {
+bot.hears(/(с)?пасиб(о|a)/gim).filter(async ctx => ctx.message?.reply_to_message?.from?.id == BOT_ID ?? false, async ctx => {
     ctx.api.sendSticker(
         ctx.chat.id,
         choice(THANKS_STICKERS_FILE_IDS),
         { reply_to_message_id: ctx.message?.message_id }
     )
 })
+
+bot.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == TOKU_CHANNEL, throttle(3 * 60 * 1000, (ctx: Context) => {
+    ctx.reply("@tokutonariwa пости на юбуб", {
+        reply_to_message_id: ctx.message?.message_id
+    })
+}))
 
 setInterval(() => {
     console.log("Fetching new animes")

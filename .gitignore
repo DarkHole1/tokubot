@@ -2,3 +2,4 @@
 *.sh
 *.service
 node_modules
+src/test.ts
