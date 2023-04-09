@@ -63,7 +63,7 @@ async function check_in_list(anime: string) {
     return completed_animes.has(anime.toLowerCase())
 }
 
-async function get_random_anime_recommendation(): ItemWithListStatus {
+async function get_random_anime_recommendation() {
     await update_list_if_obsolete()
     return ANIME_RECOMMENDATIONS.getRandomRecommendation(all_animes)
 }
