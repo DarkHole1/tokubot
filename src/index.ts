@@ -6,7 +6,7 @@ import * as statics from './static'
 import { hydrateReply, ParseModeFlavor } from '@grammyjs/parse-mode'
 import { Config } from './config'
 import { choice, throttle } from "./utils"
-import { Recommendations } from './data'
+import { Recommendations, ThanksStickers } from './data'
 
 const config = new Config()
 
@@ -20,14 +20,7 @@ const BOT_ID = 5627801063
 
 const ANIME_RECOMMENDATIONS = Recommendations.fromFileSync('data/recommendations.json')
 
-const THANKS_STICKERS_FILE_IDS = [
-    'CAACAgIAAxkBAAEc9aFj4-61elIbvJ5_EToY3Q0R58UNuwACuBUAAvUkGEuIvova8pk9SC4E',
-    'CAACAgUAAxkBAAEc9Z1j4-6M32vtoRzGjipdR0QQ-1D6BgAC9woAArOz-VV9IEYd0GEZFi4E',
-    'CAACAgQAAxkBAAEc9adj4-9ZZx7bIhqDeOsE26ZOsoamgwAC9A8AAriIAAFQ2ne7noCJnTsuBA',
-    'CAACAgIAAxkBAAEc9alj4-9oAAHsbr5qCWpegfcm5R9ZNXoAAr4gAAIwg7lI0oRwtAON6TUuBA',
-    'CAACAgIAAxkBAAEc9a1j4--P-PUJsJaAq-M-i6YpW6xlwgACLSgAAik3CUoLHpJhon6vSi4E',
-    'CAACAgQAAxkBAAEc9bNj4-_orpZRN79vWaNA-xtsjyXKcAACrwgAAhIEmVNv_vtOxKGZci4E'
-]
+const THANKS_STICKERS = ThanksStickers.fromFileSync('data/thanks.json')
 
 function escape_string(s: string) {
     return s.replace(/[\_\*\[\]\(\)\~\`\>\#\+\-\=\|\{\}\.\!]/g, '\\$&')
@@ -70,7 +63,7 @@ async function check_in_list(anime: string) {
     return completed_animes.has(anime.toLowerCase())
 }
 
-async function get_random_anime_recommendation() {
+async function get_random_anime_recommendation(): ItemWithListStatus {
     await update_list_if_obsolete()
     return ANIME_RECOMMENDATIONS.getRandomRecommendation(all_animes)
 }
@@ -133,7 +126,7 @@ bot.command('recommend', async ctx => {
 bot.hears(/(с)?пасиб(о|a)/gim).filter(async ctx => ctx.message?.reply_to_message?.from?.id == BOT_ID ?? false, async ctx => {
     ctx.api.sendSticker(
         ctx.chat.id,
-        choice(THANKS_STICKERS_FILE_IDS),
+        THANKS_STICKERS.getRandomSticker().fileId,
         { reply_to_message_id: ctx.message?.message_id }
     )
 })
