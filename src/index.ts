@@ -4,10 +4,10 @@ import { Bot, Context } from 'grammy'
 import { Animes } from './erai/animes'
 import * as statics from './static'
 import { hydrateReply, ParseModeFlavor } from '@grammyjs/parse-mode'
-import { loadConfig } from './config'
+import { Config } from './config'
 import { throttle } from "./utils"
 
-const config = loadConfig()
+const config = new Config()
 
 const TOKU_NAME = 'Sanso'
 const ANIMES = Animes.fromFile('titles.json')
