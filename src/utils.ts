@@ -9,3 +9,7 @@ export function throttle<Args extends any[], R>(time: number, f: (...args: Args)
         return f(...args);
     };
 }
+
+export function choice<T>(arr: T[]) {
+    return arr[Math.floor(Math.random() * arr.length)]
+}

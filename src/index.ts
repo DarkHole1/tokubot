@@ -5,74 +5,20 @@ import { Animes } from './erai/animes'
 import * as statics from './static'
 import { hydrateReply, ParseModeFlavor } from '@grammyjs/parse-mode'
 import { Config } from './config'
-import { throttle } from "./utils"
+import { choice, throttle } from "./utils"
+import { Recommendations } from './data'
 
 const config = new Config()
 
 const TOKU_NAME = 'Sanso'
-const ANIMES = Animes.fromFile('titles.json')
+const ANIMES = Animes.fromFile('data/titles.json')
 const DARK_HOLE = 369810644
 const TOKU_CHAT = -1001311183194
 const TOKU_CHANNEL = -1001446681491
 const EGOID = 1016239817
 const BOT_ID = 5627801063
 
-const ANIME_RECOMMENDATIONS = [
-    31646,
-    47917,
-    10800,
-    235,
-    28977,
-    37999,
-    9756,
-    5081,
-    25835,
-    28735,
-    24833,
-    5081,
-    31478,
-    44511,
-    10087,
-    5114,
-    23289,
-    16918,
-    820,
-    34096,
-    20583,
-    37141,
-    36296,
-    11061,
-    10357,
-    6594,
-    80,
-    2076,
-    28851,
-    28013,
-    34599,
-    39196,
-    37510,
-    19815,
-    46102,
-    21,
-    853,
-    35247,
-    30296,
-    30015,
-    23277,
-    33255,
-    44074,
-    16498,
-    28735,
-    35839,
-    11757,
-    41762,
-    10278,
-    6213,
-    41389,
-    37521,
-    37779,
-    34798
-]
+const ANIME_RECOMMENDATIONS = Recommendations.fromFileSync('data/recommendations.json')
 
 const THANKS_STICKERS_FILE_IDS = [
     'CAACAgIAAxkBAAEc9aFj4-61elIbvJ5_EToY3Q0R58UNuwACuBUAAvUkGEuIvova8pk9SC4E',
@@ -124,13 +70,9 @@ async function check_in_list(anime: string) {
     return completed_animes.has(anime.toLowerCase())
 }
 
-function choice<T>(arr: T[]) {
-    return arr[Math.floor(Math.random() * arr.length)]
-}
-
 async function get_random_anime_recommendation() {
     await update_list_if_obsolete()
-    return choice(all_animes.filter(anime => ANIME_RECOMMENDATIONS.includes(anime.node.id)))
+    return ANIME_RECOMMENDATIONS.getRandomRecommendation(all_animes)
 }
 
 const bot = new Bot<ParseModeFlavor<Context>>(config.TOKEN)
