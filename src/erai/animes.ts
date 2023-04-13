@@ -1,4 +1,5 @@
 import { readFileSync, writeFileSync } from "fs";
+import { writeFile } from "fs/promises";
 import { Anime } from "./anime";
 
 export class Animes {
@@ -14,6 +15,10 @@ export class Animes {
 
     toFile(path: string) {
         writeFileSync(path, JSON.stringify(this.animes))
+    }
+
+    async toFileAsync(path: string) {
+        await writeFile(path, JSON.stringify(this.animes))
     }
 
     async getSeries() {
