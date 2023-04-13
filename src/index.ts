@@ -188,7 +188,7 @@ setInterval(() => {
         ANIMES.getSeries().then(series => {
             console.log("Series: %o", series)
             if (series.length == 0) return
-            ANIMES.toFile('titles.json')
+            ANIMES.toFile('data/titles.json')
             let message = "";
             if (series.length == 1) {
                 message = `Вышла ${series[0].serie} серия ${series[0].name}`
