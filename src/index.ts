@@ -1,11 +1,11 @@
 import * as api from './mal/api'
 import { ItemWithListStatus } from './mal/types/animelist'
-import { Bot, Context } from 'grammy'
+import { Bot, Context, InlineKeyboard } from 'grammy'
 import { Animes } from './erai/animes'
 import * as statics from './static'
 import { hydrateReply, ParseModeFlavor } from '@grammyjs/parse-mode'
 import { Config } from './config'
-import { choice, throttle } from "./utils"
+import { choice, randomString, throttle } from "./utils"
 import { Recommendations, ThanksStickers } from './data'
 
 const config = new Config()
@@ -17,6 +17,8 @@ const TOKU_CHAT = -1001311183194
 const TOKU_CHANNEL = -1001446681491
 const EGOID = 1016239817
 const BOT_ID = 5627801063
+const TOKUID = 332320628
+const ADMINS = [TOKU_CHANNEL, DARK_HOLE, EGOID, TOKUID]
 
 const ANIME_RECOMMENDATIONS = Recommendations.fromFileSync('data/recommendations.json')
 
@@ -136,6 +138,28 @@ bot.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == TOKU_
         reply_to_message_id: ctx.message?.message_id
     })
 }))
+
+// Sorry I don't know how make this better :D 
+const callbacksForKeyboard = new Map<string, (c: Context) => Promise<unknown>>()
+
+bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}/).filter(
+    ctx => ADMINS.includes(ctx.from?.id ?? 0),
+    async ctx => {
+        const uid = randomString()
+        const inlineKeyboard = new InlineKeyboard()
+            .text("Да", uid)
+        
+        callbacksForKeyboard.set(uid, async _ctx => {
+            if(!ADMINS.includes(_ctx.from?.id ?? 0)) return
+            // Add ...
+        })
+
+        await ctx.reply("Хотите добавить новое аниме?", {
+            reply_to_message_id: ctx.message?.message_id,
+            reply_markup: inlineKeyboard
+        })
+    }
+)
 
 setInterval(() => {
     console.log("Fetching new animes")
