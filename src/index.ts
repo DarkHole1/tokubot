@@ -151,7 +151,7 @@ bot.command('addsticker').filter(
         const success = THANKS_STICKERS.add(sticker)
         const reply = success ? 'Стикер добавлен супер упешно!' : 'Что-то пошло не так. Скорее всего стикер уже супер добавлен.'
         if (success) {
-            THANKS_STICKERS.toFile('data/thanks.json')
+            await THANKS_STICKERS.toFile('data/thanks.json')
         }
         await ctx.reply(reply, {
             reply_to_message_id: ctx.message?.message_id
