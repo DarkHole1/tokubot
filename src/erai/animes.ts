@@ -26,7 +26,7 @@ export class Animes {
         return series.flat()
     }
 
-    // async add(url: string) {
-    //     const anime = 
-    // }
+    add(anime: Anime) {
+        this.animes.push(anime)
+    }
 }

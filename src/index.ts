@@ -173,6 +173,7 @@ bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}
             await ctx.reply(`Не получилось найти аниме`, {
                 reply_to_message_id: ctx.message?.message_id,
             })
+            return
         }
 
         const uid = randomString()
@@ -180,8 +181,17 @@ bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}
             .text("Да", uid)
 
         callbacksForKeyboard.set(uid, async _ctx => {
-            if (!ADMINS.includes(_ctx.from?.id ?? 0)) return
-            // Add ...
+            if (!ADMINS.includes(_ctx.from?.id ?? 0)) {
+                await ctx.answerCallbackQuery({
+                    text: "Ты не админ"
+                })
+                return
+            }
+            ANIMES.add(anime)
+            await ANIMES.toFileAsync('data/titles.json')
+            await ctx.answerCallbackQuery({
+                text: "Успешно добавлено"
+            })
         })
 
         await ctx.reply(`Хотите добавить аниме ${anime?.name} (сейчас там ${anime?.series} серий)?`, {
