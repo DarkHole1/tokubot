@@ -42,7 +42,6 @@ export class Anime {
             const title = feed.title
             if (!title) return null
             const trueTitle = title.slice(0, -' - Erai-raws Torrent RSS'.length)
-            console.log(trueTitle)
             const itemTitle = feed.items[0].title
             if (!itemTitle) return null
 
