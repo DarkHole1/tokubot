@@ -182,14 +182,14 @@ bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}
 
         callbacksForKeyboard.set(uid, async _ctx => {
             if (!ADMINS.includes(_ctx.from?.id ?? 0)) {
-                await ctx.answerCallbackQuery({
+                await _ctx.answerCallbackQuery({
                     text: "Ты не админ"
                 })
                 return
             }
             ANIMES.add(anime)
             await ANIMES.toFileAsync('data/titles.json')
-            await ctx.answerCallbackQuery({
+            await _ctx.answerCallbackQuery({
                 text: "Успешно добавлено"
             })
         })
