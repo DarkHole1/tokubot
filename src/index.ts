@@ -139,6 +139,27 @@ bot.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == TOKU_
     })
 }))
 
+bot.command('addsticker').filter(
+    ctx => ADMINS.includes(ctx.from?.id ?? 0),
+    async ctx => {
+        const sticker = ctx.msg.reply_to_message?.sticker
+        if (!sticker) {
+            await ctx.reply("Надо отвечать на сообщение со стикером", {
+                reply_to_message_id: ctx.message?.message_id
+            })
+            return
+        }
+        const success = THANKS_STICKERS.add(sticker)
+        const reply = success ? 'Стикер добавлен супер упешно!' : 'Что-то пошло не так. Скорее всего стикер уже супер добавлен.'
+        if (success) {
+            THANKS_STICKERS.toFile('data/thanks.json')
+        }
+        await ctx.reply(reply, {
+            reply_to_message_id: ctx.message?.message_id
+        })
+    }
+)
+
 // Sorry I don't know how make this better :D 
 const callbacksForKeyboard = new Map<string, (c: Context) => Promise<unknown>>()
 
@@ -148,9 +169,9 @@ bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}
         const uid = randomString()
         const inlineKeyboard = new InlineKeyboard()
             .text("Да", uid)
-        
+
         callbacksForKeyboard.set(uid, async _ctx => {
-            if(!ADMINS.includes(_ctx.from?.id ?? 0)) return
+            if (!ADMINS.includes(_ctx.from?.id ?? 0)) return
             // Add ...
         })
 

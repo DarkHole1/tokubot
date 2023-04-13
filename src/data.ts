@@ -76,9 +76,11 @@ type RawThanksSticker = z.infer<typeof RawThanksSticker>
 
 export class ThanksSticker {
     fileId: string
+    fileUniqueId: string
 
     private constructor(data: RawThanksSticker) {
         this.fileId = data
+        this.fileUniqueId = ''
     }
 
     static from(data: unknown) {
@@ -129,5 +131,12 @@ export class ThanksStickers {
 
     getRandomSticker() {
         return choice(this.stickers)
+    }
+
+    add({ file_id, file_unique_id }: { file_id: string, file_unique_id: string }) {
+        // TODO: Filter by unique id
+        const sticker = ThanksSticker.fromFileId(file_id)
+        this.stickers.push(sticker)
+        return true
     }
 }
