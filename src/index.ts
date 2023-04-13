@@ -104,7 +104,6 @@ bot.command('hastokuwatched', async (ctx) => {
 
 bot.command('recommend', async ctx => {
     bot.api.sendChatAction(ctx.chat.id, "typing")
-    console.log(ctx.msg.from)
     if (ctx.msg.from?.id == EGOID) {
         const anime = {
             node: {
