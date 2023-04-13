@@ -140,7 +140,7 @@ bot.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == TOKU_
 }))
 
 bot.command('addsticker').filter(
-    ctx => ADMINS.includes(ctx.from?.id ?? 0),
+    ctx => ADMINS.includes(ctx.from?.id ?? 0) || ADMINS.includes(ctx.senderChat?.id ?? 0),
     async ctx => {
         const sticker = ctx.msg.reply_to_message?.sticker
         if (!sticker) {
@@ -164,12 +164,12 @@ bot.command('addsticker').filter(
 const callbacksForKeyboard = new Map<string, (c: Context) => Promise<unknown>>()
 
 bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}/).filter(
-    ctx => ADMINS.includes(ctx.from?.id ?? 0),
+    ctx => ADMINS.includes(ctx.from?.id ?? 0) || ADMINS.includes(ctx.senderChat?.id ?? 0),
     async ctx => {
         const url: string = typeof ctx.match == 'string' ? ctx.match : ctx.match[0]
         const anime = await Anime.fromURL(url)
 
-        if(!anime) {
+        if (!anime) {
             await ctx.reply(`Не получилось найти аниме`, {
                 reply_to_message_id: ctx.message?.message_id,
             })
@@ -181,7 +181,7 @@ bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}
             .text("Да", uid)
 
         callbacksForKeyboard.set(uid, async _ctx => {
-            if (!ADMINS.includes(_ctx.from?.id ?? 0)) {
+            if (!ADMINS.includes(_ctx.from?.id ?? 0) || !ADMINS.includes(_ctx.senderChat?.id ?? 0)) {
                 await _ctx.answerCallbackQuery({
                     text: "Ты не админ"
                 })
@@ -204,7 +204,7 @@ bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}
 bot.on('callback_query:data', async ctx => {
     const data = ctx.callbackQuery.data
     const handler = callbacksForKeyboard.get(data)
-    if(!handler) {
+    if (!handler) {
         await ctx.answerCallbackQuery()
         return
     }
