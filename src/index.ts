@@ -201,6 +201,17 @@ bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}
     }
 )
 
+bot.on('callback_query:data', async ctx => {
+    const data = ctx.callbackQuery.data
+    const handler = callbacksForKeyboard.get(data)
+    if(!handler) {
+        await ctx.answerCallbackQuery()
+        return
+    }
+    await handler(ctx)
+    callbacksForKeyboard.delete(data)
+})
+
 setInterval(() => {
     console.log("Fetching new animes")
     try {
