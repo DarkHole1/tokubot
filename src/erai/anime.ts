@@ -17,6 +17,10 @@ export class Anime {
         return this.data.name
     }
 
+    get series() {
+        return this.data.series
+    }
+
     private constructor(data: RawAnime) {
         this.data = data
         this.parser = new Parser
@@ -30,6 +34,30 @@ export class Anime {
         return z.array(RawAnime).parse(data).map(anime => new this(anime))
     }
 
+    static async fromURL(url: string): Promise<Anime | null> {
+        // TODO: Move code to separate method
+        try {
+            const parser = new Parser
+            const feed = await parser.parseURL(url)
+            const title = feed.title
+            if (!title) return null
+            const trueTitle = title.slice(0, -' - Erai-raws Torrent RSS'.length)
+            console.log(trueTitle)
+            const itemTitle = feed.items[0].title
+            if (!itemTitle) return null
+
+            const badgelessTitle = itemTitle.replace(/\[.*?\]/g, '').trim()
+            const serie = parseInt(badgelessTitle.slice((trueTitle + ' - ').length))
+            return new this({
+                name: trueTitle,
+                feedUrl: url,
+                series: serie
+            })
+        } catch (e) {
+            return null
+        }
+    }
+
     toJSON() {
         return this.data
     }
@@ -37,13 +65,13 @@ export class Anime {
     async checkSeries() {
         const feed = await this.parser.parseURL(this.data.feedUrl)
         const title = feed.items[0].title
-        if(!title) return []
+        if (!title) return []
 
         const badgelessTitle = title.replace(/\[.*?\]/g, '').trim()
         const serie = parseInt(badgelessTitle.slice((this.name + ' - ').length))
-        if(serie <= this.data.series) return []
-        
+        if (serie <= this.data.series) return []
+
         this.data.series = serie
-        return [{name: this.data.name, serie }]
+        return [{ name: this.data.name, serie }]
     }
 }

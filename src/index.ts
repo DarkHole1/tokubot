@@ -7,6 +7,7 @@ import { hydrateReply, ParseModeFlavor } from '@grammyjs/parse-mode'
 import { Config } from './config'
 import { choice, randomString, throttle } from "./utils"
 import { Recommendations, ThanksStickers } from './data'
+import { Anime } from './erai/anime'
 
 const config = new Config()
 
@@ -165,6 +166,15 @@ const callbacksForKeyboard = new Map<string, (c: Context) => Promise<unknown>>()
 bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}/).filter(
     ctx => ADMINS.includes(ctx.from?.id ?? 0),
     async ctx => {
+        const url: string = typeof ctx.match == 'string' ? ctx.match : ctx.match[0]
+        const anime = await Anime.fromURL(url)
+
+        if(!anime) {
+            await ctx.reply(`Не получилось найти аниме`, {
+                reply_to_message_id: ctx.message?.message_id,
+            })
+        }
+
         const uid = randomString()
         const inlineKeyboard = new InlineKeyboard()
             .text("Да", uid)
@@ -174,7 +184,7 @@ bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}
             // Add ...
         })
 
-        await ctx.reply("Хотите добавить новое аниме?", {
+        await ctx.reply(`Хотите добавить аниме ${anime?.name} (сейчас там ${anime?.series} серий)?`, {
             reply_to_message_id: ctx.message?.message_id,
             reply_markup: inlineKeyboard
         })

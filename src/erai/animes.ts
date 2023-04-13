@@ -25,4 +25,8 @@ export class Animes {
         const series = await Promise.all(this.animes.map(anime => anime.checkSeries()))
         return series.flat()
     }
+
+    // async add(url: string) {
+    //     const anime = 
+    // }
 }
