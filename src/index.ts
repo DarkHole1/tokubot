@@ -209,7 +209,6 @@ bot.on('callback_query:data', async ctx => {
         return
     }
     await handler(ctx)
-    callbacksForKeyboard.delete(data)
 })
 
 setInterval(() => {
