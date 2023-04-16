@@ -180,6 +180,12 @@ bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}
         const inlineKeyboard = new InlineKeyboard()
             .text("Да", uid)
 
+
+        const message = await ctx.reply(`Хотите добавить аниме ${anime.name} (сейчас там ${anime.series} серий)?`, {
+            reply_to_message_id: ctx.message?.message_id,
+            reply_markup: inlineKeyboard
+        })
+
         callbacksForKeyboard.set(uid, async _ctx => {
             if (!ADMINS.includes(_ctx.from?.id ?? 0) && !ADMINS.includes(_ctx.senderChat?.id ?? 0)) {
                 await _ctx.answerCallbackQuery({
@@ -192,12 +198,7 @@ bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}
             await _ctx.answerCallbackQuery({
                 text: "Успешно добавлено"
             })
-            await ctx.editMessageText(`Успешно добавлен ${anime.name}`)
-        })
-
-        await ctx.reply(`Хотите добавить аниме ${anime.name} (сейчас там ${anime.series} серий)?`, {
-            reply_to_message_id: ctx.message?.message_id,
-            reply_markup: inlineKeyboard
+            await ctx.api.editMessageText(message.chat.id, message.message_id, `Успешно добавлено ${anime.name}`)
         })
     }
 )
