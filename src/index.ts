@@ -181,7 +181,7 @@ bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}
             .text("Да", uid)
 
         callbacksForKeyboard.set(uid, async _ctx => {
-            if (!ADMINS.includes(_ctx.from?.id ?? 0) || !ADMINS.includes(_ctx.senderChat?.id ?? 0)) {
+            if (!ADMINS.includes(_ctx.from?.id ?? 0) && !ADMINS.includes(_ctx.senderChat?.id ?? 0)) {
                 await _ctx.answerCallbackQuery({
                     text: "Ты не админ"
                 })
