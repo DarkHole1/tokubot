@@ -29,4 +29,8 @@ export class Animes {
     add(anime: Anime) {
         this.animes.push(anime)
     }
+
+    list() {
+        return this.animes.slice()
+    }
 }
