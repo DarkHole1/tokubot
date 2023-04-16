@@ -211,7 +211,7 @@ bot.on('callback_query:data', async ctx => {
     await handler(ctx)
 })
 
-bot.command('observed', ctx => ctx.reply(`Всё что я наблюдаю: ${ANIMES.list().map(anime => `* ${anime.name}`).join('\n')}`, {
+bot.command('observed', ctx => ctx.reply(`Всё что я наблюдаю:\n${ANIMES.list().map(anime => `* ${anime.name}`).join('\n')}`, {
     reply_to_message_id: ctx.message?.message_id
 }))
 
