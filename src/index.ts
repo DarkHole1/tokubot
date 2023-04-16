@@ -192,6 +192,7 @@ bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}
             await _ctx.answerCallbackQuery({
                 text: "Успешно добавлено"
             })
+            await ctx.editMessageText(`Успешно добавлен ${anime.name}`)
         })
 
         await ctx.reply(`Хотите добавить аниме ${anime.name} (сейчас там ${anime.series} серий)?`, {
