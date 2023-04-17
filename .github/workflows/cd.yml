@@ -1,0 +1,24 @@
+name: ts-node cd
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy using ssh
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSEWORD }}
+        port: 22
+        script: |
+          cd ~/tokubot
+          git pull origin master
+          git status
+          yarn install --production
+          systemctl restart tokubot
