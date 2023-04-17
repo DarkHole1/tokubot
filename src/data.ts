@@ -51,7 +51,7 @@ export class Recommendations {
 
     static fromFileSyncSafe(filname: string) {
         try {
-            return this.fromFileSync
+            return this.fromFileSync(filname)
         } catch(_) {
             return new this([])
         }
@@ -123,7 +123,7 @@ export class ThanksStickers {
 
     static fromFileSyncSafe(filname: string) {
         try {
-            return this.fromFileSync
+            return this.fromFileSync(filname)
         } catch(_) {
             return new this([])
         }
