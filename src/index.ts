@@ -12,7 +12,7 @@ import { Anime } from './erai/anime'
 const config = new Config()
 
 const TOKU_NAME = 'Sanso'
-const ANIMES = Animes.fromFile('data/titles.json')
+const ANIMES = Animes.fromFileSafe('data/titles.json')
 const DARK_HOLE = 369810644
 const TOKU_CHAT = -1001311183194
 const TOKU_CHANNEL = -1001446681491
