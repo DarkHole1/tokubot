@@ -5,7 +5,7 @@ import { Animes } from './erai/animes'
 import * as statics from './static'
 import { hydrateReply, ParseModeFlavor } from '@grammyjs/parse-mode'
 import { Config } from './config'
-import { choice, randomString, throttle } from "./utils"
+import { randomString, throttle } from "./utils"
 import { Recommendations, ThanksStickers } from './data'
 import { Anime } from './erai/anime'
 
