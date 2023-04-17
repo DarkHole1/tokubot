@@ -23,7 +23,7 @@ const ADMINS = [TOKU_CHANNEL, DARK_HOLE, EGOID, TOKUID]
 
 const ANIME_RECOMMENDATIONS = Recommendations.fromFileSyncSafe('data/recommendations.json')
 
-const THANKS_STICKERS = ThanksStickers.fromFileSync('data/thanks.json')
+const THANKS_STICKERS = ThanksStickers.fromFileSyncSafe('data/thanks.json')
 
 function escape_string(s: string) {
     return s.replace(/[\_\*\[\]\(\)\~\`\>\#\+\-\=\|\{\}\.\!]/g, '\\$&')
@@ -217,21 +217,20 @@ bot.command('observed', ctx => ctx.reply(`Всё что я наблюдаю:\n${
     reply_to_message_id: ctx.message?.message_id
 }))
 
-setInterval(() => {
+setInterval(async () => {
     console.log("Fetching new animes")
     try {
-        ANIMES.getSeries().then(series => {
-            console.log("Series: %o", series)
-            if (series.length == 0) return
-            ANIMES.toFile('data/titles.json')
-            let message = "";
-            if (series.length == 1) {
-                message = `Вышла ${series[0].serie} серия ${series[0].name}`
-            } else {
-                message = `Вышли новые серии:\n${series.map(anime => `* ${anime.serie} серия ${anime.name}`).join('\n')}`
-            }
-            bot.api.sendMessage(TOKU_CHAT, message)
-        })
+        const series = await ANIMES.getSeries()
+        console.log("Series: %o", series)
+        if (series.length == 0) return
+        await ANIMES.toFileAsync('data/titles.json')
+        let message = "";
+        if (series.length == 1) {
+            message = `Вышла ${series[0].serie} серия ${series[0].name}`
+        } else {
+            message = `Вышли новые серии:\n${series.map(anime => `* ${anime.serie} серия ${anime.name}`).join('\n')}`
+        }
+        bot.api.sendMessage(TOKU_CHAT, message)
         console.log("Successfully ended")
     } catch (e) {
         console.log("Error: %o", e)

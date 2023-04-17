@@ -1,7 +1,6 @@
 import { readFileSync, writeFileSync } from "fs";
-import { readFile, writeFile } from "fs/promises";
+import { readFile, outputFile } from "fs-extra";
 import { z } from "zod";
-import { Anime } from "./erai/anime";
 import { ItemWithListStatus } from "./mal/types/animelist";
 import { choice } from "./utils";
 
@@ -70,7 +69,7 @@ export class Recommendations {
 
     async toFile(filename: string) {
         const contents = JSON.stringify(this.recs)
-        await writeFile(filename, contents)
+        await outputFile(filename, contents)
     }
 
     getRandomRecommendation(all_animes: ItemWithListStatus[]) {
@@ -142,7 +141,7 @@ export class ThanksStickers {
 
     async toFile(filename: string) {
         const contents = JSON.stringify(this.stickers)
-        await writeFile(filename, contents)
+        await outputFile(filename, contents)
     }
 
     getRandomSticker() {
