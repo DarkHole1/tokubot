@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from "fs";
-import { writeFile } from "fs/promises";
+import { outputFile, outputFileSync, writeFile } from "fs-extra";
 import { Anime } from "./anime";
 
 export class Animes {
@@ -13,12 +13,20 @@ export class Animes {
         return new this(Anime.fromArray(JSON.parse(readFileSync(path, { encoding: 'utf-8' }))))
     }
 
+    static fromFileSafe(path: string) {
+        try {
+            return this.fromFile(path)
+        } catch(_) {
+            return new this([])
+        }
+    }
+
     toFile(path: string) {
-        writeFileSync(path, JSON.stringify(this.animes))
+        outputFileSync(path, JSON.stringify(this.animes))
     }
 
     async toFileAsync(path: string) {
-        await writeFile(path, JSON.stringify(this.animes))
+        await outputFile(path, JSON.stringify(this.animes))
     }
 
     async getSeries() {
