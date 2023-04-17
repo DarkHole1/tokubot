@@ -10,6 +10,7 @@ yarn install --production
 ```
 
 ## Starting
+Write `.env` file like `.env.example`.
 ```bash
 yarn exec -- ts-node src/index.ts
 ```
