@@ -3,4 +3,4 @@
 *.service
 node_modules
 src/test.ts
-data/titles.json
+data/
