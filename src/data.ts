@@ -121,6 +121,14 @@ export class ThanksStickers {
         return new this(ThanksSticker.fromArray(parsed))
     }
 
+    static fromFileSyncSafe(filname: string) {
+        try {
+            return this.fromFileSync
+        } catch(_) {
+            return new this([])
+        }
+    }
+
     static async fromFile(filename: string) {
         const contents = await readFile(filename, { encoding: 'utf-8' })
         const parsed = JSON.parse(contents)

@@ -21,7 +21,7 @@ const BOT_ID = 5627801063
 const TOKUID = 332320628
 const ADMINS = [TOKU_CHANNEL, DARK_HOLE, EGOID, TOKUID]
 
-const ANIME_RECOMMENDATIONS = Recommendations.fromFileSync('data/recommendations.json')
+const ANIME_RECOMMENDATIONS = Recommendations.fromFileSyncSafe('data/recommendations.json')
 
 const THANKS_STICKERS = ThanksStickers.fromFileSync('data/thanks.json')
 
