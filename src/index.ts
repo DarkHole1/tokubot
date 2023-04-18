@@ -20,6 +20,7 @@ const EGOID = 1016239817
 const BOT_ID = 5627801063
 const TOKUID = 332320628
 const ADMINS = [TOKU_CHANNEL, DARK_HOLE, EGOID, TOKUID]
+const SHOCK_PATALOCK = 'CQACAgIAAx0CbgUG4QACAQ1kPrwd1NID2ZX5u01Vzu8LdCbpswACfywAAr81uUkrbhp4o3fPMS8E'
 
 const ANIME_RECOMMENDATIONS = Recommendations.fromFileSyncSafe('data/recommendations.json')
 
@@ -132,6 +133,9 @@ bot.hears(/(с)?пасиб(о|a)/gim).filter(async ctx => ctx.message?.reply_to_
         { reply_to_message_id: ctx.message?.message_id }
     )
 })
+
+// ШОК ПАТАЛОК
+bot.hears(/паталок/gim, ctx => ctx.replyWithAudio(SHOCK_PATALOCK, { reply_to_message_id: ctx.msg.message_id }))
 
 bot.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == TOKU_CHANNEL, throttle(3 * 60 * 1000, (ctx: Context) => {
     ctx.reply("@tokutonariwa пости на юбуб", {
