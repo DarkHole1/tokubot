@@ -1,5 +1,4 @@
-import { readFileSync, writeFileSync } from "fs";
-import { readFile, outputFile } from "fs-extra";
+import { readFile, outputFile, readFileSync, writeFileSync } from "fs-extra";
 import { z } from "zod";
 import { ItemWithListStatus } from "./mal/types/animelist";
 import { choice } from "./utils";
@@ -163,5 +162,27 @@ const RawDrinkCounters = z.object({
 type RawDrinkCounters = z.infer<typeof RawDrinkCounters>
 
 export class DrinkCounters implements RawDrinkCounters {
+    tea: number
+    coffee: number
 
+    private constructor(data: RawDrinkCounters) {
+        this.tea = data.tea
+        this.coffee = data.coffee
+    }
+
+    static fromFileSync(filename: string) {
+        return new this(RawDrinkCounters.parse(readFileSync(filename, { encoding: 'utf-8' })))
+    }
+
+    static fromFileSyncSafe(filename: string) {
+        try {
+            return this.fromFileSync(filename)
+        } catch(_) {
+            return new this({ tea: 0, coffee: 0 })
+        }
+    }
+
+    async toFile(filename: string) {
+        await outputFile(filename, JSON.stringify(this))
+    }
 }
