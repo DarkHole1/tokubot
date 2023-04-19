@@ -6,7 +6,7 @@ import * as statics from './static'
 import { hydrateReply, ParseModeFlavor } from '@grammyjs/parse-mode'
 import { Config } from './config'
 import { randomString, throttle } from "./utils"
-import { Recommendations, ThanksStickers } from './data'
+import { DrinkCounters, Recommendations, ThanksStickers } from './data'
 import { Anime } from './erai/anime'
 
 const config = new Config()
@@ -27,6 +27,8 @@ const COFFEE_STICKER = 'AgAD7ikAAvdHoUk'
 const ANIME_RECOMMENDATIONS = Recommendations.fromFileSyncSafe('data/recommendations.json')
 
 const THANKS_STICKERS = ThanksStickers.fromFileSyncSafe('data/thanks.json')
+
+const drinksCounters = DrinkCounters.fromFileSyncSafe('data/drinks.json')
 
 function escape_string(s: string) {
     return s.replace(/[\_\*\[\]\(\)\~\`\>\#\+\-\=\|\{\}\.\!]/g, '\\$&')
@@ -141,7 +143,27 @@ bot.hears(/паталок/gim, ctx => ctx.replyWithAudio(SHOCK_PATALOCK, { reply
 
 bot.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
     const sticker = ctx.msg.sticker.file_unique_id
-    if(sticker == TEA_STICKER) {}
+    let drink: string
+    let count: number
+
+    if(![TEA_STICKER, COFFEE_STICKER].includes(sticker)) {
+        return
+    }
+
+    if(sticker == TEA_STICKER) {
+        drinksCounters.tea += 1
+        drink = 'чю'
+        count = drinksCounters.tea
+    } else {
+        drinksCounters.coffee += 1
+        drink = 'кфе'
+        count = drinksCounters.coffee
+    }
+
+    await drinksCounters.toFile('data/drinks.json')
+    await ctx.reply(`Приятного! Попили ${drink} ${count} раз 🍵`, {
+        reply_to_message_id: ctx.msg.message_id
+    })
 })
 
 bot.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == TOKU_CHANNEL, throttle(3 * 60 * 1000, (ctx: Context) => {
