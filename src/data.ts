@@ -155,3 +155,13 @@ export class ThanksStickers {
         return true
     }
 }
+
+const RawDrinkCounters = z.object({
+    tea: z.number().int(),
+    coffee: z.number().int()
+})
+type RawDrinkCounters = z.infer<typeof RawDrinkCounters>
+
+export class DrinkCounters implements RawDrinkCounters {
+
+}
