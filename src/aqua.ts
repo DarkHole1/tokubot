@@ -1,6 +1,7 @@
 import { Bot, Context, InlineKeyboard } from "grammy";
 import { Config } from "./config";
 import { fmt, hydrateReply, ParseModeFlavor, pre } from '@grammyjs/parse-mode'
+import { ThanksStickers } from "./data";
 
 const DARK_HOLE = 369810644
 const config = new Config()
@@ -26,7 +27,7 @@ admin.command(
     'paginated',
     async ctx => {
         const file_id = ctx.msg.reply_to_message?.sticker?.file_id
-        if(!file_id) {
+        if (!file_id) {
             return
         }
         const keyboard = new InlineKeyboard().text('1').text('2')
@@ -34,6 +35,19 @@ admin.command(
             reply_to_message_id: ctx.msg.message_id,
             reply_markup: keyboard
         })
+    }
+)
+
+admin.command(
+    'stickers',
+    async ctx => {
+        try {
+            const stickers = await ThanksStickers.fromFile('data/thanks.json')
+            
+        } catch(e) {
+            console.log(e)
+            ctx.reply('Произошла какая-то ошибка. Так мне сказал мой побочный эффект.')
+        }
     }
 )
 
