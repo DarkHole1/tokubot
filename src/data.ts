@@ -171,13 +171,14 @@ export class DrinkCounters implements RawDrinkCounters {
     }
 
     static fromFileSync(filename: string) {
-        return new this(RawDrinkCounters.parse(readFileSync(filename, { encoding: 'utf-8' })))
+        return new this(RawDrinkCounters.parse(JSON.parse(readFileSync(filename, { encoding: 'utf-8' }))))
     }
 
     static fromFileSyncSafe(filename: string) {
         try {
             return this.fromFileSync(filename)
         } catch(_) {
+            console.log(_)
             return new this({ tea: 0, coffee: 0 })
         }
     }
