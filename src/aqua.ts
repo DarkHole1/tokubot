@@ -1,4 +1,4 @@
-import { Bot, Context } from "grammy";
+import { Bot, Context, InlineKeyboard } from "grammy";
 import { Config } from "./config";
 import { fmt, hydrateReply, ParseModeFlavor, pre } from '@grammyjs/parse-mode'
 
@@ -25,12 +25,14 @@ admin.command(
 admin.command(
     'paginated',
     async ctx => {
-        const file_id = ctx.msg.sticker?.file_id
+        const file_id = ctx.msg.reply_to_message?.sticker?.file_id
         if(!file_id) {
             return
         }
+        const keyboard = new InlineKeyboard().text('1').text('2')
         await ctx.replyWithSticker(file_id, {
-            reply_to_message_id: ctx.msg.message_id
+            reply_to_message_id: ctx.msg.message_id,
+            reply_markup: keyboard
         })
     }
 )
