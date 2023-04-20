@@ -21,6 +21,7 @@ const BOT_ID = 5627801063
 const TOKUID = 332320628
 const ADMINS = [TOKU_CHANNEL, DARK_HOLE, EGOID, TOKUID]
 const SHOCK_PATALOCK = 'CQACAgIAAx0EbgUG4QACARhkQSVHnxcut0o6kWQPtWKq2lsTXwACfywAAr81uUlinNRcNS2fFC8E'
+const WORLD_TRIGGER = 'CAACAgEAAx0CbgUG4QACAS5kQTVsPpYJb3nUAAHDaO9_YTfgvNYAAtAAA3u8bAw_gR9puBpcHy8E'
 const TEA_STICKER = 'AgADihgAAu4FAUg'
 const COFFEE_STICKER = 'AgAD7ikAAvdHoUk'
 
@@ -140,6 +141,8 @@ bot.hears(/(с)?пасиб(о|a)/gim).filter(async ctx => ctx.message?.reply_to_
 
 // ШОК ПАТАЛОК
 bot.hears(/паталок|501|271|область/gim, ctx => ctx.replyWithAudio(SHOCK_PATALOCK, { reply_to_message_id: ctx.msg.message_id }))
+
+bot.hears(/триггер/gim, ctx => ctx.replyWithSticker(WORLD_TRIGGER, { reply_to_message_id: ctx.msg.message_id }))
 
 bot.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
     const sticker = ctx.msg.sticker.file_unique_id
