@@ -47,6 +47,10 @@ admin.command(
             if(stickers.length > 1) {
                 keyboard.text('>', 'sticker:1')
             }
+            await ctx.replyWithSticker(stickers.get(0), {
+                reply_to_message_id: ctx.msg.reply_to_message,
+                reply_markup: keyboard
+            })
         } catch(e) {
             console.log(e)
             ctx.reply('Произошла какая-то ошибка. Так мне сказал мой побочный эффект.')
