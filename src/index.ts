@@ -22,8 +22,8 @@ const TOKUID = 332320628
 const ADMINS = [TOKU_CHANNEL, DARK_HOLE, EGOID, TOKUID]
 const SHOCK_PATALOCK = 'CQACAgIAAx0EbgUG4QACARhkQSVHnxcut0o6kWQPtWKq2lsTXwACfywAAr81uUlinNRcNS2fFC8E'
 const WORLD_TRIGGER = 'CAACAgEAAx0CbgUG4QACAS5kQTVsPpYJb3nUAAHDaO9_YTfgvNYAAtAAA3u8bAw_gR9puBpcHy8E'
-const TEA_STICKER = 'AgADihgAAu4FAUg'
-const COFFEE_STICKER = 'AgAD7ikAAvdHoUk'
+const TEA_STICKERS = ['AgADihgAAu4FAUg', 'AgAD0BEAAtLWCUg', 'AgAD0BEAAtLWCUg']
+const COFFEE_STICKERS = ['AgAD7ikAAvdHoUk', 'AgADSyEAAtp_SEo', 'AgADSyEAAtp_SEo']
 
 const ANIME_RECOMMENDATIONS = Recommendations.fromFileSyncSafe('data/recommendations.json')
 
@@ -149,11 +149,11 @@ bot.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
     let drink: string
     let count: number
 
-    if(![TEA_STICKER, COFFEE_STICKER].includes(sticker)) {
+    if(!TEA_STICKERS.concat(COFFEE_STICKERS).includes(sticker)) {
         return
     }
 
-    if(sticker == TEA_STICKER) {
+    if(TEA_STICKERS.includes(sticker)) {
         drinksCounters.tea += 1
         drink = 'чю'
         count = drinksCounters.tea
