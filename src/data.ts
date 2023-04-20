@@ -109,6 +109,14 @@ export class ThanksSticker {
 export class ThanksStickers {
     private stickers: ThanksSticker[]
 
+    get length() {
+        return this.stickers.length
+    }
+
+    get(index: number) {
+        return this.stickers[index]
+    }
+
     private constructor(data: ThanksSticker[]) {
         this.stickers = data
     }
