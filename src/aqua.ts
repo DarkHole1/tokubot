@@ -43,12 +43,20 @@ admin.command(
     async ctx => {
         try {
             const stickers = await ThanksStickers.fromFile('data/thanks.json')
-            
+            const keyboard = new InlineKeyboard()
+            if(stickers.length > 1) {
+                keyboard.text('>', 'sticker:1')
+            }
         } catch(e) {
             console.log(e)
             ctx.reply('Произошла какая-то ошибка. Так мне сказал мой побочный эффект.')
         }
     }
 )
+
+admin.callbackQuery(/sticker:(\d+)/, async ctx => {
+    console.log(ctx.match)
+    await ctx.answerCallbackQuery()
+})
 
 bot.start()
