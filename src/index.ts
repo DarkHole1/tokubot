@@ -148,6 +148,7 @@ bot.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
     const sticker = ctx.msg.sticker.file_unique_id
     let drink: string
     let count: number
+    let emoji: string
 
     if(!TEA_STICKERS.concat(COFFEE_STICKERS).includes(sticker)) {
         return
@@ -155,16 +156,18 @@ bot.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
 
     if(TEA_STICKERS.includes(sticker)) {
         drinksCounters.tea += 1
-        drink = 'чю'
+        drink = 'чя'
         count = drinksCounters.tea
+        emoji = '🍵'
     } else {
         drinksCounters.coffee += 1
         drink = 'кфе'
         count = drinksCounters.coffee
+        emoji = '☕️'
     }
 
     await drinksCounters.toFile('data/drinks.json')
-    await ctx.reply(`Приятного! Попили ${drink} ${count} раз 🍵`, {
+    await ctx.reply(`Приятного! Попили ${drink} ${count} раз ${emoji}`, {
         reply_to_message_id: ctx.msg.message_id
     })
 })
