@@ -5,10 +5,10 @@ import { Animes } from './erai/animes'
 import * as statics from './static'
 import { hydrateReply, ParseModeFlavor } from '@grammyjs/parse-mode'
 import { Config } from './config'
-import { randomString, throttle } from "./utils"
+import { isAdmin, randomString, throttle } from "./utils"
 import { DrinkCounters, Recommendations, ThanksStickers } from './data'
 import { Anime } from './erai/anime'
-import { TOKU_NAME, EGOID, BOT_ID, SHOCK_PATALOCK, WORLD_TRIGGER, TOKU_CHAT, TEA_STICKERS, COFFEE_STICKERS, TOKU_CHANNEL, ADMINS } from './constants'
+import { TOKU_NAME, EGOID, BOT_ID, SHOCK_PATALOCK, WORLD_TRIGGER, TOKU_CHAT, TEA_STICKERS, COFFEE_STICKERS, TOKU_CHANNEL } from './constants'
 
 const config = new Config()
 const animes = Animes.fromFileSafe('data/titles.json')
@@ -164,7 +164,7 @@ bot.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == TOKU_
 }))
 
 bot.command('addsticker').filter(
-    ctx => ADMINS.includes(ctx.from?.id ?? 0) || ADMINS.includes(ctx.senderChat?.id ?? 0),
+    isAdmin,
     async ctx => {
         const sticker = ctx.msg.reply_to_message?.sticker
         if (!sticker) {
@@ -188,7 +188,7 @@ bot.command('addsticker').filter(
 const callbacksForKeyboard = new Map<string, (c: Context) => Promise<unknown>>()
 
 bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}/).filter(
-    ctx => ADMINS.includes(ctx.from?.id ?? 0) || ADMINS.includes(ctx.senderChat?.id ?? 0),
+    isAdmin,
     async ctx => {
         const url: string = typeof ctx.match == 'string' ? ctx.match : ctx.match[0]
         const anime = await Anime.fromURL(url)
@@ -211,9 +211,9 @@ bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}
         })
 
         callbacksForKeyboard.set(uid, async _ctx => {
-            if (!ADMINS.includes(_ctx.from?.id ?? 0) && !ADMINS.includes(_ctx.senderChat?.id ?? 0)) {
+            if (!isAdmin(_ctx)) {
                 await _ctx.answerCallbackQuery({
-                    text: "Ты не админ"
+                    text: "Ты не ад(м)ин"
                 })
                 return
             }
