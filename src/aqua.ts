@@ -2,6 +2,7 @@ import { Bot, Context, InlineKeyboard } from "grammy";
 import { Config } from "./config";
 import { fmt, hydrateReply, ParseModeFlavor, pre } from '@grammyjs/parse-mode'
 import { ThanksStickers } from "./data";
+import { createExportAssignment } from "typescript";
 
 const DARK_HOLE = 369810644
 const config = new Config()
@@ -39,28 +40,19 @@ admin.command(
 )
 
 admin.command(
-    'stickers',
+    'sticker',
     async ctx => {
         try {
             const stickers = await ThanksStickers.fromFile('data/thanks.json')
             const keyboard = new InlineKeyboard()
-            if(stickers.length > 1) {
-                keyboard.text('>', 'sticker:1')
-            }
-            await ctx.replyWithSticker(stickers.get(0).fileId, {
-                reply_to_message_id: ctx.msg.message_id,
-                reply_markup: keyboard
-            })
+            const id = +ctx.match
+            const sticker = stickers.get(id)
+            ctx.replyWithSticker(sticker.fileId, { reply_to_message_id: ctx.msg.message_id })
         } catch(e) {
             console.log(e)
             ctx.reply('Произошла какая-то ошибка. Так мне сказал мой побочный эффект.')
         }
     }
 )
-
-admin.callbackQuery(/sticker:(\d+)/, async ctx => {
-    console.log(ctx.match)
-    await ctx.answerCallbackQuery()
-})
 
 bot.start()
