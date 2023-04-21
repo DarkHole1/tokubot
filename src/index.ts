@@ -8,23 +8,11 @@ import { Config } from './config'
 import { randomString, throttle } from "./utils"
 import { DrinkCounters, Recommendations, ThanksStickers } from './data'
 import { Anime } from './erai/anime'
+import { TOKU_NAME, EGOID, BOT_ID, SHOCK_PATALOCK, WORLD_TRIGGER, TOKU_CHAT, TEA_STICKERS, COFFEE_STICKERS, TOKU_CHANNEL, ADMINS } from './constants'
 
 const config = new Config()
 
-const TOKU_NAME = 'Sanso'
 const ANIMES = Animes.fromFileSafe('data/titles.json')
-const DARK_HOLE = 369810644
-const TOKU_CHAT = -1001311183194
-const TOKU_CHANNEL = -1001446681491
-const EGOID = 1016239817
-const BOT_ID = 5627801063
-const TOKUID = 332320628
-const ADMINS = [TOKU_CHANNEL, DARK_HOLE, EGOID, TOKUID]
-const SHOCK_PATALOCK = 'CQACAgIAAx0EbgUG4QACARhkQSVHnxcut0o6kWQPtWKq2lsTXwACfywAAr81uUlinNRcNS2fFC8E'
-const WORLD_TRIGGER = 'CAACAgEAAx0CbgUG4QACAS5kQTVsPpYJb3nUAAHDaO9_YTfgvNYAAtAAA3u8bAw_gR9puBpcHy8E'
-const TEA_STICKERS = ['AgADihgAAu4FAUg', 'AgAD0BEAAtLWCUg', 'AgADoRcAArefAUg']
-const COFFEE_STICKERS = ['AgAD7ikAAvdHoUk', 'AgADSyEAAtp_SEo', 'AgADURYAAos5KUk']
-
 const ANIME_RECOMMENDATIONS = Recommendations.fromFileSyncSafe('data/recommendations.json')
 
 const THANKS_STICKERS = ThanksStickers.fromFileSyncSafe('data/thanks.json')
