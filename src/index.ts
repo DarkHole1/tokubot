@@ -6,15 +6,15 @@ import * as statics from './static'
 import { hydrateReply, ParseModeFlavor } from '@grammyjs/parse-mode'
 import { Config } from './config'
 import { isAdmin, randomString, throttle } from "./utils"
-import { DrinkCounters, Recommendations, ThanksStickers } from './data'
+import { Recommendations, ThanksStickers } from './data'
 import { Anime } from './erai/anime'
 import { TOKU_NAME, EGOID, BOT_ID, SHOCK_PATALOCK, WORLD_TRIGGER, TOKU_CHAT, TEA_STICKERS, COFFEE_STICKERS, TOKU_CHANNEL } from './constants'
+import { fun } from './parts/fun'
 
 const config = new Config()
 const animes = Animes.fromFileSafe('data/titles.json')
 const animeRecommendations = Recommendations.fromFileSyncSafe('data/recommendations.json')
 const thanksStickers = ThanksStickers.fromFileSyncSafe('data/thanks.json')
-const drinksCounters = DrinkCounters.fromFileSyncSafe('data/drinks.json')
 
 function escape_string(s: string) {
     return s.replace(/[\_\*\[\]\(\)\~\`\>\#\+\-\=\|\{\}\.\!]/g, '\\$&')
@@ -124,38 +124,7 @@ bot.hears(/(с)?пасиб(о|a)/gim).filter(async ctx => ctx.message?.reply_to_
     )
 })
 
-// ШОК ПАТАЛОК
-bot.hears(/п(а|a)т(а|a)л(о|o)к|501|271|область/gim, ctx => ctx.replyWithAudio(SHOCK_PATALOCK, { reply_to_message_id: ctx.msg.message_id }))
-
-bot.hears(/триггер/gim, ctx => ctx.replyWithSticker(WORLD_TRIGGER, { reply_to_message_id: ctx.msg.message_id }))
-
-bot.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
-    const sticker = ctx.msg.sticker.file_unique_id
-    let drink: string
-    let count: number
-    let emoji: string
-
-    if(!TEA_STICKERS.concat(COFFEE_STICKERS).includes(sticker)) {
-        return
-    }
-
-    if(TEA_STICKERS.includes(sticker)) {
-        drinksCounters.tea += 1
-        drink = 'чя'
-        count = drinksCounters.tea
-        emoji = '🍵'
-    } else {
-        drinksCounters.coffee += 1
-        drink = 'кфе'
-        count = drinksCounters.coffee
-        emoji = '☕️'
-    }
-
-    await drinksCounters.toFile('data/drinks.json')
-    await ctx.reply(`Приятного! Попили ${drink} ${count} раз ${emoji}`, {
-        reply_to_message_id: ctx.msg.message_id
-    })
-})
+bot.use(fun)
 
 bot.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == TOKU_CHANNEL, throttle(3 * 60 * 1000, (ctx: Context) => {
     ctx.reply("@tokutonariwa пости на юбуб", {
