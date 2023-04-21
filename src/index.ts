@@ -11,12 +11,9 @@ import { Anime } from './erai/anime'
 import { TOKU_NAME, EGOID, BOT_ID, SHOCK_PATALOCK, WORLD_TRIGGER, TOKU_CHAT, TEA_STICKERS, COFFEE_STICKERS, TOKU_CHANNEL, ADMINS } from './constants'
 
 const config = new Config()
-
-const ANIMES = Animes.fromFileSafe('data/titles.json')
-const ANIME_RECOMMENDATIONS = Recommendations.fromFileSyncSafe('data/recommendations.json')
-
-const THANKS_STICKERS = ThanksStickers.fromFileSyncSafe('data/thanks.json')
-
+const animes = Animes.fromFileSafe('data/titles.json')
+const animeRecommendations = Recommendations.fromFileSyncSafe('data/recommendations.json')
+const thanksStickers = ThanksStickers.fromFileSyncSafe('data/thanks.json')
 const drinksCounters = DrinkCounters.fromFileSyncSafe('data/drinks.json')
 
 function escape_string(s: string) {
@@ -62,7 +59,7 @@ async function check_in_list(anime: string) {
 
 async function get_random_anime_recommendation() {
     await update_list_if_obsolete()
-    return ANIME_RECOMMENDATIONS.getRandomRecommendation(all_animes)
+    return animeRecommendations.getRandomRecommendation(all_animes)
 }
 
 const bot = new Bot<ParseModeFlavor<Context>>(config.TOKEN)
@@ -122,7 +119,7 @@ bot.command('recommend', async ctx => {
 bot.hears(/(с)?пасиб(о|a)/gim).filter(async ctx => ctx.message?.reply_to_message?.from?.id == BOT_ID ?? false, async ctx => {
     ctx.api.sendSticker(
         ctx.chat.id,
-        THANKS_STICKERS.getRandomSticker().fileId,
+        thanksStickers.getRandomSticker().fileId,
         { reply_to_message_id: ctx.message?.message_id }
     )
 })
@@ -176,10 +173,10 @@ bot.command('addsticker').filter(
             })
             return
         }
-        const success = THANKS_STICKERS.add(sticker)
+        const success = thanksStickers.add(sticker)
         const reply = success ? 'Стикер добавлен супер успешно!' : 'Что-то пошло не так. Скорее всего стикер уже супер добавлен.'
         if (success) {
-            await THANKS_STICKERS.toFile('data/thanks.json')
+            await thanksStickers.toFile('data/thanks.json')
         }
         await ctx.reply(reply, {
             reply_to_message_id: ctx.message?.message_id
@@ -220,8 +217,8 @@ bot.hears(/https:\/\/www\.erai-raws\.info\/anime-list\/\S+\/feed\/\?[a-z0-9]{32}
                 })
                 return
             }
-            ANIMES.add(anime)
-            await ANIMES.toFileAsync('data/titles.json')
+            animes.add(anime)
+            await animes.toFileAsync('data/titles.json')
             await _ctx.answerCallbackQuery({
                 text: "Успешно добавлено"
             })
@@ -240,17 +237,17 @@ bot.on('callback_query:data', async ctx => {
     await handler(ctx)
 })
 
-bot.command('observed', ctx => ctx.reply(`Всё что я наблюдаю:\n${ANIMES.list().map(anime => `* ${anime.name} (серий: ${anime.series})`).join('\n')}`, {
+bot.command('observed', ctx => ctx.reply(`Всё что я наблюдаю:\n${animes.list().map(anime => `* ${anime.name} (серий: ${anime.series})`).join('\n')}`, {
     reply_to_message_id: ctx.message?.message_id
 }))
 
 setInterval(async () => {
     console.log("Fetching new animes")
     try {
-        const series = await ANIMES.getSeries()
+        const series = await animes.getSeries()
         console.log("Series: %o", series)
         if (series.length == 0) return
-        await ANIMES.toFileAsync('data/titles.json')
+        await animes.toFileAsync('data/titles.json')
         let message = "";
         if (series.length == 1) {
             message = `Вышла ${series[0].serie} серия ${series[0].name}`
