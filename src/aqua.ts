@@ -44,7 +44,6 @@ admin.command(
     async ctx => {
         try {
             const stickers = await ThanksStickers.fromFile('data/thanks.json')
-            const keyboard = new InlineKeyboard()
             const id = +ctx.match
             const sticker = stickers.get(id)
             ctx.replyWithSticker(sticker.fileId, { reply_to_message_id: ctx.msg.message_id })
