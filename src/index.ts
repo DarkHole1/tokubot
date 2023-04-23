@@ -230,4 +230,8 @@ setInterval(async () => {
     }
 }, 60 * 1000)
 
+setInterval(async () => {
+    await bot.api.sendMessage(TOKU_CHAT, '@kdcfjsvrjx oshi no ko это моя звезда')
+}, 12 * 60 * 60 * 1000)
+
 bot.start()
