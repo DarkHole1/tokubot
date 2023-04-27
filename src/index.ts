@@ -231,7 +231,7 @@ setInterval(async () => {
 }, 60 * 1000)
 
 setInterval(async () => {
-    await bot.api.sendMessage(TOKU_CHAT, '@iluvgiriswithglasses Учи Яп Как Будто От Этого Зависит Твоя Жизнь')
+    await bot.api.sendMessage(TOKU_CHAT, '@iluvgiriswithglasses Учи яп что бы перевести PRETTY×CATION')
 }, 12 * 60 * 60 * 1000)
 
 bot.start()
