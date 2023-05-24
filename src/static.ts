@@ -1,4 +1,4 @@
-import { code, fmt, linkMessage } from "@grammyjs/parse-mode"
+import { code, fmt, link } from "@grammyjs/parse-mode"
 
 export const help = fmt
 `Этот бот умеет:
