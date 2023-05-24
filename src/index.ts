@@ -127,10 +127,7 @@ bot.hears(/(с)?пасиб(о|a)/gim).filter(async ctx => ctx.message?.reply_to_
 bot.use(fun)
 
 bot.on('message:new_chat_members', async ctx => {
-    await ctx.reply(`
-Nyanpasu~
-
-Приходи, присаживайся, читай правила (https://t.me/c/1311183194/11885) и список рекомендуемых аниме к просмотру (https://t.me/c/1311183194/84785)`)
+    await ctx.replyFmt(statics.greeting)
 })
 
 bot.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == TOKU_CHANNEL, throttle(3 * 60 * 1000, (ctx: Context) => {
