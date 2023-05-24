@@ -1,4 +1,4 @@
-import { code, fmt } from "@grammyjs/parse-mode"
+import { code, fmt, linkMessage } from "@grammyjs/parse-mode"
 
 export const help = fmt
 `Этот бот умеет:
@@ -6,3 +6,8 @@ export const help = fmt
 * Делать рекомендации на основе списка Току. Попробуйте скопировать и отправить ${code(`/recommend`)}
 
 Вот и всё! Связаться с разработчиком: @darkhole1`
+
+export const greeting = fmt
+`Nyanpasu~
+
+Приходи, присаживайся, читай ${linkMessage(`правила`, 1311183194, 11885)} и список рекомендуемых аниме к ${linkMessage(`просмотру`, 1311183194, 84785)}`
