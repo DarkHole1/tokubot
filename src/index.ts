@@ -8,7 +8,7 @@ import { Config } from './config'
 import { isAdmin, randomString, throttle } from "./utils"
 import { Recommendations, ThanksStickers } from './data'
 import { Anime } from './erai/anime'
-import { TOKU_NAME, EGOID, BOT_ID, SHOCK_PATALOCK, WORLD_TRIGGER, TOKU_CHAT, TEA_STICKERS, COFFEE_STICKERS, TOKU_CHANNEL } from './constants'
+import { TOKU_NAME, EGOID, BOT_ID, SHOCK_PATALOCK, WORLD_TRIGGER, TOKU_CHAT, TEA_STICKERS, COFFEE_STICKERS, TOKU_CHANNEL, ANGELINA_LIST } from './constants'
 import { fun } from './parts/fun'
 
 const config = new Config()
@@ -124,7 +124,7 @@ bot.hears(/(с)?пасиб(о|a)/gim).filter(async ctx => ctx.message?.reply_to_
     )
 })
 
-bot.use(fun)
+bot.filter(ctx => !ANGELINA_LIST.includes(ctx.from?.id ?? 0)).use(fun)
 
 bot.on('message:new_chat_members', async ctx => {
     await ctx.replyFmt(statics.greeting)
