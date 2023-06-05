@@ -40,8 +40,25 @@ fun.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
             case 75:
                 achivement = 'Хватит на аквариум. С чаем.'
                 break
+            case 80:
+                achivement = '"Замечательный день сегодня. То ли чай пойти выпить, то ли повеситься." (приписывается А.П.Чехову)'
+                break
+            case 90:
+                achivement = '"Чай! Вот что мне было нужно! Хорошая чашка чая! Перегретый настой свободных радикалов и танина, он просто создан для здоровья." (c) 10 Доктор'
             case 100:
                 achivement = 'Твой чй пронзит небеса!'
+                break
+            case 110:
+                achivement = '— Хочешь чаю?\n— Хм... Чай... Мы только и делаем тут, что пьем чай. Поражаюсь, как мы в нем еще не захлебнулись.\n(Отголоски прошлого)'
+                break
+            case 120:
+                achivement = 'Чаю? Это как объятия. Только в чашке. (Менталист)'
+                break
+            case 130:
+                achivement = 'Такие нынче времена, — изрёк мистер Норрис, приняв чашку чая, — тебе мешают жить, а ты мешаешь ложечкой чай.'
+                break
+            case 140:
+                achivement = 'Не пей чай там, где тебя ненавидят.'
                 break
             case 150:
                 achivement = '"Я должен был пить много чая, ибо без него не мог работать. Чай высвобождает те возможности, которые дремлют в глубине моей души." Лев Толстой'
@@ -69,8 +86,18 @@ fun.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
             case 50:
                 achivement = 'What is this, a coffee episode?'
                 break
-            case 75:
+            case 60:
                 achivement = 'Ничто на свете не даётся даром. Даже кофе.'
+                break
+            case 70:
+                achivement = 'Go beyond! Plus coffee'
+                break
+            case 80:
+                achivement = 'I can’t go on like this. I\'ll drink coffee!'
+                break
+            case 90:
+                achivement = 'More importantly, where\'s coffe!?'
+                break
             case 100:
                 achivement = 'Ты выпил 100 чашек кофе? Как мило'
                 break
