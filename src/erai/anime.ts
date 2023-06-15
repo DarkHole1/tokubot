@@ -1,6 +1,7 @@
 import { readFileSync } from "fs";
 import Parser from "rss-parser";
 import { z } from "zod";
+import { RSSItem } from "./new-rss";
 
 const RawAnime = z.object({
     name: z.string(),
@@ -72,5 +73,20 @@ export class Anime {
 
         this.data.series = serie
         return [{ name: this.data.name, serie }]
+    }
+
+    handle(updates: RSSItem[]) {
+        let res = []
+        for(const update of updates) {
+            if(update.anime != this.name) {
+                continue
+            }
+            if(update.episode <= this.series) {
+                continue
+            }
+            this.data.series = update.episode as number
+            res.push({ anime: this.name, episode: this.series })
+        }
+        return res
     }
 }

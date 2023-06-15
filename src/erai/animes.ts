@@ -1,23 +1,26 @@
 import { readFileSync, writeFileSync } from "fs";
 import { outputFile, outputFileSync, writeFile } from "fs-extra";
 import { Anime } from "./anime";
+import { makeLink, watchUpdates } from "./new-rss";
 
 export class Animes {
     private animes: Anime[]
+    private token: string
 
-    private constructor(data: Anime[]) {
+    private constructor(data: Anime[], token: string) {
         this.animes = data
+        this.token = token
     }
 
-    static fromFile(path: string) {
-        return new this(Anime.fromArray(JSON.parse(readFileSync(path, { encoding: 'utf-8' }))))
+    static fromFile(path: string, token: string) {
+        return new this(Anime.fromArray(JSON.parse(readFileSync(path, { encoding: 'utf-8' }))), token)
     }
 
-    static fromFileSafe(path: string) {
+    static fromFileSafe(path: string, token: string) {
         try {
-            return this.fromFile(path)
+            return this.fromFile(path, token)
         } catch(_) {
-            return new this([])
+            return new this([], token)
         }
     }
 
@@ -40,5 +43,21 @@ export class Animes {
 
     list() {
         return this.animes.slice()
+    }
+
+    start(update: (animes: ({ anime: string, episode: number })[]) => void) {
+        watchUpdates(makeLink({
+            category: 'airing',
+            linkType: 'magnet',
+            token: this.token
+        }), updates => {
+            let res = [] as ({ anime: string, episode: number }[])
+            for(const anime of this.animes) {
+                res = res.concat(anime.handle(updates))
+            }
+            if(res.length != 0) update(res)
+        }, {
+            initial: true
+        })
     }
 }
