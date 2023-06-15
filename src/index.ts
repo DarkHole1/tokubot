@@ -214,24 +214,16 @@ bot.command('observed', ctx => ctx.reply(`Всё что я наблюдаю:\n${
     reply_to_message_id: ctx.message?.message_id
 }))
 
-setInterval(async () => {
-    console.log("Fetching new animes")
-    try {
-        const series = await animes.getSeries()
-        console.log("Series: %o", series)
-        if (series.length == 0) return
-        await animes.toFileAsync('data/titles.json')
-        let message = "";
-        if (series.length == 1) {
-            message = `Вышла ${series[0].serie} серия ${series[0].name}`
-        } else {
-            message = `Вышли новые серии:\n${series.map(anime => `* ${anime.serie} серия ${anime.name}`).join('\n')}`
-        }
-        bot.api.sendMessage(TOKU_CHAT, message)
-        console.log("Successfully ended")
-    } catch (e) {
-        console.log("Error: %o", e)
+animes.start(async (updates) => {
+    await animes.toFileAsync('data/titles.json')
+    let message = "";
+    if (updates.length == 1) {
+        message = `Вышла ${updates[0].episode} серия ${updates[0].anime}`
+    } else {
+        message = `Вышли новые серии:\n${updates.map(update => `* ${update.episode} серия ${update.anime}`).join('\n')}`
     }
-}, 60 * 1000)
+    bot.api.sendMessage(TOKU_CHAT, message)
+    console.log("Successfully ended")
+})
 
 bot.start()
