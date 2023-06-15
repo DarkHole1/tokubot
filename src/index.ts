@@ -12,7 +12,7 @@ import { TOKU_NAME, EGOID, BOT_ID, SHOCK_PATALOCK, WORLD_TRIGGER, TOKU_CHAT, TEA
 import { fun } from './parts/fun'
 
 const config = new Config()
-const animes = Animes.fromFileSafe('data/titles.json')
+const animes = Animes.fromFileSafe('data/titles.json', config.ERAI_TOKEN)
 const animeRecommendations = Recommendations.fromFileSyncSafe('data/recommendations.json')
 const thanksStickers = ThanksStickers.fromFileSyncSafe('data/thanks.json')
 
