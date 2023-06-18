@@ -131,13 +131,22 @@ export async function watchUpdates(link: string, cb: (newItemts: RSSItem[]) => v
     const fullConfig: WatchUpdatesArgs = Object.assign({}, {
         every: 1, initial: false
     }, config)
-    const items = await parseFeed(link)
-    if(fullConfig.initial) cb(items)
-    let lastDate = items[0].date
-    setInterval(async () => {
+    let lastDate = new Date()
+    try {
         const items = await parseFeed(link)
-        const newItems = items.filter(item => item.date > lastDate)
+        if(fullConfig.initial) cb(items)
         lastDate = items[0].date
-        if(newItems.length > 0) cb(newItems)
+    } catch(e) {
+        console.error('Error during parsing erai-raws feed %o', e)
+    }
+    setInterval(async () => {
+        try {
+            const items = await parseFeed(link)
+            const newItems = items.filter(item => item.date > lastDate)
+            lastDate = items[0].date
+            if(newItems.length > 0) cb(newItems)
+        } catch(e) {
+            console.error('Error during parsing erai-raws feed %o', e)
+        }
     }, fullConfig.every * 1000)
 }

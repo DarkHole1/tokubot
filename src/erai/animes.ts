@@ -57,7 +57,8 @@ export class Animes {
             }
             if(res.length != 0) update(res)
         }, {
-            initial: true
+            initial: true,
+            every: 60
         })
     }
 }
