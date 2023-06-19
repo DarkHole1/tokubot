@@ -45,13 +45,13 @@ export class Animes {
         return this.animes.slice()
     }
 
-    start(update: (animes: ({ anime: string, episode: number })[]) => void) {
+    start(update: (animes: ({ anime: string, episode: number, completed: boolean })[]) => void) {
         watchUpdates(makeLink({
             category: 'airing',
             linkType: 'magnet',
             token: this.token
         }), updates => {
-            let res = [] as ({ anime: string, episode: number }[])
+            let res = [] as ({ anime: string, episode: number, completed: boolean }[])
             this.animes = this.animes.filter(anime => {
                 const handled = anime.handle(updates)
                 res = res.concat(handled)
