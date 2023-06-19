@@ -76,16 +76,20 @@ export class Anime {
     }
 
     handle(updates: RSSItem[]) {
+        let completed = false
         let res = []
         for(const update of updates) {
             if(update.anime != this.name) {
                 continue
             }
+            if(update.category == 'Finale') {
+                completed = true
+            }
             if(update.episode <= this.series) {
                 continue
             }
             this.data.series = update.episode as number
-            res.push({ anime: this.name, episode: this.series })
+            res.push({ anime: this.name, episode: this.series, completed })
         }
         return res
     }

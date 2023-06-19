@@ -52,9 +52,11 @@ export class Animes {
             token: this.token
         }), updates => {
             let res = [] as ({ anime: string, episode: number }[])
-            for(const anime of this.animes) {
-                res = res.concat(anime.handle(updates))
-            }
+            this.animes = this.animes.filter(anime => {
+                const handled = anime.handle(updates)
+                res = res.concat(handled)
+                return !handled.some(event => event.completed)
+            })
             if(res.length != 0) update(res)
         }, {
             initial: true,

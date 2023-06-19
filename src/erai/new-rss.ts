@@ -129,7 +129,7 @@ type WatchUpdatesArgs = {
 
 export async function watchUpdates(link: string, cb: (newItemts: RSSItem[]) => void, config?: Partial<WatchUpdatesArgs>) {
     const fullConfig: WatchUpdatesArgs = Object.assign({}, {
-        every: 1, initial: false
+        every: 60, initial: false
     }, config)
     let lastDate = new Date()
     try {
