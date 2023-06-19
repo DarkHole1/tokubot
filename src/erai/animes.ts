@@ -53,9 +53,9 @@ export class Animes {
         }), updates => {
             let res = [] as ({ anime: string, episode: number, completed: boolean }[])
             this.animes = this.animes.filter(anime => {
-                const handled = anime.handle(updates)
+                const { completed, handled } = anime.handle(updates)
                 res = res.concat(handled)
-                return !handled.some(event => event.completed)
+                return !completed
             })
             if(res.length != 0) update(res)
         }, {

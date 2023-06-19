@@ -77,7 +77,7 @@ export class Anime {
 
     handle(updates: RSSItem[]) {
         let completed = false
-        let res = []
+        let handled = []
         for(const update of updates) {
             if(update.anime != this.name) {
                 continue
@@ -89,8 +89,8 @@ export class Anime {
                 continue
             }
             this.data.series = update.episode as number
-            res.push({ anime: this.name, episode: this.series, completed })
+            handled.push({ anime: this.name, episode: this.series, completed })
         }
-        return res
+        return { completed, handled }
     }
 }
