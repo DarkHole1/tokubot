@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "@grammyjs/parse-mode": "^1.5.0",
+    "@roziscoding/grammy-autoquote": "^1.1.2",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^18.11.18",
     "axios": "^1.2.2",

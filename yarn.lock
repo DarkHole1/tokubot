@@ -37,6 +37,11 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@roziscoding/grammy-autoquote@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@roziscoding/grammy-autoquote/-/grammy-autoquote-1.1.2.tgz#bd420b8e7d11905a19177c21ae610c20f27c61ef"
+  integrity sha512-+idatR6lOnn6EA/4wPFN+d5+Bf+Qv4oTH12Pq4/VC9+GZcDCOVj3Nz7nAWzm5WQV7N3HBwqd6tCwqNFI5Ud/rQ==
+
 "@tsconfig/node10@^1.0.7":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@tsconfig/node10/-/node10-1.0.9.tgz#df4907fc07a886922637b15e02d4cebc4c0021b2"
