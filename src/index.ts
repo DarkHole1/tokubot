@@ -10,6 +10,7 @@ import { Recommendations, ThanksStickers } from './data'
 import { Anime } from './erai/anime'
 import { TOKU_NAME, EGOID, BOT_ID, SHOCK_PATALOCK, WORLD_TRIGGER, TOKU_CHAT, TEA_STICKERS, COFFEE_STICKERS, TOKU_CHANNEL, ANGELINA_LIST } from './constants'
 import { fun } from './parts/fun'
+import { voting } from './parts/voting'
 
 const config = new Config()
 const animes = Animes.fromFileSafe('data/titles.json', config.ERAI_TOKEN)
@@ -115,6 +116,8 @@ bot.command('recommend', async ctx => {
         reply_to_message_id: ctx.message?.message_id
     })
 })
+
+bot.use(voting)
 
 bot.hears(/(с)?пасиб(о|a)/gim).filter(async ctx => ctx.message?.reply_to_message?.from?.id == BOT_ID ?? false, async ctx => {
     ctx.api.sendSticker(
