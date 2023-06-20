@@ -21,6 +21,12 @@ voting.command('startvoting', async ctx => {
     }
 })
 
+voting.command('rating', async ctx => {
+    await ctx.reply('Рейтинг:' + votes.rating().map((anime, i) => `${i}. (${anime.votes}) ${anime.russian} / ${anime.name}`).join('\n'), {
+        reply_to_message_id: ctx.msg.message_id
+    })
+})
+
 voting.callbackQuery('voting:start', async ctx => {
     if (new Date() > until) {
         await ctx.answerCallbackQuery('Прости, время закончилось :(')
