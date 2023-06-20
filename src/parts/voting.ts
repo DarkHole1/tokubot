@@ -12,9 +12,13 @@ voting.command('startvoting', async ctx => {
         return
     }
     const inlineKeyboard = new InlineKeyboard().text('Понятненька', 'voting:start')
-    await ctx.reply(statics.startVoting, {
-        reply_markup: inlineKeyboard
-    })
+    try {
+        await ctx.reply(statics.startVoting, {
+            reply_markup: inlineKeyboard
+        })
+    } catch (e) {
+
+    }
 })
 
 voting.callbackQuery('voting:start', async ctx => {
@@ -24,7 +28,7 @@ voting.callbackQuery('voting:start', async ctx => {
     }
     const anime = votes.get(0)
     const keyboard = new InlineKeyboard().text('За', 'voting:0:add').text('Против', 'voting:0:remove')
-    await ctx.api.sendMessage(ctx.callbackQuery.chat_instance, `${anime.russian} / ${anime.name}\n${anime.url}`, {
+    await ctx.api.sendMessage(ctx.callbackQuery.from.id, `${anime.russian} / ${anime.name}\nhttps://shikimori.me${anime.url}`, {
         reply_markup: keyboard
     })
     await ctx.answerCallbackQuery()
@@ -37,7 +41,7 @@ voting.callbackQuery(/voting:(\d+):(add|remove)(:final)?/, async ctx => {
     }
     const id = Number(ctx.match[1])
     const add = ctx.match[2] == 'add'
-    const final = ctx.match[3] != ''
+    const final = !!ctx.match[3]
     const member = ctx.callbackQuery.from.id
     const keyboard = new InlineKeyboard()
     if (add) {
@@ -50,17 +54,24 @@ voting.callbackQuery(/voting:(\d+):(add|remove)(:final)?/, async ctx => {
     const chat_id = ctx.callbackQuery.message!.chat.id
     const message_id = ctx.callbackQuery.message!.message_id
     const anime = votes.get(id)
-    await ctx.api.editMessageText(chat_id, message_id, `${anime.russian} / ${anime.name}\n${anime.url}`)
+    try {
+        await ctx.api.editMessageText(chat_id, message_id, `${anime.russian} / ${anime.name}\nhttps://shikimori.me${anime.url}`, {
+            reply_markup: keyboard
+        })
+    } catch (e) {
+
+    }
     if (!final) {
         const newAnime = votes.get(id + 1)
         if (newAnime) {
             const keyboard = new InlineKeyboard().text('За', `voting:${id + 1}:add`).text('Против', `voting:${id + 1}:remove`)
-            await ctx.api.sendMessage(ctx.callbackQuery.chat_instance, `${newAnime.russian} / ${newAnime.name}\n${newAnime.url}`, {
+            await ctx.api.sendMessage(ctx.callbackQuery.from.id, `${newAnime.russian} / ${newAnime.name}\nhttps://shikimori.me${newAnime.url}`, {
                 reply_markup: keyboard
             })
         } else {
-            await ctx.api.sendMessage(ctx.callbackQuery.chat_instance, `Ура! Вы проголосовали за все аниме. Вы можете поменять свой голос позже, если тыкните куда надо :3`)
+            await ctx.api.sendMessage(ctx.callbackQuery.from.id, `Ура! Вы проголосовали за все аниме. Вы можете поменять свой голос позже, если тыкните куда надо :3`)
         }
     }
+    await votes.save('data/votes.json')
     await ctx.answerCallbackQuery()
 })
