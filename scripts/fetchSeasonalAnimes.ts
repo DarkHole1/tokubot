@@ -14,7 +14,7 @@ const shikimori = new API({
         season: 'summer_2023',
         order: 'name',
         limit: 50,
-        kind: 'tv,ona' as AnimeKind
+        kind: 'tv'
     })
     let page = 2
     while(true) {
@@ -23,7 +23,7 @@ const shikimori = new API({
             season: 'summer_2023',
             order: 'name',
             limit: 50,
-            kind: 'tv,ona' as AnimeKind,
+            kind: 'tv' as AnimeKind,
             page
         })
         if(added.length == 0) break
