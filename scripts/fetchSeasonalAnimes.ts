@@ -1,7 +1,13 @@
 import { outputFile } from "fs-extra";
 import { AnimeKind, API } from "shikimori"
 
-const shikimori = new API()
+const shikimori = new API({
+    axios: {
+        headers: {
+            'Accept-Encoding': '*'
+        }
+    }
+})
 
 ; void async function() {
     let animes = await shikimori.animes.get({
@@ -20,7 +26,8 @@ const shikimori = new API()
             kind: 'tv,ona' as AnimeKind,
             page
         })
-        if(added.length == 0) break 
+        if(added.length == 0) break
+        console.log(`Fetched ${page} pages`)
         page++
         animes = animes.concat(added)
     }
