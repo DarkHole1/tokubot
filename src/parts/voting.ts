@@ -9,7 +9,7 @@ const votes = Votes.loadSync('data/votes.json')
 
 voting.use(autoQuote)
 
-voting.command('/startvoting', async ctx => {
+voting.command('startvoting', async ctx => {
     if (new Date() > until) {
         await ctx.reply('Прости, время закончилось :(')
         return
