@@ -4,7 +4,7 @@ import { Votes } from "../models/votes"
 import * as statics from '../static'
 
 export const voting = new Composer
-const until = new Date('1 June 2023')
+const until = new Date('1 July 2023')
 const votes = Votes.loadSync('data/votes.json')
 
 voting.use(autoQuote)
