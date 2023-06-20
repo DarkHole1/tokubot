@@ -53,7 +53,7 @@ export class Votes {
     }
 
     rating() {
-        return this.votes.sort((a, b) => a.votes.length - b.votes.length).map(({ name, russian, url, votes }) => {
+        return this.votes.sort((a, b) => b.votes.length - a.votes.length).map(({ name, russian, url, votes }) => {
             return {
                 name, russian, url,
                 votes: votes.length
