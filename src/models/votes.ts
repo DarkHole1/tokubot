@@ -51,4 +51,13 @@ export class Votes {
     get length() {
         return this.votes.length
     }
+
+    rating() {
+        return this.votes.sort((a, b) => a.votes.length - b.votes.length).map(({ name, russian, url, votes }) => {
+            return {
+                name, russian, url,
+                votes: votes.length
+            }
+        })
+    }
 }
