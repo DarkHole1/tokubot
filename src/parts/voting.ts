@@ -1,4 +1,3 @@
-import { autoQuote } from "@roziscoding/grammy-autoquote"
 import { Composer, InlineKeyboard } from "grammy"
 import { Votes } from "../models/votes"
 import * as statics from '../static'
@@ -6,8 +5,6 @@ import * as statics from '../static'
 export const voting = new Composer
 const until = new Date('1 July 2023')
 const votes = Votes.loadSync('data/votes.json')
-
-voting.use(autoQuote)
 
 voting.command('startvoting', async ctx => {
     if (new Date() > until) {
