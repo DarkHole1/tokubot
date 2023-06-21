@@ -22,7 +22,8 @@ voting.command('startvoting', async ctx => {
 })
 
 voting.command('rating', async ctx => {
-    await ctx.reply('Рейтинг:\n' + votes.rating().map((anime, i) => `${i + 1}. (${anime.votes}) ${anime.russian} / ${anime.name}`).join('\n'), {
+    const unique = votes.unique()
+    await ctx.reply('Рейтинг:\n' + votes.rating().map((anime, i) => `${i + 1}. ${anime.votes}👍 (${(anime.votes / unique * 100).toFixed(2)}%) ${anime.russian} / ${anime.name}`).join('\n'), {
         reply_to_message_id: ctx.msg.message_id
     })
 })

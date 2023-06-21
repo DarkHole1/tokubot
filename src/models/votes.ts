@@ -60,4 +60,9 @@ export class Votes {
             }
         })
     }
+
+    unique() {
+        const uniqueVotes = new Set(this.votes.flatMap(anime => anime.votes))
+        return uniqueVotes.size
+    }
 }
