@@ -22,7 +22,7 @@ voting.command('startvoting', async ctx => {
 })
 
 voting.command('rating', async ctx => {
-    await ctx.reply('Рейтинг:\n' + votes.rating().map((anime, i) => `${i}. (${anime.votes}) ${anime.russian} / ${anime.name}`).join('\n'), {
+    await ctx.reply('Рейтинг:\n' + votes.rating().map((anime, i) => `${i + 1}. (${anime.votes}) ${anime.russian} / ${anime.name}`).join('\n'), {
         reply_to_message_id: ctx.msg.message_id
     })
 })
