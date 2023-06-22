@@ -67,6 +67,7 @@ voting.callbackQuery(/voting:(\d+):(add|remove)(:final)?/, async ctx => {
 async function sendNext(ctx: Context, id?: number) {
     const { id: nextId, anime } = votes.selectNext(id)
     if (!anime) {
+        await ctx.api.sendMessage(ctx.callbackQuery!.from.id, `Ура! Вы проголосовали за все аниме. Вы можете поменять свой голос позже, если тыкните куда надо :3`)
         return
     }
     const keyboard = makeKeyboard(nextId)
@@ -82,7 +83,7 @@ async function editMessage(ctx: Context, id: number, added: boolean) {
     const message = makeMessage(anime)
     const chat_id = ctx.callbackQuery!.message!.chat.id
     const message_id = ctx.callbackQuery!.message!.message_id
-    await ctx.api.editMessageText(chat_id, message_id, `${anime.russian} / ${anime.name}\nhttps://shikimori.me${anime.url}`, {
+    await ctx.api.editMessageText(chat_id, message_id, message, {
         reply_markup: keyboard
     })
 }
@@ -94,7 +95,7 @@ function makeKeyboard(id: number, added?: boolean, final: boolean = false) {
             `voting:${id}:add${final ? ':final' : ''}`
         )
         .text(
-            added == true ? '✅ Против' : 'Против',
+            added == false ? '✅ Против' : 'Против',
             `voting:${id}:remove${final ? ':final' : ''}`
         )
 }

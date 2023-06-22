@@ -71,8 +71,8 @@ export class Votes {
     }
 
     selectNext(id = -1) {
-        for (let newId = id + 1; newId++; newId < this.length) {
-            const anime = this.get(id)
+        for (let newId = id + 1; newId < this.length; newId++) {
+            const anime = this.get(newId)
             if (!anime.hidden) {
                 return { id: newId, anime }
             }
