@@ -5,7 +5,8 @@ export const RawVotes = z.array(z.object({
     name: z.string(),
     russian: z.string(),
     url: z.string(),
-    votes: z.array(z.number().int())
+    votes: z.array(z.number().int()),
+    hidden: z.boolean().optional().default(false)
 }))
 export type RawVotes = z.infer<typeof RawVotes>
 
