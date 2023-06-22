@@ -1,4 +1,4 @@
-import { Composer, InlineKeyboard } from "grammy"
+import { Composer, Context, InlineKeyboard } from "grammy"
 import { Votes } from "../models/votes"
 import * as statics from '../static'
 
@@ -82,3 +82,31 @@ voting.callbackQuery(/voting:(\d+):(add|remove)(:final)?/, async ctx => {
     await votes.save('data/votes.json')
     await ctx.answerCallbackQuery()
 })
+
+async function sendNext(ctx: Context, id?: number) {
+    const { id: nextId, anime } = votes.selectNext(id)
+    if (!anime) {
+        return
+    }
+    const keyboard = makeKeyboard(nextId)
+    const message = makeMessage(anime)
+    await ctx.api.sendMessage(ctx.callbackQuery!.from.id, message, {
+        reply_markup: keyboard
+    })
+}
+
+function makeKeyboard(id: number, added?: boolean, final: boolean = false) {
+    return new InlineKeyboard()
+        .text(
+            added == true ? '✅ За' : 'За',
+            `voting:${id}:add${final ? ':final' : ''}`
+        )
+        .text(
+            added == true ? '✅ Против' : 'Против',
+            `voting:${id}:remove${final ? ':final' : ''}`
+        )
+}
+
+function makeMessage(anime: { russian: string, name: string, url: string }) {
+    return `${anime.russian} / ${anime.name}\nhttps://shikimori.me${anime.url}`
+}
