@@ -29,17 +29,17 @@ export class Votes {
     }
 
     addVote(id: number, member: number) {
-        if(!this.votes[id]) {
+        if (!this.votes[id]) {
             return
         }
-        if(this.votes[id].votes.includes(member)) {
+        if (this.votes[id].votes.includes(member)) {
             return
         }
         this.votes[id].votes.push(member)
     }
 
     removeVote(id: number, member: number) {
-        if(!this.votes[id]) {
+        if (!this.votes[id]) {
             return
         }
         this.votes[id].votes = this.votes[id].votes.filter(e => e != member)
@@ -54,16 +54,29 @@ export class Votes {
     }
 
     rating() {
-        return this.votes.sort((a, b) => b.votes.length - a.votes.length).map(({ name, russian, url, votes }) => {
-            return {
-                name, russian, url,
-                votes: votes.length
-            }
-        })
+        return this.votes
+            .filter(anime => !anime.hidden)
+            .sort((a, b) => b.votes.length - a.votes.length)
+            .map(({ name, russian, url, votes }) => {
+                return {
+                    name, russian, url,
+                    votes: votes.length
+                }
+            })
     }
 
     unique() {
         const uniqueVotes = new Set(this.votes.flatMap(anime => anime.votes))
         return uniqueVotes.size
+    }
+
+    selectNext(id = -1) {
+        for (let newId = id + 1; newId++; newId < this.length) {
+            const anime = this.get(id)
+            if (!anime.hidden) {
+                return { id: newId, anime }
+            }
+        }
+        return { id: -1, anime: undefined }
     }
 }
