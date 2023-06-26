@@ -1,5 +1,5 @@
 export const TOKU_NAME = 'Sanso';
-const DARK_HOLE = 369810644;
+export const DARK_HOLE = 369810644;
 export const TOKU_CHAT = -1001311183194;
 // export const TOKU_CHAT = -1001845823201;
 export const TOKU_CHANNEL = -1001446681491;
