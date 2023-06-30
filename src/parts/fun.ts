@@ -93,7 +93,7 @@ fun.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
                 achivement = 'Go beyond! Plus coffee'
                 break
             case 80:
-                achivement = 'I can’t go on like this. I\'ll drink coffee!'
+                achivement = 'I can\'t go on like this. I\'ll drink coffee!'
                 break
             case 90:
                 achivement = 'More importantly, where\'s coffe!?'
