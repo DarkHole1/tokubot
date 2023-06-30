@@ -1,4 +1,5 @@
 import { Composer } from "grammy"
+import { pluralize } from "numeralize-ru"
 import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER } from "../constants"
 import { DrinkCounters } from "../data"
 
@@ -21,16 +22,16 @@ fun.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
     let emoji: string
     let achivement = ''
 
-    if(!TEA_STICKERS.concat(COFFEE_STICKERS).includes(sticker)) {
+    if (!TEA_STICKERS.concat(COFFEE_STICKERS).includes(sticker)) {
         return
     }
 
-    if(TEA_STICKERS.includes(sticker)) {
+    if (TEA_STICKERS.includes(sticker)) {
         drinksCounters.tea += 1
         drink = 'чя'
         count = drinksCounters.tea
         emoji = '🍵'
-        switch(count) {
+        switch (count) {
             case 1:
                 achivement = 'Чай буш?'
                 break
@@ -79,7 +80,7 @@ fun.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
         drink = 'кфе'
         count = drinksCounters.coffee
         emoji = '☕️'
-        switch(count) {
+        switch (count) {
             case 1:
                 achivement = 'На этом ты не остановишься. Так мне сказал мой побочный эффект.'
                 break
@@ -120,7 +121,7 @@ fun.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
     }
 
     await drinksCounters.toFile('data/drinks.json')
-    await ctx.reply(`Приятного! Попили ${drink} ${count} раз ${emoji}\n${achivement}`, {
+    await ctx.reply(`Приятного! Попили ${drink} ${count} ${pluralize(count, 'раз', 'раза', 'раз')}  ${emoji}\n${achivement}`, {
         reply_to_message_id: ctx.msg.message_id
     })
 })

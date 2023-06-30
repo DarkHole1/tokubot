@@ -326,6 +326,11 @@ node-fetch@^2.6.7:
   dependencies:
     whatwg-url "^5.0.0"
 
+numeralize-ru@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/numeralize-ru/-/numeralize-ru-1.0.1.tgz#44437cc1905f54b80bb03213597ab40d25245909"
+  integrity sha512-DyVAuqi8I930ujYKdWlqSmExbEOCYhme+6gbRTnjt5az/MZmgpw5GwLWbEz03TeTpwBI+JjixZa/4iXIOyavrw==
+
 object-inspect@^1.9.0:
   version "1.12.3"
   resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.12.3.tgz#ba62dffd67ee256c8c086dfae69e016cd1f198b9"
