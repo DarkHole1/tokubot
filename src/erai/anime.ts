@@ -1,11 +1,10 @@
-import { readFileSync } from "fs";
-import Parser from "rss-parser";
-import { z } from "zod";
-import { RSSItem } from "./new-rss";
+import Parser from "rss-parser"
+import { z } from "zod"
+import { RSSItem } from "./new-rss"
 
 const RawAnime = z.object({
     name: z.string(),
-    feedUrl: z.string(),
+    feedUrl: z.string().optional(),
     series: z.number().int()
 })
 type RawAnime = z.infer<typeof RawAnime>
@@ -63,7 +62,11 @@ export class Anime {
     }
 
     async checkSeries() {
-        const feed = await this.parser.parseURL(this.data.feedUrl)
+        const feedUrl = this.data.feedUrl
+        if (!feedUrl) {
+            return []
+        }
+        const feed = await this.parser.parseURL(feedUrl)
         const title = feed.items[0].title
         if (!title) return []
 
@@ -78,14 +81,14 @@ export class Anime {
     handle(updates: RSSItem[]) {
         let completed = false
         let handled = []
-        for(const update of updates) {
-            if(update.anime != this.name) {
+        for (const update of updates) {
+            if (update.anime != this.name) {
                 continue
             }
-            if(update.category == 'Finale') {
+            if (update.category == 'Finale') {
                 completed = true
             }
-            if(update.episode <= this.series) {
+            if (update.episode <= this.series) {
                 continue
             }
             this.data.series = update.episode as number
