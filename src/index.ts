@@ -163,7 +163,7 @@ bot.command('addsticker').filter(
     }
 )
 
-bot.command('/add').filter(
+bot.command('add').filter(
     isAdmin,
     async ctx => {
         if (ctx.match) return
