@@ -163,6 +163,19 @@ bot.command('addsticker').filter(
     }
 )
 
+bot.command('/add').filter(
+    isAdmin,
+    async ctx => {
+        if (ctx.match) return
+        const anime = Anime.fromName(ctx.match)
+        animes.add(anime)
+        await animes.toFileAsync('data/titles.json')
+        await ctx.reply('Супер-успешно добавили аниме в список', {
+            reply_to_message_id: ctx.msg.message_id
+        })
+    }
+)
+
 // Sorry I don't know how make this better :D 
 const callbacksForKeyboard = new Map<string, (c: Context) => Promise<unknown>>()
 
@@ -222,7 +235,7 @@ bot.command('observed', ctx => ctx.reply(`Всё что я наблюдаю:\n${
 
 animes.start(async (updates) => {
     await animes.toFileAsync('data/titles.json')
-    let message = "";
+    let message = ""
     if (updates.length == 1) {
         message = `Вышла ${updates[0].completed ? 'последняя ' : ''}${updates[0].episode} серия ${updates[0].anime}`
     } else {

@@ -57,6 +57,12 @@ export class Anime {
         }
     }
 
+    static fromName(name: string) {
+        return new this({
+            name, series: 0
+        })
+    }
+
     toJSON() {
         return this.data
     }
