@@ -1,7 +1,7 @@
-import { readFileSync, writeFileSync } from "fs";
-import { outputFile, outputFileSync, writeFile } from "fs-extra";
-import { Anime } from "./anime";
-import { makeLink, watchUpdates } from "./new-rss";
+import { readFileSync, writeFileSync } from "fs"
+import { outputFile, outputFileSync, writeFile } from "fs-extra"
+import { Anime } from "./anime"
+import { makeLink, watchUpdates } from "./new-rss"
 
 export class Animes {
     private animes: Anime[]
@@ -19,7 +19,7 @@ export class Animes {
     static fromFileSafe(path: string, token: string) {
         try {
             return this.fromFile(path, token)
-        } catch(_) {
+        } catch (_) {
             return new this([], token)
         }
     }
@@ -57,7 +57,7 @@ export class Animes {
                 res = res.concat(handled)
                 return !completed
             })
-            if(res.length != 0) update(res)
+            if (res.length != 0) update(res)
         }, {
             initial: true,
             every: 60

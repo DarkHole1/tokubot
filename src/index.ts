@@ -166,7 +166,7 @@ bot.command('addsticker').filter(
 bot.command('add').filter(
     isAdmin,
     async ctx => {
-        if (ctx.match) return
+        if (ctx.match.length == 0) return
         const anime = Anime.fromName(ctx.match)
         animes.add(anime)
         await animes.toFileAsync('data/titles.json')
