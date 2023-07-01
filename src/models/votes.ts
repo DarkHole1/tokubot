@@ -54,13 +54,15 @@ export class Votes {
     }
 
     rating() {
+        const unique = this.unique()
         return this.votes
             .filter(anime => !anime.hidden)
             .sort((a, b) => b.votes.length - a.votes.length)
             .map(({ name, russian, url, votes }) => {
                 return {
                     name, russian, url,
-                    votes: votes.length
+                    votes: votes.length,
+                    percent: votes.length / unique
                 }
             })
     }

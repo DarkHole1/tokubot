@@ -2,6 +2,8 @@ import { Composer, Context, InlineKeyboard } from "grammy"
 import { Votes } from "../models/votes"
 import * as statics from '../static'
 
+const MIN_PERCENT = 0.3
+
 export const voting = new Composer
 const until = new Date('1 July 2023')
 const votes = Votes.loadSync('data/votes.json')
@@ -22,8 +24,15 @@ voting.command('startvoting', async ctx => {
 })
 
 voting.command('rating', async ctx => {
-    const unique = votes.unique()
-    await ctx.reply('Рейтинг:\n' + votes.rating().map((anime, i) => `${i + 1}. ${anime.votes}👍 (${(anime.votes / unique * 100).toFixed(0)}%) ${anime.russian} / ${anime.name}`).join('\n'), {
+    let title = 'Рейтинг:'
+    let currentRating = votes.rating()
+    if (new Date() > until) {
+        title = 'Окончательный рейтинг:'
+        currentRating = currentRating.filter(anime => anime.percent > MIN_PERCENT)
+    }
+    const formattedRating = currentRating.map((anime, i) => `${i + 1}. ${anime.votes}👍 (${(anime.percent * 100).toFixed(0)}%) ${anime.russian} / ${anime.name}`)
+    
+    await ctx.reply(title + '\n' + formattedRating.join('\n'), {
         reply_to_message_id: ctx.msg.message_id
     })
 })
