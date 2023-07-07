@@ -9,9 +9,11 @@ const shikimori = new API({
     }
 })
 
+const season = 'spring_2023'
+
 void async function () {
     let animes = await shikimori.animes.get({
-        season: 'spring_2023',
+        season,
         order: 'name',
         limit: 50,
         kind: 'tv'
@@ -20,7 +22,7 @@ void async function () {
     while (true) {
         await sleep(20_000)
         const added = await shikimori.animes.get({
-            season: 'summer_2023',
+            season,
             order: 'name',
             limit: 50,
             kind: 'tv' as AnimeKind,
