@@ -85,7 +85,7 @@ export type RSSItem = {
     subtitles: Lang[],
     category: string,
     anime: string,
-    episode: number | number[],
+    episode: number | [number, number] | 'SP',
     modifier: string | undefined,
     date: Date
 }
@@ -96,16 +96,26 @@ const parser = new Parser({
     }
 })
 
+function parseEpisode(match: RegExpMatchArray) {
+    if(match[2]) {
+        return parseFloat(match[2])
+    }
+    if(match[3]) {
+        return match[3].split(' ~ ').map(d => parseFloat(d)) as [number, number]
+    }
+    return 'SP' as const
+}
+
 export async function parseFeed(link: string): Promise<RSSItem[]> {
     const feed = await parser.parseURL(link)
     let items = feed.items.map(item => {
         if (!item.title) throw new Error('No title')
         const title = item.title.replace(/\[.+?\]/g, '').trim()
-        const titleParsed = title.match(/^(.+) \- (?:(\d+(?:\.\d)?)|(\d+ ~ \d+))( END)?(?: \((.+)\))?$/)
+        const titleParsed = title.match(/^(.+) \- (?:(\d+(?:\.\d)?)|(\d+ ~ \d+)|(SP))( END)?(?: \((.+)\))?$/)
         if (!titleParsed) throw new Error(`Cant parse title '${title}'. Feed is broken`)
         const anime = titleParsed[1]
-        const episode = parseFloat(titleParsed[2]) ?? titleParsed[3].split(' ~ ').map(d => parseFloat(d))
-        const modifier = titleParsed[5]
+        const episode = parseEpisode(titleParsed)
+        const modifier = titleParsed[6]
         return {
             title,
             linkType: item['erai:linktype'],
