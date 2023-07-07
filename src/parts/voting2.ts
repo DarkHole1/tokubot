@@ -30,7 +30,7 @@ voting2.callbackQuery('voting:start', async ctx => {
     await ctx.answerCallbackQuery()
 })
 
-voting2.callbackQuery(/voting:(\d+):(not_planning|planning|dropped|not_finished|1|2|3|4|5|6|7|8|9|10)(:final)?/, async ctx => {
+voting2.callbackQuery(/^voting:(\d+):(not_planning|planning|dropped|not_finished|1|2|3|4|5|6|7|8|9|10)(:final)?$/, async ctx => {
     if (new Date() > until) {
         await ctx.answerCallbackQuery('Прости, время закончилось :(')
         return
