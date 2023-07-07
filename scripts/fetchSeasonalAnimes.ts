@@ -1,4 +1,4 @@
-import { outputFile } from "fs-extra";
+import { outputFile } from "fs-extra"
 import { AnimeKind, API } from "shikimori"
 
 const shikimori = new API({
@@ -9,15 +9,15 @@ const shikimori = new API({
     }
 })
 
-; void async function() {
+void async function () {
     let animes = await shikimori.animes.get({
-        season: 'summer_2023',
+        season: 'spring_2023',
         order: 'name',
         limit: 50,
         kind: 'tv'
     })
     let page = 2
-    while(true) {
+    while (true) {
         await sleep(20_000)
         const added = await shikimori.animes.get({
             season: 'summer_2023',
@@ -26,7 +26,7 @@ const shikimori = new API({
             kind: 'tv' as AnimeKind,
             page
         })
-        if(added.length == 0) break
+        if (added.length == 0) break
         console.log(`Fetched ${page} pages`)
         page++
         animes = animes.concat(added)
@@ -40,7 +40,7 @@ const shikimori = new API({
             votes: []
         }
     })
-    outputFile('data/votes.json', JSON.stringify(res))
+    outputFile('data/votes2.json', JSON.stringify(res))
 }()
 
 function sleep(time: number): Promise<never> {
