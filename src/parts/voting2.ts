@@ -30,26 +30,36 @@ voting2.callbackQuery('voting:start', async ctx => {
     await ctx.answerCallbackQuery()
 })
 
-voting2.callbackQuery(/^voting:(\d+):(not_planning|planning|dropped|not_finished|1|2|3|4|5|6|7|8|9|10)(:final)?$/, async ctx => {
+voting2.callbackQuery(/^voting:(\d+):(not_planning|planning|dropped|not_finished|watched|main|1|2|3|4|5|6|7|8|9|10)(:final)?$/, async ctx => {
     if (new Date() > until) {
         await ctx.answerCallbackQuery('Прости, время закончилось :(')
         return
     }
     const id = Number(ctx.match[1])
-    const answer = ctx.match[2] as Answers
+    const answer = ctx.match[2] as (Answers | 'watched' | 'main')
     const final = !!ctx.match[3]
     const member = ctx.callbackQuery.from.id
-    votes.addVote(id, member, answer)
 
-    try {
-        await editMessage(ctx, id, answer)
-    } catch (e) {
+    if (answer == 'watched' || answer == 'main') {
+        try {
+            await editMessage(ctx, id, answer, final)
+        } catch (e) {
 
+        }
+    } else {
+        votes.addVote(id, member, answer)
+
+        try {
+            await editMessage(ctx, id, answer, final)
+        } catch (e) {
+
+        }
+        if (!final) {
+            await sendNext(ctx, id)
+        }
+        await votes.save('data/votes2.json')
     }
-    if (!final) {
-        await sendNext(ctx, id)
-    }
-    await votes.save('data/votes2.json')
+
     await ctx.answerCallbackQuery()
 })
 
@@ -66,9 +76,18 @@ async function sendNext(ctx: Context, id?: number) {
     })
 }
 
-async function editMessage(ctx: Context, id: number, answer: Answers) {
+async function editMessage(ctx: Context, id: number, answer: (Answers | 'watched' | 'main'), final: boolean) {
     const anime = votes.get(id)
-    const keyboard = makeKeyboard(id, answer, true)
+    let keyboard: InlineKeyboard
+    if (answer == 'watched') {
+        keyboard = makeRatingKeyboard(id, undefined, final)
+    } else if(answer == 'main') {
+        keyboard = makeKeyboard(id, undefined, final)
+    } else if(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].includes(answer)) {
+        keyboard = makeRatingKeyboard(id, answer, true)
+    } else {
+        keyboard = makeKeyboard(id, answer, true)
+    }
     const message = makeMessage(anime)
     const chat_id = ctx.callbackQuery!.message!.chat.id
     const message_id = ctx.callbackQuery!.message!.message_id
@@ -97,6 +116,14 @@ function makeKeyboard(id: number, answer?: Answers, final: boolean = false) {
             `voting:${id}:dropped` + addFinal(final)
         )
         .row()
+        .text(
+            'Посмотрел',
+            `voting:${id}:watched` + addFinal(final)
+        )
+}
+
+function makeRatingKeyboard(id: number, answer?: Answers, final: boolean = false) {
+    return new InlineKeyboard()
         .text(
             addCheckmark(answer, '1') + '1',
             `voting:${id}:1` + addFinal(final)
@@ -137,6 +164,11 @@ function makeKeyboard(id: number, answer?: Answers, final: boolean = false) {
         .text(
             addCheckmark(answer, '10') + '10',
             `voting:${id}:10` + addFinal(final)
+        )
+        .row()
+        .text(
+            'Назад',
+            `voting:${id}:main` + addFinal(final)
         )
 }
 
