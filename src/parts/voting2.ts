@@ -2,11 +2,11 @@ import { Composer, Context, InlineKeyboard } from "grammy"
 import { Answers, Votes2 } from "../models/votes2"
 import * as statics from '../static'
 
-export const voting = new Composer
+export const voting2 = new Composer
 const until = new Date('1 August 2023')
 const votes = Votes2.loadSync('data/votes2.json')
 
-voting.command('startvoting', async ctx => {
+voting2.command('startvoting', async ctx => {
     if (new Date() > until) {
         await ctx.reply('Прости, время закончилось :(')
         return
@@ -21,7 +21,7 @@ voting.command('startvoting', async ctx => {
     }
 })
 
-voting.callbackQuery('voting:start', async ctx => {
+voting2.callbackQuery('voting:start', async ctx => {
     if (new Date() > until) {
         await ctx.answerCallbackQuery('Прости, время закончилось :(')
         return
@@ -30,7 +30,7 @@ voting.callbackQuery('voting:start', async ctx => {
     await ctx.answerCallbackQuery()
 })
 
-voting.callbackQuery(/voting:(\d+):(not_planning|planning|dropped|not_finished|1|2|3|4|5|6|7|8|9|10)(:final)?/, async ctx => {
+voting2.callbackQuery(/voting:(\d+):(not_planning|planning|dropped|not_finished|1|2|3|4|5|6|7|8|9|10)(:final)?/, async ctx => {
     if (new Date() > until) {
         await ctx.answerCallbackQuery('Прости, время закончилось :(')
         return
@@ -141,7 +141,7 @@ function makeKeyboard(id: number, answer?: Answers, final: boolean = false) {
 }
 
 function addCheckmark(a: string | undefined, b: string) {
-    if(a === b) {
+    if (a === b) {
         return '✅ '
     }
     return ''

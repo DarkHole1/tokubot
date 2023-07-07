@@ -10,8 +10,8 @@ import { Recommendations, ThanksStickers } from './data'
 import { Anime } from './erai/anime'
 import { TOKU_NAME, EGOID, BOT_ID, TOKU_CHAT, TOKU_CHANNEL, ANGELINA_LIST } from './constants'
 import { fun } from './parts/fun'
-import { voting } from './parts/voting'
 import { brs } from './parts/brs'
+import { voting2 } from './parts/voting2'
 
 const config = new Config()
 const animes = Animes.fromFileSafe('data/titles.json', config.ERAI_TOKEN)
@@ -118,7 +118,7 @@ bot.command('recommend', async ctx => {
     })
 })
 
-bot.use(voting)
+bot.use(voting2)
 
 brs(bot)
 
