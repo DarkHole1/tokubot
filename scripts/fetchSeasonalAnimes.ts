@@ -37,7 +37,7 @@ void async function () {
             name: anime.name,
             russian: anime.russian,
             url: anime.url,
-            votes: []
+            votes: {}
         }
     })
     outputFile('data/votes2.json', JSON.stringify(res))
