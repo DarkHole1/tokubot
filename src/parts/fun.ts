@@ -122,7 +122,7 @@ fun.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
         drinksCounters.alco += 1
         drink = 'алк'
         count = drinksCounters.alco
-        emoji = '🍺'
+        emoji = '🥃'
         switch (count) {
             case 1:
                 achivement = 'На этом ты не остановишься. Так мне сказал мой побочный эффект.'
