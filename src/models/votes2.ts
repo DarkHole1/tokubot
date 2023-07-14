@@ -40,9 +40,6 @@ export class Votes2 {
         if (!this.votes[id]) {
             return
         }
-        if (!this.votes[id].votes[member]) {
-            return
-        }
         this.votes[id].votes[member] = answer
     }
 
