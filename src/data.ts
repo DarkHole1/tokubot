@@ -165,17 +165,20 @@ export class ThanksStickers {
 
 const RawDrinkCounters = z.object({
     tea: z.number().int(),
-    coffee: z.number().int()
+    coffee: z.number().int(),
+    alco: z.number().int().default(0)
 })
 type RawDrinkCounters = z.infer<typeof RawDrinkCounters>
 
 export class DrinkCounters implements RawDrinkCounters {
     tea: number
     coffee: number
+    alco: number
 
     private constructor(data: RawDrinkCounters) {
         this.tea = data.tea
         this.coffee = data.coffee
+        this.alco = data.alco
     }
 
     static fromFileSync(filename: string) {
@@ -187,7 +190,7 @@ export class DrinkCounters implements RawDrinkCounters {
             return this.fromFileSync(filename)
         } catch(_) {
             console.log(_)
-            return new this({ tea: 0, coffee: 0 })
+            return new this({ tea: 0, coffee: 0, alco: 0 })
         }
     }
 
