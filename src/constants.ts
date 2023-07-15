@@ -13,5 +13,8 @@ export const WORLD_TRIGGER = 'CAACAgEAAx0CbgUG4QACAS5kQTVsPpYJb3nUAAHDaO9_YTfgvN
 export const TEA_STICKERS = ['AgADihgAAu4FAUg', 'AgAD0BEAAtLWCUg', 'AgADoRcAArefAUg']
 export const COFFEE_STICKERS = ['AgAD7ikAAvdHoUk', 'AgADSyEAAtp_SEo', 'AgADURYAAos5KUk']
 export const ALCO_STICKERS = ['AgADtxoAAqDgEUs', 'AgADFBgAAmsrgUg', 'AgADrBgAAj0SSUk', 'AgADfQwAAiFgWVU', 'AgADlyMAAn28YEs']
+export const TEA_EMOJIS = ['🍵']
+export const COFFEE_EMOJIS = ['☕️']
+export const ALCO_EMOJIS = ['🥃', '🍻', '🍺', '🍷', '🍾']
 // Пон
 export const PON_STICKER = 'CAACAgIAAxkBAAEhnnNkblkm-YkHGOAR1ltwGrPGDhGvMgACmygAAqCNOUshhm_UzqyrcC8E'
