@@ -17,7 +17,6 @@ fun.hears(/триггер/gim, ctx => ctx.replyWithSticker(WORLD_TRIGGER, { repl
 fun.hears(/(\P{L}|^)пон(\P{L}|$)/gimu, ctx => ctx.replyWithSticker(PON_STICKER, { reply_to_message_id: ctx.msg.message_id }))
 
 fun.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
-    const sticker = ctx.msg.sticker.file_unique_id
     let drink: string
     let count: number
     let emoji: string
