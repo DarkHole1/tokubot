@@ -203,11 +203,11 @@ function classifySticker(sticker: Sticker): Counters | null {
     }
 
     if (COFFEE_EMOJIS.includes(emoji)) {
-        return 'tea'
+        return 'coffee'
     }
 
     if (ALCO_EMOJIS.includes(emoji)) {
-        return 'tea'
+        return 'alco'
     }
 
     return null
