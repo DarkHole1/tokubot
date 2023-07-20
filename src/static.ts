@@ -22,4 +22,4 @@ export const startVoting =
 const tryCapitalize = (s: string, really = true) => really ? s[0].toUpperCase() + s.slice(1) : s
 
 export const formatUpdate = ({ anime, episode, completed }: { anime: string, episode: number, completed: boolean }, capitalize = false) => fmt
-`${completed ? tryCapitalize('последняя ', capitalize) : ''}${episode} серия ${anime}${' / ' + spoiler('That was all a trick. I deceived you.')}`
+`${completed ? tryCapitalize('последняя ', capitalize) : ''}${episode} серия ${anime}${fmt` / ${spoiler('That was all a trick. I deceived you.')}`}`

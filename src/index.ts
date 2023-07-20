@@ -3,7 +3,7 @@ import { ItemWithListStatus } from './mal/types/animelist'
 import { Bot, Context, InlineKeyboard } from 'grammy'
 import { Animes } from './erai/animes'
 import * as statics from './static'
-import { hydrateReply, ParseModeFlavor } from '@grammyjs/parse-mode'
+import { fmt, FormattedString, hydrateReply, ParseModeFlavor } from '@grammyjs/parse-mode'
 import { Config } from './config'
 import { isAdmin, randomString, throttle } from "./utils"
 import { Recommendations, ThanksStickers } from './data'
@@ -234,14 +234,15 @@ bot.command('observed', ctx => ctx.reply(`Всё что я наблюдаю:\n${
 }))
 
 animes.start(async (updates) => {
-    await animes.toFileAsync('data/titles.json')
-    let message = ""
+    // await animes.toFileAsync('data/titles.json')
+    let message: FormattedString
     if (updates.length == 1) {
-        message = `Вышла ${statics.formatUpdate(updates[0], false)}`
+        message = fmt`Вышла ${statics.formatUpdate(updates[0], false)}`
     } else {
-        message = `Вышли новые серии:\n${updates.map(update => `* ${statics.formatUpdate(update, true)}`).join('\n')}`
+        message = fmt`Вышли новые серии:\n${updates.map(update => `* ${statics.formatUpdate(update, true)}`).join('\n')}`
     }
-    bot.api.sendMessage(TOKU_CHAT, message)
+    console.log(message)
+    bot.api.sendMessage(TOKU_CHAT, message.toString(), { entities: message.entities })
     console.log("Successfully ended")
 })
 
