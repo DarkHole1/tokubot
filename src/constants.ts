@@ -1,7 +1,7 @@
 export const TOKU_NAME = 'Sanso'
 export const DARK_HOLE = 369810644
-// export const TOKU_CHAT = -1001311183194
-export const TOKU_CHAT = -1001845823201;
+export const TOKU_CHAT = -1001311183194
+// export const TOKU_CHAT = -1001845823201
 export const TOKU_CHANNEL = -1001446681491
 export const EGOID = 1016239817
 export const BOT_ID = 5627801063
