@@ -1,4 +1,4 @@
-import { code, fmt, link } from "@grammyjs/parse-mode"
+import { code, fmt, link, spoiler } from "@grammyjs/parse-mode"
 
 export const help = fmt
 `Этот бот умеет:
@@ -18,3 +18,8 @@ export const startVoting =
 А ну и да, вы можете переголосовать в любой момент или начать голосвание с нуля.
 
 Если обнаружили ошибку или отсутствие чего-то важного, пишите моему создателю - @darkhole1.`
+
+const tryCapitalize = (s: string, really = true) => really ? s[0].toUpperCase() + s.slice(1) : s
+
+export const formatUpdate = ({ anime, episode, completed }: { anime: string, episode: number, completed: boolean }, capitalize = false) => fmt
+`${completed ? tryCapitalize('последняя ', capitalize) : ''}${episode} серия ${anime}${' / ' + spoiler('That was all a trick. I deceived you.')}`

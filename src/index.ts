@@ -237,9 +237,9 @@ animes.start(async (updates) => {
     await animes.toFileAsync('data/titles.json')
     let message = ""
     if (updates.length == 1) {
-        message = `Вышла ${updates[0].completed ? 'последняя ' : ''}${updates[0].episode} серия ${updates[0].anime}`
+        message = `Вышла ${statics.formatUpdate(updates[0], false)}`
     } else {
-        message = `Вышли новые серии:\n${updates.map(update => `* ${updates[0].completed ? 'Последняя ' : ''}${update.episode} серия ${update.anime}`).join('\n')}`
+        message = `Вышли новые серии:\n${updates.map(update => `* ${statics.formatUpdate(update, true)}`).join('\n')}`
     }
     bot.api.sendMessage(TOKU_CHAT, message)
     console.log("Successfully ended")
