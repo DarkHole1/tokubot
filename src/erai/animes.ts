@@ -45,7 +45,7 @@ export class Animes {
         return this.animes.slice()
     }
 
-    start(update: (animes: ({ anime: string, episode: number, completed: boolean })[]) => void) {
+    start(update: (animes: ({ anime: string, russian?: string, episode: number, completed: boolean })[]) => void) {
         watchUpdates(makeLink({
             category: 'airing',
             linkType: 'magnet',

@@ -103,7 +103,7 @@ export class Anime {
                 continue
             }
             this.data.series = update.episode as number
-            handled.push({ anime: this.name, episode: this.series, completed })
+            handled.push({ anime: this.name, episode: this.series, russian: this.russian, completed })
         }
         return { completed, handled }
     }
