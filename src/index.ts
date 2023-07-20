@@ -234,7 +234,7 @@ bot.command('observed', ctx => ctx.reply(`Всё что я наблюдаю:\n${
 }))
 
 animes.start(async (updates) => {
-    // await animes.toFileAsync('data/titles.json')
+    await animes.toFileAsync('data/titles.json')
     let message: FormattedString
     if (updates.length == 1) {
         message = fmt`Вышла ${statics.formatUpdate(updates[0], false)}`
