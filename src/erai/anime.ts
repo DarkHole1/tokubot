@@ -4,6 +4,7 @@ import { RSSItem } from "./new-rss"
 
 const RawAnime = z.object({
     name: z.string(),
+    russian: z.string().optional(),
     feedUrl: z.string().optional(),
     series: z.number().int()
 })
@@ -15,6 +16,10 @@ export class Anime {
 
     get name() {
         return this.data.name
+    }
+
+    get russian() {
+        return this.data.russian
     }
 
     get series() {
