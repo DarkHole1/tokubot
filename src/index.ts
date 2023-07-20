@@ -239,7 +239,7 @@ animes.start(async (updates) => {
     if (updates.length == 1) {
         message = fmt`Вышла ${statics.formatUpdate(updates[0], false)}`
     } else {
-        message = fmt`Вышли новые серии:\n${updates.map(update => `* ${statics.formatUpdate(update, true)}`).join('\n')}`
+        message = fmt`Вышли новые серии:\n${updates.map(update => fmt`* ${statics.formatUpdate(update, true)}`).reduce((a, b) => fmt`${a}\n${b}`)}`
     }
     console.log(message)
     bot.api.sendMessage(TOKU_CHAT, message.toString(), { entities: message.entities })
