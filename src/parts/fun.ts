@@ -17,6 +17,25 @@ fun.hears(/триггер/gim, ctx => ctx.replyWithSticker(WORLD_TRIGGER, { repl
 // Пон
 fun.hears(/(\P{L}|^)пон(\P{L}|$)/gimu, ctx => ctx.replyWithSticker(PON_STICKER, { reply_to_message_id: ctx.msg.message_id }))
 
+fun.hears(/^Руби, (.+) или (.+)\?$/, async ctx => {
+    const a = ctx.match[1]
+    const b = ctx.match[2]
+    let res: string
+    const random = Math.random()
+    const donuts = 0.99
+    console.log(random)
+    if (a.toLowerCase() == 'или' || b.toLowerCase() == 'или' || random > donuts) {
+        res = 'Пончики'
+    } else if (random <= donuts * 0.5) {
+        res = a[0].toUpperCase() + a.slice(1)
+    } else {
+        res = b[0].toUpperCase() + b.slice(1)
+    }
+    await ctx.reply(res, {
+        reply_to_message_id: ctx.msg.message_id
+    })
+})
+
 fun.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
     let drink: string
     let count: number
