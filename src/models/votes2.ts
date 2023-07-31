@@ -65,4 +65,21 @@ export class Votes2 {
         }
         return { id: -1, anime: undefined }
     }
+
+    count() {
+        const res: { [k in Answers]: number } = {
+            'not_planning': 0, 'planning': 0,
+            'dropped': 0, 'not_finished': 0,
+            '1': 0, '2': 0, '3': 0, '4': 0, '5': 0,
+            '6': 0, '7': 0, '8': 0, '9': 0, '10': 0
+        }
+
+        for(const anime of this.votes) {
+            for(const vote of Object.values(anime.votes)) {
+                res[vote]++
+            }
+        }
+
+        return res
+    }
 }
