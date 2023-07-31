@@ -31,8 +31,25 @@ voting2.command('rating', async ctx => {
     const notInterectingFormatted = notInterecting.map(anime => `* ${anime.name} / ${anime.russian}`).join('\n')
     const notInterectingBlock = `Абсолютно неинтересные тайтлы:\n${notInterectingFormatted}`
 
+    const ratedAnimes = count.map(anime => {
+        const { sum, unique } = Object.entries(anime.votes).reduce((res, [k, v]) => {
+            const parsed = parseInt(k)
+            if (isNaN(parsed)) return res
+            res.sum += parsed * v
+            res.unique += v
+            return res
+        }, { sum: 0, unique: 0 })
+        return {
+            ...anime,
+            score: sum / unique
+        }
+    })
+    const topAnimes = ratedAnimes.sort((a, b) => b.score - a.score)
+    const topAnimesFormatted = topAnimes.map((anime, i) => `${i + 1}. (${anime.score}) ${anime.name} / ${anime.russian}`)
+    const topAnimesBlock = `Топ аниме:\n${topAnimesFormatted.join('\n')}`
+
     try {
-        await ctx.reply([totalBlock, notInterectingBlock].join('\n\n'))
+        await ctx.reply([totalBlock, topAnimesBlock].join('\n\n'))
         // const mapped = count.map(anime => `* ${anime.name} / ${anime.russian}:\n${Object.entries(anime.votes).filter(([_, v]) => v > 0).map(([k, v]) => `  ${k}: ${v}`).join('\n')}`)
         // await ctx.reply(`Проголосовало ${unique} человек\nРезультаты:\n${mapped.slice(0, 25).join('\n')}`)
         // await ctx.reply(mapped.slice(25).join('\n'))
