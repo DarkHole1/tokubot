@@ -48,8 +48,12 @@ voting2.command('rating', async ctx => {
     const topAnimesFormatted = topAnimes.map((anime, i) => `${i + 1}. (${anime.score.toFixed(2)}) ${anime.name} / ${anime.russian}`)
     const topAnimesBlock = `Топ аниме:\n${topAnimesFormatted.join('\n')}`
 
+    const perspectiveAnimes = count.sort((a, b) => b.votes.planning - a.votes.planning)
+    const perspectiveAnimesFormatted = perspectiveAnimes.map((anime, i) => `${i + 1}. (${anime.votes.planning}) ${anime.name} / ${anime.russian}`)
+    const perspectiveAnimesBlock = `Перспективные аниме: ${perspectiveAnimesFormatted.join('\n')}`
+
     try {
-        await ctx.reply([totalBlock, topAnimesBlock].join('\n\n'))
+        await ctx.reply([totalBlock, perspectiveAnimesBlock].join('\n\n'))
         // const mapped = count.map(anime => `* ${anime.name} / ${anime.russian}:\n${Object.entries(anime.votes).filter(([_, v]) => v > 0).map(([k, v]) => `  ${k}: ${v}`).join('\n')}`)
         // await ctx.reply(`Проголосовало ${unique} человек\nРезультаты:\n${mapped.slice(0, 25).join('\n')}`)
         // await ctx.reply(mapped.slice(25).join('\n'))
