@@ -41,7 +41,7 @@ voting2.command('rating', async ctx => {
         }, { sum: 0, unique: 0 })
         return {
             ...anime,
-            score: sum / unique
+            score: unique == 0 ? 0 : sum / unique
         }
     })
     const topAnimes = ratedAnimes.sort((a, b) => b.score - a.score)
