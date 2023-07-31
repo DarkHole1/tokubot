@@ -55,7 +55,7 @@ voting2.command('rating', async ctx => {
 
     const ratedFixed = ratedAnimes.map(anime => {
         const votes = anime.votes
-        const score = anime.score * (0.99 ** votes.not_planning) * (1.005 ** votes.planning) * (1.005 ** votes.planning) * (0.95 ** votes.dropped)
+        const score = anime.score * (0.99 ** votes.not_planning) * (1.005 ** votes.planning) * (1.008 ** votes.not_finished) * (0.95 ** votes.dropped)
         return {
             ...anime,
             score: clamp(score, 0, 10)
