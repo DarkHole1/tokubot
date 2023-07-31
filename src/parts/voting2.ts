@@ -25,12 +25,14 @@ voting2.command('rating', async ctx => {
     const unique = votes.unique()
     const count = votes.count()
 
+    const totalBlock = `Всего тайтлов: ${count.length}. Всего проголосовало: ${unique}.`
+
     const notInterecting = count.filter(anime => !Object.entries(anime.votes).some(([k, v]) => k != 'not_planning' && v != 0))
     const notInterectingFormatted = notInterecting.map(anime => `* ${anime.name} / ${anime.russian}`).join('\n')
     const notInterectingBlock = `Абсолютно неинтересные тайтлы:\n${notInterectingFormatted}`
-    
+
     try {
-        await ctx.reply(`Всего тайтлов: ${count.length}. Всего проголосовало: ${unique}.\n\n${notInterectingBlock}`)
+        await ctx.reply([totalBlock, notInterectingBlock].join('\n\n'))
         // const mapped = count.map(anime => `* ${anime.name} / ${anime.russian}:\n${Object.entries(anime.votes).filter(([_, v]) => v > 0).map(([k, v]) => `  ${k}: ${v}`).join('\n')}`)
         // await ctx.reply(`Проголосовало ${unique} человек\nРезультаты:\n${mapped.slice(0, 25).join('\n')}`)
         // await ctx.reply(mapped.slice(25).join('\n'))
