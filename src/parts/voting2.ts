@@ -51,7 +51,7 @@ voting2.command('rating', async ctx => {
 
     const perspectiveAnimes = count.sort((a, b) => b.votes.planning - a.votes.planning)
     const perspectiveAnimesFormatted = perspectiveAnimes.map((anime, i) => `${i + 1}. (${anime.votes.planning}) ${anime.name} / ${anime.russian}`)
-    const perspectiveAnimesBlock = `Перспективные аниме: ${perspectiveAnimesFormatted.slice(0, 10).join('\n')}`
+    const perspectiveAnimesBlock = `Перспективные аниме:\n${perspectiveAnimesFormatted.slice(0, 10).join('\n')}`
 
     const ratedFixed = ratedAnimes.map(anime => {
         const votes = anime.votes
