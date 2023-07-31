@@ -63,7 +63,7 @@ voting2.command('rating', async ctx => {
     })
     const topAnimesFixed = ratedFixed.sort((a, b) => b.score - a.score)
     const topAnimesFixedFormatted = topAnimesFixed.map((anime, i) => `${i + 1}. (${anime.score.toFixed(2)}) ${anime.name} / ${anime.russian}`)
-    const topAnimesFixedBlock = `Топ аниме:\n${topAnimesFixedFormatted.slice(30).join('\n')}`
+    const topAnimesFixedBlock = `Топ аниме:\n${topAnimesFixedFormatted.slice(0, 30).join('\n')}`
 
     try {
         await ctx.reply([totalBlock, topAnimesFixedBlock].join('\n\n'))
