@@ -25,8 +25,12 @@ voting2.command('rating', async ctx => {
     const unique = votes.unique()
     const count = votes.count()
     const mapped = count.map(anime => `* ${anime.name} / ${anime.russian}:\n${Object.entries(anime.votes).filter(([_, v]) => v > 0).map(([k, v]) => `  ${k}: ${v}`).join('\n')}`)
-    await ctx.reply(`Проголосовало ${unique} человек\nРезультаты:\n${mapped.slice(0, 25).join('\n')}`)
-    await ctx.reply(mapped.slice(25).join('\n'))
+    try {
+        await ctx.reply(`Проголосовало ${unique} человек\nРезультаты:\n${mapped.slice(0, 25).join('\n')}`)
+        await ctx.reply(mapped.slice(25).join('\n'))
+    } catch(e) {
+        await ctx.reply(`Error: ${e}`)
+    }
 })
 
 voting2.callbackQuery('voting:start', async ctx => {
