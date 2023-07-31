@@ -4,7 +4,7 @@ import { Answers, Votes2 } from "../models/votes2"
 import * as statics from '../static'
 
 export const voting2 = new Composer
-const until = new Date('1 August 2023')
+const until = new Date('3 August 2023')
 const votes = Votes2.loadSync('data/votes2.json')
 
 voting2.command('startvoting', async ctx => {
@@ -67,7 +67,7 @@ voting2.command('rating', async ctx => {
     const topAnimesFixedBlock = `Топ аниме:\n${topAnimesFixedFormatted.slice(0, 10).join('\n')}`
 
     try {
-        await ctx.reply([totalBlock, topAnimesFixedBlock, perspectiveAnimesBlock].join('\n\n'))
+        await ctx.reply([totalBlock].join('\n\n'))
     } catch (e) {
         await ctx.reply(`Error: ${e}`)
     }
