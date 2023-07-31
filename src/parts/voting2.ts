@@ -24,11 +24,17 @@ voting2.command('startvoting', async ctx => {
 voting2.command('rating', async ctx => {
     const unique = votes.unique()
     const count = votes.count()
-    const mapped = count.map(anime => `* ${anime.name} / ${anime.russian}:\n${Object.entries(anime.votes).filter(([_, v]) => v > 0).map(([k, v]) => `  ${k}: ${v}`).join('\n')}`)
+
+    const notInterecting = count.filter(anime => !Object.entries(anime.votes).some(([k, v]) => k != 'not_planning' && v != 0))
+    const notInterectingFormatted = notInterecting.map(anime => `* ${anime.name} / ${anime.russian}`).join('\n')
+    const notInterectingBlock = `Абсолютно неинтересные тайтлы:\n${notInterectingFormatted}`
+    
     try {
-        await ctx.reply(`Проголосовало ${unique} человек\nРезультаты:\n${mapped.slice(0, 25).join('\n')}`)
-        await ctx.reply(mapped.slice(25).join('\n'))
-    } catch(e) {
+        await ctx.reply(`Всего тайтлов: ${count.length}. Всего проголосовало: ${unique}.\n\n${notInterectingBlock}`)
+        // const mapped = count.map(anime => `* ${anime.name} / ${anime.russian}:\n${Object.entries(anime.votes).filter(([_, v]) => v > 0).map(([k, v]) => `  ${k}: ${v}`).join('\n')}`)
+        // await ctx.reply(`Проголосовало ${unique} человек\nРезультаты:\n${mapped.slice(0, 25).join('\n')}`)
+        // await ctx.reply(mapped.slice(25).join('\n'))
+    } catch (e) {
         await ctx.reply(`Error: ${e}`)
     }
 })
@@ -93,9 +99,9 @@ async function editMessage(ctx: Context, id: number, answer: (Answers | 'watched
     let keyboard: InlineKeyboard
     if (answer == 'watched') {
         keyboard = makeRatingKeyboard(id, undefined, final)
-    } else if(answer == 'main') {
+    } else if (answer == 'main') {
         keyboard = makeKeyboard(id, undefined, final)
-    } else if(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].includes(answer)) {
+    } else if (['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].includes(answer)) {
         keyboard = makeRatingKeyboard(id, answer, true)
     } else {
         keyboard = makeKeyboard(id, answer, true)
