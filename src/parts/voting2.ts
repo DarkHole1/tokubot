@@ -76,9 +76,13 @@ voting2.command('rating', async ctx => {
 voting2.command('raw', async ctx => {
     const count = votes.count()
     const text = pre(JSON.stringify(count), 'json')
-    ctx.reply(text.text, {
-        entities: text.entities
-    })
+    try {
+        await ctx.reply(text.text, {
+            entities: text.entities
+        })
+    } catch (e) {
+        await ctx.reply(`Error: ${e}`)
+    }
 })
 
 voting2.callbackQuery('voting:start', async ctx => {
