@@ -24,6 +24,7 @@ voting2.command('startvoting', async ctx => {
 voting2.command('rating', async ctx => {
     const unique = votes.unique()
     const count = votes.count()
+    const clamp = (e: number, a: number, b: number) => Math.min(Math.max(e, a), b)
 
     const totalBlock = `Всего тайтлов: ${count.length}. Всего проголосовало: ${unique}.`
 
@@ -52,8 +53,20 @@ voting2.command('rating', async ctx => {
     const perspectiveAnimesFormatted = perspectiveAnimes.map((anime, i) => `${i + 1}. (${anime.votes.planning}) ${anime.name} / ${anime.russian}`)
     const perspectiveAnimesBlock = `Перспективные аниме: ${perspectiveAnimesFormatted.join('\n')}`
 
+    const ratedFixed = ratedAnimes.map(anime => {
+        const votes = anime.votes
+        const score = anime.score * (0.99 ** votes.not_planning) * (1.005 ** votes.planning) * (1.005 ** votes.planning) * (0.95 ** votes.dropped)
+        return {
+            ...anime,
+            score: clamp(score, 0, 10)
+        }
+    })
+    const topAnimesFixed = ratedFixed.sort((a, b) => b.score - a.score)
+    const topAnimesFixedFormatted = topAnimesFixed.map((anime, i) => `${i + 1}. (${anime.score.toFixed(2)}) ${anime.name} / ${anime.russian}`)
+    const topAnimesFixedBlock = `Топ аниме:\n${topAnimesFixedFormatted.join('\n')}`
+
     try {
-        await ctx.reply([totalBlock, perspectiveAnimesBlock].join('\n\n'))
+        await ctx.reply([totalBlock, topAnimesFixedBlock].join('\n\n'))
         // const mapped = count.map(anime => `* ${anime.name} / ${anime.russian}:\n${Object.entries(anime.votes).filter(([_, v]) => v > 0).map(([k, v]) => `  ${k}: ${v}`).join('\n')}`)
         // await ctx.reply(`Проголосовало ${unique} человек\nРезультаты:\n${mapped.slice(0, 25).join('\n')}`)
         // await ctx.reply(mapped.slice(25).join('\n'))
