@@ -66,7 +66,7 @@ voting2.command('rating', async ctx => {
     const topAnimesFixedBlock = `Топ аниме:\n${topAnimesFixedFormatted.slice(0, 10).join('\n')}`
 
     try {
-        await ctx.reply([totalBlock, topAnimesFixedBlock, perspectiveAnimes].join('\n\n'))
+        await ctx.reply([totalBlock, topAnimesFixedBlock, perspectiveAnimesBlock].join('\n\n'))
     } catch (e) {
         await ctx.reply(`Error: ${e}`)
     }
