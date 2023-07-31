@@ -23,7 +23,8 @@ voting2.command('startvoting', async ctx => {
 
 voting2.command('rating', async ctx => {
     const unique = votes.unique()
-    ctx.reply(`Проголосовало ${unique} человек`)
+    const count = votes.count()
+    ctx.reply(`Проголосовало ${unique} человек\nРезультаты:\n${count.map(anime => `* ${anime.name} / ${anime.russian}:\n${Object.entries(anime.votes).map(([k, v]) => `  ${k}: v`).join('\n')}`).join('\n')}`)
 })
 
 voting2.callbackQuery('voting:start', async ctx => {
