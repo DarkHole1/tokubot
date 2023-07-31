@@ -1,3 +1,4 @@
+import { pre } from '@grammyjs/parse-mode'
 import { Composer, Context, InlineKeyboard } from "grammy"
 import { Answers, Votes2 } from "../models/votes2"
 import * as statics from '../static'
@@ -70,6 +71,14 @@ voting2.command('rating', async ctx => {
     } catch (e) {
         await ctx.reply(`Error: ${e}`)
     }
+})
+
+voting2.command('raw', async ctx => {
+    const count = votes.count()
+    const text = pre(JSON.stringify(count), 'json')
+    ctx.reply(text.text, {
+        entities: text.entities
+    })
 })
 
 voting2.callbackQuery('voting:start', async ctx => {
