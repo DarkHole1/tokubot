@@ -4,7 +4,7 @@ import { Answers, Votes2 } from "../models/votes2"
 import * as statics from '../static'
 
 export const voting2 = new Composer
-const until = new Date('1 August 2023')
+const until = new Date('2 August 2023')
 const votes = Votes2.loadSync('data/votes2.json')
 
 voting2.command('startvoting', async ctx => {
