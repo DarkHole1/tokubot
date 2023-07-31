@@ -75,12 +75,9 @@ voting2.command('rating', async ctx => {
 
 voting2.command('raw', async ctx => {
     const count = votes.count()
-    const text = pre(JSON.stringify(count), 'json')
+    const text = JSON.stringify(count)
     try {
-        await ctx.replyWithDocument(new InputFile(Buffer.from(text.text)))
-        // await ctx.reply(text.text, {
-        //     entities: text.entities
-        // })
+        await ctx.replyWithDocument(new InputFile(Buffer.from(text), 'voting.json'))
     } catch (e) {
         await ctx.reply(`Error: ${e}`)
     }
