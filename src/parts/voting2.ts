@@ -1,5 +1,5 @@
 import { pre } from '@grammyjs/parse-mode'
-import { Composer, Context, InlineKeyboard } from "grammy"
+import { Composer, Context, InlineKeyboard, InputFile } from "grammy"
 import { Answers, Votes2 } from "../models/votes2"
 import * as statics from '../static'
 
@@ -77,9 +77,10 @@ voting2.command('raw', async ctx => {
     const count = votes.count()
     const text = pre(JSON.stringify(count), 'json')
     try {
-        await ctx.reply(text.text, {
-            entities: text.entities
-        })
+        await ctx.replyWithDocument(new InputFile(Buffer.from(text.text)))
+        // await ctx.reply(text.text, {
+        //     entities: text.entities
+        // })
     } catch (e) {
         await ctx.reply(`Error: ${e}`)
     }
