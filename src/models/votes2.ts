@@ -22,7 +22,7 @@ export const RawVotes2 = z.array(RawVote)
 export type RawVotes2 = z.infer<typeof RawVotes2>
 
 type Counter = { [k in Answers]: number }
-type Res = Omit<RawVote, 'votes'> & { votes: Counter }
+export type Animes = Omit<RawVote, 'votes'> & { votes: Counter }
 
 export class Votes2 {
     private votes: RawVotes2
@@ -72,7 +72,7 @@ export class Votes2 {
         return { id: -1, anime: undefined }
     }
 
-    count(): Res[] {
+    count(): Animes[] {
         return this.votes.map(anime => {
             const res: Counter = {
                 'not_planning': 0, 'planning': 0,

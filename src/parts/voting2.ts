@@ -1,6 +1,6 @@
 import { pre } from '@grammyjs/parse-mode'
 import { Composer, Context, InlineKeyboard, InputFile } from "grammy"
-import { Answers, Votes2 } from "../models/votes2"
+import { Animes, Answers, Votes2 } from "../models/votes2"
 import * as statics from '../static'
 
 export const voting2 = new Composer
@@ -24,16 +24,16 @@ voting2.command('startvoting', async ctx => {
 
 voting2.command('rating', async ctx => {
     const unique = votes.unique()
-    const count = votes.count()
+    const animes = votes.count()
     const clamp = (e: number, a: number, b: number) => Math.min(Math.max(e, a), b)
 
-    const totalBlock = `Всего тайтлов: ${count.length}. Всего проголосовало: ${unique}.`
+    const totalBlock = `Всего тайтлов: ${animes.length}. Всего проголосовало: ${unique}.`
 
-    const notInterecting = count.filter(anime => !Object.entries(anime.votes).some(([k, v]) => k != 'not_planning' && v != 0))
+    const notInterecting = animes.filter(anime => !Object.entries(anime.votes).some(([k, v]) => k != 'not_planning' && v != 0))
     const notInterectingFormatted = notInterecting.map(anime => `* ${anime.name} / ${anime.russian}`).join('\n')
     const notInterectingBlock = `Абсолютно неинтересные тайтлы:\n${notInterectingFormatted}`
 
-    const ratedAnimes = count.map(anime => {
+    const ratedAnimes = animes.map(anime => {
         const { sum, unique } = Object.entries(anime.votes).reduce((res, [k, v]) => {
             const parsed = parseInt(k)
             if (isNaN(parsed)) return res
@@ -48,11 +48,11 @@ voting2.command('rating', async ctx => {
     })
     const topAnimes = ratedAnimes.sort((a, b) => b.score - a.score)
     const topAnimesFormatted = topAnimes.map((anime, i) => `${i + 1}. (${anime.score.toFixed(2)}) ${anime.name} / ${anime.russian}`)
-    const topAnimesBlock = `Топ аниме:\n${topAnimesFormatted.slice(0, 10).join('\n')}`
+    const topAnimesBlock = `Топ аниме (среднее значение):\n${topAnimesFormatted.slice(0, 10).join('\n')}`
 
-    const perspectiveAnimes = count.sort((a, b) => b.votes.planning - a.votes.planning)
+    const perspectiveAnimes = animes.sort((a, b) => b.votes.planning - a.votes.planning)
     const perspectiveAnimesFormatted = perspectiveAnimes.map((anime, i) => `${i + 1}. (${anime.votes.planning}) ${anime.name} / ${anime.russian}`)
-    const perspectiveAnimesBlock = `Перспективные аниме:\n${perspectiveAnimesFormatted.slice(0, 10).join('\n')}`
+    const perspectiveAnimesBlock = `Перспективные аниме (запланированные):\n${perspectiveAnimesFormatted.slice(0, 10).join('\n')}`
 
     const ratedFixed = ratedAnimes.map(anime => {
         const votes = anime.votes
@@ -64,10 +64,32 @@ voting2.command('rating', async ctx => {
     })
     const topAnimesFixed = ratedFixed.sort((a, b) => b.score - a.score)
     const topAnimesFixedFormatted = topAnimesFixed.map((anime, i) => `${i + 1}. (${anime.score.toFixed(2)}) ${anime.name} / ${anime.russian}`)
-    const topAnimesFixedBlock = `Топ аниме:\n${topAnimesFixedFormatted.slice(0, 10).join('\n')}`
+    const topAnimesFixedBlock = `Топ аниме (моя формула):\n${topAnimesFixedFormatted.slice(0, 10).join('\n')}`
+
+    const sumWatched = (a: Animes) => (['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'] as Answers[]).reduce((s, x) => s + a.votes[x], 0)
+    const watched = animes.map(anime => ({ ...anime, watched: sumWatched(anime) }))
+    const topWatched = watched.sort((a, b) => b.watched - a.watched)
+    const topWatchedFormatted = topWatched.map((anime, i) => `${i + 1}. (${anime.watched}) ${anime.name} / ${anime.russian}`)
+    const topWatchedBlock = `Топ просматриваемых:\n${topWatchedFormatted.slice(0, 10).join('\n')}`
+
+    const MIN = 5
+    const weightedScore = ratedAnimes.map(anime => {
+        const total = sumWatched(anime)
+        return {
+            ...anime,
+            score: total / (total + MIN) * anime.score + MIN / (total + MIN) * 7.2453
+        }
+    })
+    const topWeighted = weightedScore.sort((a, b) => b.score - a.score)
+    const topWeightedFormatted = topWeighted.map((anime, i) => `${i + 1}. (${anime.score.toFixed(2)}) ${anime.name} / ${anime.russian}`)
+    const topWeightedBlock = `Топ аниме (формула WA):\n${topWeightedFormatted.slice(0, 10).join('\n')}`
+
+    const topDropped = animes.sort((a, b) => b.votes.dropped - a.votes.dropped)
+    const topDroppedFormatted = topDropped.map((anime, i) => `${i + 1}. (${anime.votes.dropped}) ${anime.name} / ${anime.russian}`)
+    const topDroppedBlock = `Не оправдавшие надежды (дропнутые):\n${topDroppedFormatted.slice(0, 5).join('\n')}`
 
     try {
-        await ctx.reply([totalBlock].join('\n\n'))
+        await ctx.reply([totalBlock, topWeightedBlock, topAnimesBlock, topAnimesFixedBlock, perspectiveAnimesBlock, topWatchedBlock, topDroppedBlock].join('\n\n'))
     } catch (e) {
         await ctx.reply(`Error: ${e}`)
     }
