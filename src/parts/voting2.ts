@@ -83,6 +83,15 @@ voting2.command('raw', async ctx => {
     }
 })
 
+voting2.command('rawer', async ctx => {
+    const text = JSON.stringify(votes.raw())
+    try {
+        await ctx.replyWithDocument(new InputFile(Buffer.from(text), 'voting.json'))
+    } catch (e) {
+        await ctx.reply(`Error: ${e}`)
+    }
+})
+
 voting2.callbackQuery('voting:start', async ctx => {
     if (new Date() > until) {
         await ctx.answerCallbackQuery('Прости, время закончилось :(')

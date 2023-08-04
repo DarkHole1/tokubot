@@ -89,4 +89,8 @@ export class Votes2 {
             }
         })
     }
+
+    raw() {
+        return this.votes
+    }
 }
