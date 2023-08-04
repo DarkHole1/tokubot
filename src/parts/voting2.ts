@@ -86,7 +86,7 @@ voting2.command('raw', async ctx => {
 voting2.command('rawer', async ctx => {
     const text = JSON.stringify(votes.raw())
     try {
-        await ctx.replyWithDocument(new InputFile(Buffer.from(text), 'voting.json'))
+        await ctx.replyWithDocument(new InputFile(Buffer.from(text), 'raw_voting.json'))
     } catch (e) {
         await ctx.reply(`Error: ${e}`)
     }
