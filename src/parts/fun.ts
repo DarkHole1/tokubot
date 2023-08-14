@@ -1,3 +1,4 @@
+import { pre } from '@grammyjs/parse-mode'
 import { Composer } from "grammy"
 import { Sticker } from "grammy/out/types.node"
 import { pluralize } from "numeralize-ru"
@@ -16,6 +17,20 @@ fun.hears(/триггер/gim, ctx => ctx.replyWithSticker(WORLD_TRIGGER, { repl
 
 // Пон
 fun.hears(/(\P{L}|^)пон(\P{L}|$)/gimu, ctx => ctx.replyWithSticker(PON_STICKER, { reply_to_message_id: ctx.msg.message_id }))
+
+fun.command(
+    'inspect',
+    ctx => {
+        const msg = pre(JSON.stringify(ctx.msg.reply_to_message, null, 2), 'json')
+        return ctx.reply(msg.toString(), {
+            reply_to_message_id: ctx.msg.message_id,
+            entities: msg.entities
+        })
+    }
+)
+
+// Tomorrow
+// fun.hears()
 
 fun.hears(/^Руби, (.+) или (.+)\?$/, async ctx => {
     const a = ctx.match[1]

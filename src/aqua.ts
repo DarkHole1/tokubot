@@ -19,7 +19,7 @@ const admin = bot.filter(ctx => ctx.from?.id == DARK_HOLE)
 
 admin.command(
     'inspect',
-    ctx => ctx.replyFmt(fmt`${pre(JSON.stringify(ctx.msg.reply_to_message, null, 2), 'json')}`, {
+    ctx => ctx.replyFmt(pre(JSON.stringify(ctx.msg.reply_to_message, null, 2), 'json'), {
         reply_to_message_id: ctx.msg.message_id
     })
 )
