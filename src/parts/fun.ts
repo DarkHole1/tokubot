@@ -2,7 +2,7 @@ import { pre } from '@grammyjs/parse-mode'
 import { Composer } from "grammy"
 import { Sticker } from "grammy/out/types.node"
 import { pluralize } from "numeralize-ru"
-import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS } from "../constants"
+import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW } from "../constants"
 import { DrinkCounters } from "../data"
 
 export const fun = new Composer
@@ -30,7 +30,9 @@ fun.command(
 )
 
 // Tomorrow
-// fun.hears()
+fun.hears(/завтра/i, ctx => ctx.replyWithVideo(NOT_TOMORROW, {
+    reply_to_message_id: ctx.msg.message_id
+}))
 
 fun.hears(/^Руби, (.+) или (.+)\?$/, async ctx => {
     const a = ctx.match[1]
