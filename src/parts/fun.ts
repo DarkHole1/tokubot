@@ -30,7 +30,7 @@ fun.command(
 )
 
 // Tomorrow
-fun.hears(/завтра/i, ctx => ctx.replyWithVideo(NOT_TOMORROW, {
+fun.hears(/(\P{L}|^)завтра(\P{L}|$)/ui, ctx => ctx.replyWithVideo(NOT_TOMORROW, {
     reply_to_message_id: ctx.msg.message_id
 }))
 
