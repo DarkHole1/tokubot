@@ -3,7 +3,7 @@ import { ItemWithListStatus } from './mal/types/animelist'
 import { Bot, Context, InlineKeyboard } from 'grammy'
 import { Animes } from './erai/animes'
 import * as statics from './static'
-import { fmt, FormattedString, hydrateReply, ParseModeFlavor } from '@grammyjs/parse-mode'
+import { fmt, FormattedString, hydrateReply, ParseModeFlavor, link } from '@grammyjs/parse-mode'
 import { Config } from './config'
 import { isAdmin, randomString, throttle } from "./utils"
 import { Recommendations, ThanksStickers } from './data'
@@ -16,6 +16,7 @@ import { voting2 } from './parts/voting2'
 const config = new Config()
 const animes = Animes.fromFileSafe('data/titles.json', config.ERAI_TOKEN)
 const animeRecommendations = Recommendations.fromFileSyncSafe('data/recommendations.json')
+const animeRecommendationsExtended = Recommendations.fromFileSyncSafe('data/recommendations.json')
 const thanksStickers = ThanksStickers.fromFileSyncSafe('data/thanks.json')
 
 function escape_string(s: string) {
@@ -114,6 +115,27 @@ bot.command('recommend', async ctx => {
     const anime = await get_random_anime_recommendation()
     ctx.reply(`Согласно статистике, Току рекомендует посмотреть [${escape_string(anime.node.title)}](https://myanimelist.net/anime/${anime.node.id})`, {
         parse_mode: 'MarkdownV2',
+        reply_to_message_id: ctx.message?.message_id
+    })
+})
+
+bot.command('recommendExtended', async ctx => {
+    bot.api.sendChatAction(ctx.chat.id, "typing")
+    let anime: { node: { title: string, id: number }}
+    let whoami: string
+    if (ctx.msg.from?.id == EGOID) {
+        whoami = 'Эгоизм'
+        anime = {
+            node: {
+                title: 'Bakemonogatari',
+                id: 5081
+            }
+        }
+    } else {
+        whoami = 'Току'
+        anime = await get_random_anime_recommendation()
+    }
+    ctx.replyFmt(fmt`Согласно статистике, ${whoami} рекомендует посмотреть ${link(anime.node.title, 'https://myanimelist.net/anime/${anime.node.id')}`, {
         reply_to_message_id: ctx.message?.message_id
     })
 })
