@@ -65,6 +65,11 @@ async function get_random_anime_recommendation() {
     return animeRecommendations.getRandomRecommendation(all_animes)
 }
 
+async function get_random_anime_recommendation_extended() {
+    await update_list_if_obsolete()
+    return animeRecommendationsExtended.getRandomRecommendation(all_animes)
+}
+
 const bot = new Bot<ParseModeFlavor<Context>>(config.TOKEN)
 bot.use(hydrateReply)
 
@@ -133,7 +138,7 @@ bot.command('recommendExtended', async ctx => {
         }
     } else {
         whoami = 'Току'
-        anime = await get_random_anime_recommendation()
+        anime = await get_random_anime_recommendation_extended()
     }
     ctx.replyFmt(fmt`Согласно статистике, ${whoami} рекомендует посмотреть ${link(anime.node.title, `https://myanimelist.net/anime/${anime.node.id}`)}`, {
         reply_to_message_id: ctx.message?.message_id
