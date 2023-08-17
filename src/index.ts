@@ -135,7 +135,7 @@ bot.command('recommendExtended', async ctx => {
         whoami = 'Току'
         anime = await get_random_anime_recommendation()
     }
-    ctx.replyFmt(fmt`Согласно статистике, ${whoami} рекомендует посмотреть ${link(anime.node.title, 'https://myanimelist.net/anime/${anime.node.id')}`, {
+    ctx.replyFmt(fmt`Согласно статистике, ${whoami} рекомендует посмотреть ${link(anime.node.title, `https://myanimelist.net/anime/${anime.node.id}`)}`, {
         reply_to_message_id: ctx.message?.message_id
     })
 })
