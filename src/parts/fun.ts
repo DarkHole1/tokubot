@@ -2,7 +2,7 @@ import { pre } from '@grammyjs/parse-mode'
 import { Composer } from "grammy"
 import { Sticker } from "grammy/out/types.node"
 import { pluralize } from "numeralize-ru"
-import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW } from "../constants"
+import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING } from "../constants"
 import { DrinkCounters } from "../data"
 
 export const fun = new Composer
@@ -17,6 +17,9 @@ fun.hears(/триггер/gim, ctx => ctx.replyWithSticker(WORLD_TRIGGER, { repl
 
 // Пон
 fun.hears(/(\P{L}|^)пон(\P{L}|$)/gimu, ctx => ctx.replyWithSticker(PON_STICKER, { reply_to_message_id: ctx.msg.message_id }))
+
+// Nadeko
+fun.hears(/(\P{L}|^)ало(\P{L}|$)/gimu, ctx => ctx.replyWithAnimation(NADEKO_CALLING, { reply_to_message_id: ctx.msg.message_id }))
 
 fun.command(
     'inspect',
