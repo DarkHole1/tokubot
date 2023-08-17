@@ -16,7 +16,7 @@ import { voting2 } from './parts/voting2'
 const config = new Config()
 const animes = Animes.fromFileSafe('data/titles.json', config.ERAI_TOKEN)
 const animeRecommendations = Recommendations.fromFileSyncSafe('data/recommendations.json')
-const animeRecommendationsExtended = Recommendations.fromFileSyncSafe('data/recommendations.json')
+const animeRecommendationsExtended = Recommendations.fromFileSyncSafe('data/extended.json')
 const thanksStickers = ThanksStickers.fromFileSyncSafe('data/thanks.json')
 
 function escape_string(s: string) {
