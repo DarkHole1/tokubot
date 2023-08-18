@@ -12,6 +12,7 @@ import { TOKU_NAME, EGOID, BOT_ID, TOKU_CHAT, TOKU_CHANNEL, ANGELINA_LIST } from
 import { fun } from './parts/fun'
 import { brs } from './parts/brs'
 import { voting2 } from './parts/voting2'
+import { backArrow } from './parts/backarrow'
 
 const config = new Config()
 const animes = Animes.fromFileSafe('data/titles.json', config.ERAI_TOKEN)
@@ -147,8 +148,10 @@ bot.command('recommendExtended', async ctx => {
 })
 
 bot.use(voting2)
+bot.use(backArrow(config))
 
 brs(bot)
+
 
 bot.hears(/(с)?пасиб(о|a)/gim).filter(async ctx => ctx.message?.reply_to_message?.from?.id == BOT_ID ?? false, async ctx => {
     ctx.api.sendSticker(
