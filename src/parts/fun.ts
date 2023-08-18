@@ -21,6 +21,9 @@ fun.hears(/(\P{L}|^)пон(\P{L}|$)/gimu, ctx => ctx.replyWithSticker(PON_STICKE
 // Nadeko
 fun.hears(/(\P{L}|^)ало(\P{L}|$)/gimu, ctx => ctx.replyWithAnimation(NADEKO_CALLING, { reply_to_message_id: ctx.msg.message_id }))
 
+// P-word
+fun.hears(/пидор/i, ctx => ctx.reply('ОБНАРУЖЕНА ДЕМОНИЧЕСКАЯ УГРОЗА', { reply_to_message_id: ctx.msg.message_id }))
+
 fun.command(
     'inspect',
     ctx => {
