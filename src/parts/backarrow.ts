@@ -21,7 +21,7 @@ export const backArrow = (config: Config) => {
             const file_path = `https://api.telegram.org/file/bot${config.TOKEN}/${file.file_path}`
             https.get(file_path, async stream => {
                 const res = await client(stream)
-                const buttons = res.filter(res => res.similarity >= 60).map(res => ({ text: res.site + ' ' + res.similarity, url: res.url }))
+                const buttons = res.filter(res => res.similarity >= 60).map(res => ({ text: res.site + ' ' + res.similarity '%s', url: res.url }))
                 const keyboard = new InlineKeyboard(chunk(buttons, 3))
                 await ctx.api.editMessageText(msg.chat.id, msg.message_id, 'Meow', {
                     reply_markup: keyboard
