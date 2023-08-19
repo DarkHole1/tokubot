@@ -8,7 +8,7 @@ solidScript.hears(/пидор|негр|нигга|лесбух/i, async ctx => {
     await ctx.replyWithSticker(KILLING_STICKER)
 })
 
-solidScript.hears(/нет/i).filter(
-    ctx => Boolean(ctx.msg.reply_to_message && ctx.msg.reply_to_message.text == 'быстро исправил' && ctx.msg.reply_to_message.from && ctx.msg.reply_to_message.from.id == ctx.me.id),
-    ctx => ctx.reply('п-слова ответ\n@tokutonariwa', { reply_to_message_id: ctx.msg.message_id })
-)
+// solidScript.hears(/нет/i).filter(
+//     ctx => Boolean(ctx.msg.reply_to_message && ctx.msg.reply_to_message.text == 'быстро исправил' && ctx.msg.reply_to_message.from && ctx.msg.reply_to_message.from.id == ctx.me.id),
+//     ctx => ctx.reply('п-слова ответ\n@tokutonariwa', { reply_to_message_id: ctx.msg.message_id })
+// )
