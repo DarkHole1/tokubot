@@ -13,6 +13,7 @@ import { fun } from './parts/fun'
 import { brs } from './parts/brs'
 import { voting2 } from './parts/voting2'
 import { backArrow } from './parts/backarrow'
+import { solidScript } from './parts/solid-scritpt'
 
 const config = new Config()
 const animes = Animes.fromFileSafe('data/titles.json', config.ERAI_TOKEN)
@@ -149,6 +150,7 @@ bot.command('recommendExtended', async ctx => {
 
 bot.use(voting2)
 bot.use(backArrow(config))
+bot.use(solidScript)
 
 brs(bot)
 
