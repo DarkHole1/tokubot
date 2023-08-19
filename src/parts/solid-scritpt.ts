@@ -9,6 +9,6 @@ solidScript.hears(/пидор|негр|нигга|лесбух/i, async ctx => {
 })
 
 solidScript.hears(/нет/i).filter(
-    ctx => Boolean(ctx.msg.reply_to_message && ctx.msg.reply_to_message.text == 'быстро исправил' && ctx.from && ctx.from.id == ctx.me.id),
+    ctx => Boolean(ctx.msg.reply_to_message && ctx.msg.reply_to_message.text == 'быстро исправил' && ctx.msg.reply_to_message.from && ctx.msg.reply_to_message.from.id == ctx.me.id),
     ctx => ctx.reply('п-слова ответ\n@tokutonariwa', { reply_to_message_id: ctx.msg.message_id })
 )
