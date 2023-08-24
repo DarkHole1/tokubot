@@ -36,7 +36,7 @@ fun.command(
 )
 
 // Tomorrow
-fun.hears(/(\P{L}|^)завтра(\P{L}|$)/ui, ctx => ctx.replyWithVideo(Math.random() > 0.1 ? NOT_TOMORROW : TOMORROW, {
+fun.hears(/(\P{L}|^)завтра(\P{L}|$)/ui, ctx => ctx.replyWithVideo(Math.random() > 0.3 ? NOT_TOMORROW : TOMORROW, {
     reply_to_message_id: ctx.msg.message_id
 }))
 
