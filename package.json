@@ -6,6 +6,7 @@
   "dependencies": {
     "@grammyjs/parse-mode": "^1.5.0",
     "@roziscoding/grammy-autoquote": "^1.1.2",
+    "@types/debug": "^4.1.8",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^18.11.18",
     "@types/node-cron": "^3.0.8",

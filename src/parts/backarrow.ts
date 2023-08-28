@@ -5,7 +5,9 @@ import * as https from 'node:https'
 import sagiri, { SagiriResult } from 'sagiri'
 import { Config } from '../config'
 import { DanbooruPostWithTags } from '../models/danbooru-post'
+import debug from 'debug'
 
+const log = debug('tokubot:backarrow')
 
 export const backArrow = (config: Config) => {
     const res = new Composer
@@ -60,9 +62,13 @@ type Metadata = {
 
 async function getMetadata(res: SagiriResult[]): Promise<Metadata> {
     const danbooruPost = res.find(res => res.site == 'Danbooru')
-    if (!danbooruPost) return null
+    if (!danbooruPost) {
+        log('Danbooru post not found')
+        return null
+    }
     try {
         const postId = danbooruPost.raw.data.danbooru_id!
+        log('Found danbooru post with id %d', postId)
         const { data } = await axios.get<unknown>(`https://testbooru.donmai.us/posts/${postId}.json`)
         const parsed = DanbooruPostWithTags.parse(data)
         return {
@@ -70,7 +76,9 @@ async function getMetadata(res: SagiriResult[]): Promise<Metadata> {
             characters: parsed.tags_character,
             origin: parsed.tags_copyright
         }
-    } catch (e) { }
+    } catch (e) {
+        log('An error occured: %e', e)
+    }
     return null
 }
 
