@@ -25,10 +25,15 @@ export const backArrow = (config: Config) => {
             https.get(file_path, async stream => {
                 const res = await client(stream)
                 const filteredRes = res.filter(res => res.similarity >= 60)
+                
+                const meta = await getMetadata(filteredRes)
+                const text = fmt`Meow\n${formatMetadata(meta)}`
+                
                 const buttons = filteredRes.map(res => ({ text: res.site + ' ' + res.similarity + '%', url: res.url }))
                 const keyboard = new InlineKeyboard(chunk(buttons, 3))
-                await ctx.api.editMessageText(msg.chat.id, msg.message_id, 'Meow', {
-                    reply_markup: keyboard
+                await ctx.api.editMessageText(msg.chat.id, msg.message_id, text.toString(), {
+                    reply_markup: keyboard,
+                    entities: text.entities
                 })
             })
         } catch (e) {
