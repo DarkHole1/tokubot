@@ -1,7 +1,10 @@
+import { fmt, code, bold, FormattedString } from '@grammyjs/parse-mode'
+import axios from 'axios'
 import { Composer, InlineKeyboard } from 'grammy'
 import * as https from 'node:https'
-import sagiri from 'sagiri'
+import sagiri, { SagiriResult } from 'sagiri'
 import { Config } from '../config'
+import { DanbooruPostWithTags } from '../models/danbooru-post'
 
 
 export const backArrow = (config: Config) => {
@@ -21,7 +24,8 @@ export const backArrow = (config: Config) => {
             const file_path = `https://api.telegram.org/file/bot${config.TOKEN}/${file.file_path}`
             https.get(file_path, async stream => {
                 const res = await client(stream)
-                const buttons = res.filter(res => res.similarity >= 60).map(res => ({ text: res.site + ' ' + res.similarity + '%', url: res.url }))
+                const filteredRes = res.filter(res => res.similarity >= 60)
+                const buttons = filteredRes.map(res => ({ text: res.site + ' ' + res.similarity + '%', url: res.url }))
                 const keyboard = new InlineKeyboard(chunk(buttons, 3))
                 await ctx.api.editMessageText(msg.chat.id, msg.message_id, 'Meow', {
                     reply_markup: keyboard
@@ -41,4 +45,43 @@ function chunk<T>(array: T[], chunkSize: number): T[][] {
         res.push(array.slice(i, i + chunkSize))
     }
     return res
+}
+
+type Metadata = {
+    author: string[],
+    characters: string[],
+    origin: string[]
+} | null
+
+async function getMetadata(res: SagiriResult[]): Promise<Metadata> {
+    const danbooruPost = res.find(res => res.site == 'Danbooru')
+    if (!danbooruPost) return null
+    try {
+        const postId = danbooruPost.raw.data.danbooru_id!
+        const { data } = await axios.get<unknown>(`https://testbooru.donmai.us/posts/${postId}.json`)
+        const parsed = DanbooruPostWithTags.parse(data)
+        return {
+            author: parsed.tags_artist,
+            characters: parsed.tags_character,
+            origin: parsed.tags_copyright
+        }
+    } catch (e) { }
+    return null
+}
+
+function formatMetadata(meta: Metadata): FormattedString {
+    if(!meta) {
+        return fmt``
+    }
+    const preprocess = (arr: string[], title: string) => {
+        const entities = arr.map(author => code(author)).reduce((a, b) => fmt`${a}, ${b}`)
+        const line = arr.length > 0 ? fmt`${bold(title)} ${entities}\n` : ''
+        return line
+    }
+
+    const authorLine = preprocess(meta.author, 'Author:')
+    const originLine = preprocess(meta.characters, 'From:')
+    const charLine = preprocess(meta.characters, 'Characters:')
+
+    return fmt`${authorLine}${originLine}${charLine}`
 }
