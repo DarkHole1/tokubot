@@ -77,7 +77,7 @@ async function getMetadata(res: SagiriResult[]): Promise<Metadata> {
             origin: parsed.tags_copyright
         }
     } catch (e) {
-        log('An error occured: %e', e)
+        log('An error occured: %o', e)
     }
     return null
 }
