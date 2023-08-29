@@ -2,7 +2,7 @@ import { pre } from '@grammyjs/parse-mode'
 import { Composer } from "grammy"
 import { Sticker } from "grammy/out/types.node"
 import { pluralize } from "numeralize-ru"
-import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW } from "../constants"
+import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER } from "../constants"
 import { DrinkCounters } from "../data"
 
 export const fun = new Composer
@@ -25,6 +25,13 @@ fun.hears(/(\P{L}|^)ало(\P{L}|$)/gimu, ctx => ctx.replyWithAnimation(NADEKO_C
 fun.hears(/пидор/i, ctx => ctx.reply('ОБНАРУЖЕНА ДЕМОНИЧЕСКАЯ УГРОЗА', { reply_to_message_id: ctx.msg.message_id }))
 
 fun.hears(/не\s+ешь/i, ctx => ctx.reply('Ням!', { reply_to_message_id: ctx.msg.message_id }))
+
+fun.hears(/(\P{L}|^)бан(\P{L}|$)/gimu).filter(
+    ctx => ADMINS.includes(ctx.from?.id ?? 0),
+    ctx => ctx.replyWithAnimation(MONOKUMA, { reply_to_message_id: ctx.message?.message_id })
+)
+
+fun.hears(/противоречи/i, ctx => ctx.replyWithAnimation(COUNTER, { reply_to_message_id: ctx.message?.message_id }))
 
 fun.command(
     'inspect',
