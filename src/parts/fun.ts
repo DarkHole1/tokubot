@@ -10,6 +10,9 @@ export const fun = new Composer
 const drinksCounters = DrinkCounters.fromFileSyncSafe('data/drinks.json')
 const ENABLE_EMOJI = false
 
+// Похвала
+fun.filter(_ => Math.random() > 0.9, ctx => ctx.reply('Ты умничка', { reply_to_message_id: ctx.msg?.message_id }))
+
 // ШОК ПАТАЛОК
 fun.hears(/п(а|a)т(а|a)л(о|o)к|501\s?271|область/gim, ctx => ctx.replyWithAudio(SHOCK_PATALOCK, { reply_to_message_id: ctx.msg.message_id }))
 
