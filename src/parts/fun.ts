@@ -1,4 +1,5 @@
 import { pre } from '@grammyjs/parse-mode'
+import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { Composer } from "grammy"
 import { Sticker } from "grammy/out/types.node"
 import { pluralize } from "numeralize-ru"
@@ -6,59 +7,55 @@ import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER
 import { DrinkCounters } from "../data"
 
 export const fun = new Composer
+const quoted = fun.use(autoQuote)
 
 const drinksCounters = DrinkCounters.fromFileSyncSafe('data/drinks.json')
 const ENABLE_EMOJI = false
 
 // Похвала
-fun.filter(_ => Math.random() > 0.99, ctx => ctx.reply('Ты умничка', { reply_to_message_id: ctx.msg?.message_id }))
+quoted.filter(_ => Math.random() > 0.99, ctx => ctx.reply('Ты умничка'))
 
 // ШОК ПАТАЛОК
-fun.hears(/п(а|a)т(а|a)л(о|o)к|501\s?271|область/gim, ctx => ctx.replyWithAudio(SHOCK_PATALOCK, { reply_to_message_id: ctx.msg.message_id }))
+quoted.hears(/п(а|a)т(а|a)л(о|o)к|501\s?271|область/gim, ctx => ctx.replyWithAudio(SHOCK_PATALOCK))
 
-fun.hears(/триггер/gim, ctx => ctx.replyWithSticker(WORLD_TRIGGER, { reply_to_message_id: ctx.msg.message_id }))
+quoted.hears(/триггер/gim, ctx => ctx.replyWithSticker(WORLD_TRIGGER))
 
 // Пон
-fun.hears(/(\P{L}|^)пон(\P{L}|$)/gimu, ctx => ctx.replyWithSticker(PON_STICKER, { reply_to_message_id: ctx.msg.message_id }))
+quoted.hears(/(\P{L}|^)пон(\P{L}|$)/gimu, ctx => ctx.replyWithSticker(PON_STICKER))
 
 // Nadeko
-fun.hears(/(\P{L}|^)ало(\P{L}|$)/gimu, ctx => ctx.replyWithAnimation(NADEKO_CALLING, { reply_to_message_id: ctx.msg.message_id }))
+quoted.hears(/(\P{L}|^)ало(\P{L}|$)/gimu, ctx => ctx.replyWithAnimation(NADEKO_CALLING))
 
 // P-word
-fun.hears(/пидор/i, ctx => ctx.reply('ОБНАРУЖЕНА ДЕМОНИЧЕСКАЯ УГРОЗА', { reply_to_message_id: ctx.msg.message_id }))
+quoted.hears(/пидор/i, ctx => ctx.reply('ОБНАРУЖЕНА ДЕМОНИЧЕСКАЯ УГРОЗА'))
 
-fun.hears(/не\s+ешь/i, ctx => ctx.reply('Ням!', { reply_to_message_id: ctx.msg.message_id }))
+quoted.hears(/не\s+ешь/i, ctx => ctx.reply('Ням!'))
 
-fun.hears(/(\P{L}|^)бан(\P{L}|$)/gimu).filter(
+quoted.hears(/(\P{L}|^)бан(\P{L}|$)/gimu).filter(
     ctx => ADMINS.includes(ctx.from?.id ?? 0),
-    ctx => ctx.replyWithAnimation(MONOKUMA, { reply_to_message_id: ctx.message?.message_id })
+    ctx => ctx.replyWithAnimation(MONOKUMA)
 )
 
-fun.hears(/противоречи/i, ctx => ctx.replyWithAnimation(COUNTER, { reply_to_message_id: ctx.message?.message_id }))
+quoted.hears(/противоречи/i, ctx => ctx.replyWithAnimation(COUNTER))
 
-fun.hears(/Руби мяу/i, ctx => ctx.replyWithVoice(RUBY_MEOW, { reply_to_message_id: ctx.msg.message_id }))
+quoted.hears(/Руби мяу/i, ctx => ctx.replyWithVoice(RUBY_MEOW))
 
-fun.hears(/86|восемьдесят шесть/i, ctx => ctx.replyWithPhoto(EIGHTY_SIX, { reply_to_message_id: ctx.msg.message_id }))
+quoted.hears(/86|восемьдесят шесть/i, ctx => ctx.replyWithPhoto(EIGHTY_SIX))
 
-fun.hears(/(\P{L}|^)дб(\P{L}|$)|драгонбол/iu, ctx => ctx.replyWithVideo(DRAGONBALL, { reply_to_message_id: ctx.msg.message_id }))
+quoted.hears(/(\P{L}|^)дб(\P{L}|$)|драгонбол/iu, ctx => ctx.replyWithVideo(DRAGONBALL))
 
-fun.command(
+quoted.command(
     'inspect',
     ctx => {
         const msg = pre(JSON.stringify(ctx.msg.reply_to_message, null, 2), 'json')
-        return ctx.reply(msg.toString(), {
-            reply_to_message_id: ctx.msg.message_id,
-            entities: msg.entities
-        })
+        return ctx.reply(msg.toString(), { entities: msg.entities })
     }
 )
 
 // Tomorrow
-fun.hears(/(\P{L}|^)завтра(\P{L}|$)/ui, ctx => ctx.replyWithVideo(Math.random() > 0.3 ? NOT_TOMORROW : TOMORROW, {
-    reply_to_message_id: ctx.msg.message_id
-}))
+quoted.hears(/(\P{L}|^)завтра(\P{L}|$)/ui, ctx => ctx.replyWithVideo(Math.random() > 0.3 ? NOT_TOMORROW : TOMORROW))
 
-fun.hears(/^Руби, (.+) или (.+)\?$/i, async ctx => {
+quoted.hears(/^Руби, (.+) или (.+)\?$/i, async ctx => {
     const a = ctx.match[1]
     const b = ctx.match[2]
     let res: string
@@ -72,12 +69,10 @@ fun.hears(/^Руби, (.+) или (.+)\?$/i, async ctx => {
     } else {
         res = b[0].toUpperCase() + b.slice(1)
     }
-    await ctx.reply(res, {
-        reply_to_message_id: ctx.msg.message_id
-    })
+    await ctx.reply(res)
 })
 
-fun.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
+quoted.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
     let drink: string
     let count: number
     let emoji: string
@@ -258,9 +253,7 @@ fun.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
     }
 
     await drinksCounters.toFile('data/drinks.json')
-    await ctx.reply(`Приятного! Попили ${drink} ${count} ${pluralize(count, 'раз', 'раза', 'раз')}  ${emoji}\n${achivement}`, {
-        reply_to_message_id: ctx.msg.message_id
-    })
+    await ctx.reply(`Приятного! Попили ${drink} ${count} ${pluralize(count, 'раз', 'раза', 'раз')}  ${emoji}\n${achivement}`)
 })
 
 type Counters = 'tea' | 'coffee' | 'alco'
