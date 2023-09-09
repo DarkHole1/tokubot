@@ -2,7 +2,7 @@ import { pre } from '@grammyjs/parse-mode'
 import { Composer } from "grammy"
 import { Sticker } from "grammy/out/types.node"
 import { pluralize } from "numeralize-ru"
-import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX } from "../constants"
+import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL } from "../constants"
 import { DrinkCounters } from "../data"
 
 export const fun = new Composer
@@ -36,6 +36,8 @@ fun.hears(/противоречи/i, ctx => ctx.replyWithAnimation(COUNTER, { re
 fun.hears(/Руби мяу/i, ctx => ctx.replyWithVoice(RUBY_MEOW, { reply_to_message_id: ctx.msg.message_id }))
 
 fun.hears(/86|восемьдесят шесть/i, ctx => ctx.replyWithPhoto(EIGHTY_SIX, { reply_to_message_id: ctx.msg.message_id }))
+
+fun.hears(/(\P{L}|^)дб(\P{L}|$)|драгонбол/iu, ctx => ctx.replyWithVideo(DRAGONBALL, { reply_to_message_id: ctx.msg.message_id }))
 
 fun.command(
     'inspect',
