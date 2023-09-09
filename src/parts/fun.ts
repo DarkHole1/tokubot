@@ -53,7 +53,7 @@ fun.hears(/(\P{L}|^)завтра(\P{L}|$)/ui, ctx => ctx.replyWithVideo(Math.ran
     reply_to_message_id: ctx.msg.message_id
 }))
 
-fun.hears(/^Руби, (.+) или (.+)\?$/, async ctx => {
+fun.hears(/^Руби, (.+) или (.+)\?$/i, async ctx => {
     const a = ctx.match[1]
     const b = ctx.match[2]
     let res: string
