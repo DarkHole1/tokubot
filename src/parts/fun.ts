@@ -13,7 +13,7 @@ const drinksCounters = DrinkCounters.fromFileSyncSafe('data/drinks.json')
 const ENABLE_EMOJI = false
 
 // Похвала
-quoted.filter(_ => Math.random() > 0.99, ctx => ctx.reply('Ты умничка'))
+quoted.filter(_ => Math.random() > 0.998, ctx => ctx.reply('Ты умничка'))
 
 // ШОК ПАТАЛОК
 quoted.hears(/п(а|a)т(а|a)л(о|o)к|501\s?271|область/gim, ctx => ctx.replyWithAudio(SHOCK_PATALOCK))
