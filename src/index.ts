@@ -14,6 +14,7 @@ import { brs } from './parts/brs'
 import { voting2 } from './parts/voting2'
 import { backArrow } from './parts/backarrow'
 import { solidScript } from './parts/solid-scritpt'
+import { service } from './parts/service'
 
 const config = new Config()
 const animes = Animes.fromFileSafe('data/titles.json', config.ERAI_TOKEN)
@@ -148,6 +149,7 @@ bot.command('recommendExtended', async ctx => {
     })
 })
 
+bot.use(service)
 bot.use(voting2)
 bot.use(backArrow(config))
 bot.use(solidScript)
@@ -164,16 +166,6 @@ bot.hears(/(с)?пасиб(о|a)/gim).filter(async ctx => ctx.message?.reply_to_
 })
 
 bot.filter(ctx => !ANGELINA_LIST.includes(ctx.from?.id ?? 0)).use(fun)
-
-bot.on('message:new_chat_members', async ctx => {
-    await ctx.replyFmt(statics.greeting)
-})
-
-bot.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == TOKU_CHANNEL, throttle(3 * 60 * 1000, (ctx: Context) => {
-    ctx.reply("@tokutonariwa пости на юбуб", {
-        reply_to_message_id: ctx.message?.message_id
-    })
-}))
 
 bot.command('addsticker').filter(
     isAdmin,
