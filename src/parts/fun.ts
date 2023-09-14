@@ -1,7 +1,7 @@
 import { pre } from '@grammyjs/parse-mode'
 import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { Composer } from "grammy"
-import { Sticker } from "grammy/out/types.node"
+import { InputFile, Sticker } from "grammy/out/types.node"
 import { pluralize } from "numeralize-ru"
 import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL } from "../constants"
 import { DrinkCounters } from "../data"
@@ -47,6 +47,10 @@ quoted.hears(/(\P{L}|^)дб(\P{L}|$)|драгонбол/iu, ctx => ctx.replyWith
 quoted.command(
     'inspect',
     ctx => {
+        const text = JSON.stringify(ctx.msg.reply_to_message, null, 2)
+        if(text.length > 2048) {
+            return ctx.replyWithDocument(new InputFile(Buffer.from(text), 'inspect.json'))
+        }
         const msg = pre(JSON.stringify(ctx.msg.reply_to_message, null, 2), 'json')
         return ctx.reply(msg.toString(), { entities: msg.entities })
     }
