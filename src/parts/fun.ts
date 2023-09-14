@@ -1,7 +1,7 @@
 import { pre } from '@grammyjs/parse-mode'
 import { autoQuote } from '@roziscoding/grammy-autoquote'
-import { Composer } from "grammy"
-import { InputFile, Sticker } from "grammy/out/types.node"
+import { Composer, InputFile } from "grammy"
+import type { Sticker } from "grammy/out/types"
 import { pluralize } from "numeralize-ru"
 import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL } from "../constants"
 import { DrinkCounters } from "../data"
