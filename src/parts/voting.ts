@@ -26,7 +26,7 @@ voting.command('startvoting', async ctx => {
 
 voting.command('rating', async ctx => {
     let title = 'Рейтинг:'
-    let currentRating = votes.rating()
+    let currentRating = votes.rating().filter(anime => anime.votes != 0)
     if (new Date() > until) {
         title = 'Окончательный рейтинг:'
         currentRating = currentRating.filter(anime => anime.percent > MIN_PERCENT)
