@@ -9,23 +9,25 @@ const shikimori = new API({
     }
 })
 
-const season = 'spring_2023'
+const SEASON = 'fall_2023'
+const VOTES_FILE = 'data/votes3.json'
+const KINDS = 'tv,ona,ova' as AnimeKind
 
 void async function () {
     let animes = await shikimori.animes.get({
-        season,
+        season: SEASON,
         order: 'name',
         limit: 50,
-        kind: 'tv'
+        kind: KINDS
     })
     let page = 2
     while (true) {
         await sleep(20_000)
         const added = await shikimori.animes.get({
-            season,
+            season: SEASON,
             order: 'name',
             limit: 50,
-            kind: 'tv' as AnimeKind,
+            kind: KINDS,
             page
         })
         if (added.length == 0) break
@@ -39,10 +41,10 @@ void async function () {
             name: anime.name,
             russian: anime.russian,
             url: anime.url,
-            votes: {}
+            votes: []
         }
     })
-    outputFile('data/votes2.json', JSON.stringify(res))
+    outputFile(VOTES_FILE, JSON.stringify(res))
 }()
 
 function sleep(time: number): Promise<never> {
