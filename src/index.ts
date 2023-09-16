@@ -11,7 +11,7 @@ import { Anime } from './erai/anime'
 import { TOKU_NAME, EGOID, BOT_ID, TOKU_CHAT, TOKU_CHANNEL, ANGELINA_LIST } from './constants'
 import { fun } from './parts/fun'
 import { brs } from './parts/brs'
-import { voting2 } from './parts/voting2'
+import { voting } from './parts/voting'
 import { backArrow } from './parts/backarrow'
 import { solidScript } from './parts/solid-scritpt'
 import { service } from './parts/service'
@@ -150,7 +150,7 @@ bot.command('recommendExtended', async ctx => {
 })
 
 bot.use(service)
-bot.use(voting2)
+bot.use(voting)
 bot.use(backArrow(config))
 bot.use(solidScript)
 

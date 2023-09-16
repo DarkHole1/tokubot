@@ -3,10 +3,11 @@ import { Votes } from "../models/votes"
 import * as statics from '../static'
 
 const MIN_PERCENT = 0.3
+const VOTES_FILE = 'data/votes3.json'
 
 export const voting = new Composer
-const until = new Date('1 July 2023')
-const votes = Votes.loadSync('data/votes.json')
+const until = new Date('1 Oct 2023')
+const votes = Votes.loadSync(VOTES_FILE)
 
 voting.command('startvoting', async ctx => {
     if (new Date() > until) {
@@ -69,7 +70,7 @@ voting.callbackQuery(/voting:(\d+):(add|remove)(:final)?/, async ctx => {
     if (!final) {
         await sendNext(ctx, id)
     }
-    await votes.save('data/votes.json')
+    await votes.save(VOTES_FILE)
     await ctx.answerCallbackQuery()
 })
 
