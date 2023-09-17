@@ -31,7 +31,7 @@ voting.command('rating', async ctx => {
         title = 'Окончательный рейтинг:'
         currentRating = currentRating.filter(anime => anime.percent > MIN_PERCENT)
     }
-    const formattedRating = currentRating.map((anime, i) => `${i + 1}. ${anime.votes}👍 (${(anime.percent * 100).toFixed(0)}%) ${anime.russian} / ${anime.name}`)
+    const formattedRating = currentRating.map((anime, i) => `${i + 1}. ${anime.votes}👍 (${(anime.percent * 100).toFixed(0)}%) ${anime.russian} / ${anime.name}`).join('\n')
     
     console.log(formattedRating.length)
     if(formattedRating.length > 4096) {
@@ -39,7 +39,7 @@ voting.command('rating', async ctx => {
             reply_to_message_id: ctx.msg.message_id
         })
     } else {
-        await ctx.reply(title + '\n' + formattedRating.join('\n'), {
+        await ctx.reply(title + '\n' + formattedRating, {
             reply_to_message_id: ctx.msg.message_id
         })
     }
