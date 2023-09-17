@@ -1,6 +1,6 @@
 import * as api from './mal/api'
 import { ItemWithListStatus } from './mal/types/animelist'
-import { Bot, Context, InlineKeyboard } from 'grammy'
+import { Bot, Context, GrammyError, InlineKeyboard } from 'grammy'
 import { Animes } from './erai/animes'
 import * as statics from './static'
 import { fmt, FormattedString, hydrateReply, ParseModeFlavor, link } from '@grammyjs/parse-mode'
@@ -8,7 +8,7 @@ import { Config } from './config'
 import { isAdmin, randomString, throttle } from "./utils"
 import { Recommendations, ThanksStickers } from './data'
 import { Anime } from './erai/anime'
-import { TOKU_NAME, EGOID, BOT_ID, TOKU_CHAT, TOKU_CHANNEL, ANGELINA_LIST } from './constants'
+import { TOKU_NAME, EGOID, BOT_ID, TOKU_CHAT, TOKU_CHANNEL, ANGELINA_LIST, DARK_HOLE } from './constants'
 import { fun } from './parts/fun'
 import { brs } from './parts/brs'
 import { voting } from './parts/voting'
@@ -77,6 +77,18 @@ const bot = new Bot<ParseModeFlavor<Context>>(config.TOKEN)
 bot.use(hydrateReply)
 
 const help = statics.help
+
+bot.catch(async err => {
+    console.error(err.error)
+    try {
+        const e = err.error
+        if(e instanceof GrammyError) {
+            await bot.api.sendMessage(DARK_HOLE, `An error occured in bot ${err.ctx.me.username}: ${e.description}`)
+        }
+    } catch(e) {
+        console.log(`Send failed`)
+    }
+})
 
 bot.command('start', (ctx) =>
     ctx.replyFmt(help, {
