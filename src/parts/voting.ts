@@ -35,7 +35,7 @@ voting.command('rating', async ctx => {
     
     console.log(formattedRating.length)
     if(formattedRating.length > 4096) {
-        await ctx.reply(`Я рассчитала поистине чудесный рейтинг, но сообщения в телеграм слишком узки для него.\n\n${formattedRating.slice(3990)}`, {
+        await ctx.reply(`Я рассчитала поистине чудесный рейтинг, но сообщения в телеграм слишком узки для него.\n\n${formattedRating.slice(0, 3990)}`, {
             reply_to_message_id: ctx.msg.message_id
         })
     } else {
