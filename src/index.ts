@@ -83,7 +83,7 @@ bot.catch(async err => {
     try {
         const e = err.error
         if(e instanceof GrammyError) {
-            await bot.api.sendMessage(DARK_HOLE, `An error occured in bot ${err.ctx.me.username}: ${e.description}`)
+            await bot.api.sendMessage(DARK_HOLE, `An error occured: ${e.description}`)
         }
     } catch(e) {
         console.log(`Send failed`)
