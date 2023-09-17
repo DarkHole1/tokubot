@@ -81,4 +81,8 @@ export class Votes {
         }
         return { id: -1, anime: undefined }
     }
+
+    raw() {
+        return this.votes
+    }
 }

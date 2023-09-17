@@ -1,4 +1,4 @@
-import { Composer, Context, InlineKeyboard } from "grammy"
+import { Composer, Context, InlineKeyboard, InputFile } from "grammy"
 import { Votes } from "../models/votes"
 import * as statics from '../static'
 
@@ -42,6 +42,15 @@ voting.command('rating', async ctx => {
         await ctx.reply(title + '\n' + formattedRating, {
             reply_to_message_id: ctx.msg.message_id
         })
+    }
+})
+
+voting.command('rawer', async ctx => {
+    const text = JSON.stringify(votes.raw())
+    try {
+        await ctx.replyWithDocument(new InputFile(Buffer.from(text), 'raw_voting.json'))
+    } catch (e) {
+        await ctx.reply(`Error: ${e}`)
     }
 })
 
