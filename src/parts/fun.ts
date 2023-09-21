@@ -5,6 +5,7 @@ import type { Sticker } from "grammy/out/types"
 import { pluralize } from "numeralize-ru"
 import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL } from "../constants"
 import { DrinkCounters } from "../data"
+import { choice } from '../utils'
 
 export const fun = new Composer
 const quoted = fun.use(autoQuote)
@@ -38,7 +39,7 @@ quoted.hears(/(\P{L}|^)бан(\P{L}|$)/gimu).filter(
 
 quoted.hears(/противоречи/i, ctx => ctx.replyWithAnimation(COUNTER))
 
-quoted.hears(/Руби мяу/i, ctx => ctx.replyWithVoice(RUBY_MEOW))
+quoted.hears(/Руби мяу/i, ctx => ctx.replyWithVoice(choice(RUBY_MEOW)))
 
 quoted.hears(/86|восемьдесят шесть/i, ctx => ctx.replyWithPhoto(EIGHTY_SIX))
 
