@@ -15,6 +15,7 @@ import { voting } from './parts/voting'
 import { backArrow } from './parts/backarrow'
 import { solidScript } from './parts/solid-scritpt'
 import { service } from './parts/service'
+import { worldTrigger } from './parts/world-trigger'
 
 const config = new Config()
 const animes = Animes.fromFileSafe('data/titles.json', config.ERAI_TOKEN)
@@ -167,6 +168,7 @@ bot.use(backArrow(config))
 bot.use(solidScript)
 
 brs(bot)
+worldTrigger(bot)
 
 
 bot.hears(/(с)?пасиб(о|a)/gim).filter(async ctx => ctx.message?.reply_to_message?.from?.id == BOT_ID ?? false, async ctx => {
