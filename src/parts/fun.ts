@@ -13,13 +13,16 @@ const quoted = fun.use(autoQuote)
 const drinksCounters = DrinkCounters.fromFileSyncSafe('data/drinks.json')
 const ENABLE_EMOJI = false
 
+let lastTime = 0
+const debounced = quoted.filter(_ => Date.now() > lastTime + 5 * 60 * 1000)
+
 // Похвала
 quoted.filter(_ => Math.random() > 0.998, ctx => ctx.reply('Ты умничка'))
 
 // ШОК ПАТАЛОК
-quoted.hears(/п(а|a)т(а|a)л(о|o)к|501\s?271|область/gim, ctx => ctx.replyWithAudio(SHOCK_PATALOCK))
+quoted.hears(/п(а|a)т(а|a)л(о|o)к|501\s?271|область/gim, ctx => (lastTime = Date.now(), ctx.replyWithAudio(SHOCK_PATALOCK)))
 
-quoted.hears(/триггер/gim, ctx => ctx.replyWithSticker(WORLD_TRIGGER))
+debounced.hears(/триггер/gim, ctx => (lastTime = Date.now(), ctx.replyWithSticker(WORLD_TRIGGER)))
 
 // Пон
 quoted.hears(/(\P{L}|^)пон(\P{L}|$)/gimu, ctx => ctx.replyWithSticker(PON_STICKER))
@@ -41,9 +44,9 @@ quoted.hears(/противоречи/i, ctx => ctx.replyWithAnimation(COUNTER))
 
 quoted.hears(/Руби мяу/i, ctx => ctx.replyWithVoice(choice(RUBY_MEOW)))
 
-quoted.hears(/86|восемьдесят шесть/i, ctx => ctx.replyWithPhoto(EIGHTY_SIX))
+debounced.hears(/86|восемьдесят шесть/i, ctx => (lastTime = Date.now(), ctx.replyWithPhoto(EIGHTY_SIX)))
 
-quoted.hears(/(\P{L}|^)дб(\P{L}|$)|драгонбол/iu, ctx => ctx.replyWithVideo(DRAGONBALL))
+debounced.hears(/(\P{L}|^)дб(\P{L}|$)|драгонбол/iu, ctx => (lastTime = Date.now(), ctx.replyWithVideo(DRAGONBALL)))
 
 quoted.command(
     'inspect',
@@ -58,7 +61,7 @@ quoted.command(
 )
 
 // Tomorrow
-quoted.hears(/(\P{L}|^)завтра(\P{L}|$)/ui, ctx => ctx.replyWithVideo(Math.random() > 0.3 ? NOT_TOMORROW : TOMORROW))
+debounced.hears(/(\P{L}|^)завтра(\P{L}|$)/ui, ctx => (lastTime = Date.now(), ctx.replyWithVideo(Math.random() > 0.3 ? NOT_TOMORROW : TOMORROW)))
 
 quoted.hears(/^Руби, (.+) или (.+)\?$/i, async ctx => {
     const a = ctx.match[1]
