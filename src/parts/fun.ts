@@ -22,8 +22,6 @@ quoted.filter(_ => Math.random() > 0.998, ctx => ctx.reply('Ты умничка'
 // ШОК ПАТАЛОК
 quoted.hears(/п(а|a)т(а|a)л(о|o)к|501\s?271|область/gim, ctx => (lastTime = Date.now(), ctx.replyWithAudio(SHOCK_PATALOCK)))
 
-debounced.hears(/триггер/gim, ctx => (lastTime = Date.now(), ctx.replyWithSticker(WORLD_TRIGGER)))
-
 // Пон
 quoted.hears(/(\P{L}|^)пон(\P{L}|$)/gimu, ctx => ctx.replyWithSticker(PON_STICKER))
 
