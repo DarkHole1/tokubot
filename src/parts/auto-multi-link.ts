@@ -1,6 +1,7 @@
 import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { Composer, InlineKeyboard } from 'grammy'
 import { API } from 'shikimori'
+import * as mal from '../mal/api'
 
 const shikimori = new API({
     baseURL: 'https://shikimori.one/api/',
@@ -35,7 +36,14 @@ const handlers: { [key: string]: Handler } = {
         },
 
         async resolve(ids) {
-            // if(ids.shikimori)
+            if(ids.shikimori && !ids.myanimelist) {
+                ids.myanimelist = ids.shikimori
+                return true
+            }
+            if(ids.myanimelist && !ids.shikimori) {
+                ids.shikimori = ids.myanimelist
+                return true
+            }
             return false
         },
 
@@ -53,6 +61,32 @@ const handlers: { [key: string]: Handler } = {
 
         name: 'Shiki',
         link: (id) => `https://shikimori.me/animes/${id}`
+    },
+    myanimelist: {
+        extractor(url) {
+            const match = url.match(/myanimelist.net\/anime\/(\d+)/)
+            if (!match) {
+                return null
+            }
+            return { type: 'myanimelist', id: match[1] }
+        },
+
+        async resolve(ids) {
+            return false
+        },
+
+        async resolveName(ids) {
+            if (!ids.myanimelist) return null
+            console.log('Fetching')
+            const res = await mal.get_anime_by_id(parseInt(ids.myanimelist))
+            if(res.title) {
+                return [res.title]
+            }
+            return null
+        },
+
+        name: 'MAL',
+        link: (id) => `https://myanimelist.net/anime/${id}`
     }
 }
 

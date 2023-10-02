@@ -38,3 +38,10 @@ export async function get_anime(query: string) {
 
     return BasicResult.parse(res.data)
 }
+
+export async function get_anime_by_id(anime_id: number) {
+    const res = await instance.get<{ id: number, title: string }>(`/anime/${anime_id}`, {
+        params: { fields: 'id,title' }
+    })
+    return res.data
+}
