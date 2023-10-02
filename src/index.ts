@@ -16,6 +16,7 @@ import { backArrow } from './parts/backarrow'
 import { solidScript } from './parts/solid-scritpt'
 import { service } from './parts/service'
 import { worldTrigger } from './parts/world-trigger'
+import { autoMultiLink } from './parts/auto-multi-link'
 
 const config = new Config()
 const animes = Animes.fromFileSafe('data/titles.json', config.ERAI_TOKEN)
@@ -166,6 +167,7 @@ bot.use(service)
 bot.use(voting)
 bot.use(backArrow(config))
 bot.use(solidScript)
+bot.use(autoMultiLink)
 
 brs(bot)
 worldTrigger(bot)
