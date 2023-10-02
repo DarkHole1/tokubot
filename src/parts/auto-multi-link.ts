@@ -49,7 +49,6 @@ const handlers: { [key: string]: Handler } = {
 
         async resolveName(ids) {
             if (!ids.shikimori) return null
-            console.log('Fetching')
             const res = await shikimori.animes.getById({
                 id: parseInt(ids.shikimori)
             })
@@ -77,7 +76,6 @@ const handlers: { [key: string]: Handler } = {
 
         async resolveName(ids) {
             if (!ids.myanimelist) return null
-            console.log('Fetching')
             const res = await mal.get_anime_by_id(parseInt(ids.myanimelist))
             if(res.title) {
                 return [res.title]
@@ -138,14 +136,13 @@ autoMultiLink.command('i', async ctx => {
         const allIDs = await resolveGlobal(uid)
         console.log(allIDs)
         const name = await resolveName(allIDs)
-        console.log(allIDs)
         if (!name) {
             // await ctx.reply()
             // TODO
             return
         }
         const buttons = new InlineKeyboard([
-            Object.entries(allIDs).filter(([_, value]) => !!value).map(([name, value]) => (console.log(name), {
+            Object.entries(allIDs).filter(([_, value]) => !!value).map(([name, value]) => ({
                 text: handlers[name].name,
                 url: handlers[name].link(value!)
             }))
