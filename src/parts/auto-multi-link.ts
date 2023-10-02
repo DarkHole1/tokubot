@@ -4,6 +4,7 @@ import { API } from 'shikimori'
 import { HELP } from '../constants'
 import * as mal from '../mal/api'
 import { graphql } from '../gql/gql'
+import { GraphQLClient } from 'graphql-request'
 
 const findByMalId = graphql(`
   query ByMalId($idMal: Int) {
@@ -38,20 +39,21 @@ const shikimori = new API({
         headers: { "Accept-Encoding": "gzip,deflate,compress" }
     }
 })
+const anilist = new GraphQLClient('https://graphql.anilist.co/')
 
 export const autoMultiLink = new Composer().use(autoQuote)
 
-type UniversalID = { type: keyof typeof handlers, id: string }
+type UniversalID = { type: keyof typeof handlers, id: number }
 
 type Handler = {
     extractor: (url: string) => UniversalID | null
     resolve: (ids: AllIDs) => Promise<boolean>
     resolveName: (ids: AllIDs) => Promise<[string, string] | [string] | null>
     name: string
-    link: (id: string) => string
+    link: (id: number) => string
 }
 
-type AllIDs = { [type: keyof typeof handlers]: string | null }
+type AllIDs = { [type: keyof typeof handlers]: number | null }
 
 const handlers: { [key: string]: Handler } = {
     shikimori: {
@@ -60,7 +62,7 @@ const handlers: { [key: string]: Handler } = {
             if (!match) {
                 return null
             }
-            return { type: 'shikimori', id: match[1] }
+            return { type: 'shikimori', id: parseInt(match[1]) }
         },
 
         async resolve(ids) {
@@ -78,7 +80,7 @@ const handlers: { [key: string]: Handler } = {
         async resolveName(ids) {
             if (!ids.shikimori) return null
             const res = await shikimori.animes.getById({
-                id: parseInt(ids.shikimori)
+                id: ids.shikimori
             })
             if (res.russian) {
                 return [res.russian, res.name]
@@ -95,7 +97,7 @@ const handlers: { [key: string]: Handler } = {
             if (!match) {
                 return null
             }
-            return { type: 'myanimelist', id: match[1] }
+            return { type: 'myanimelist', id: parseInt(match[1]) }
         },
 
         async resolve(ids) {
@@ -104,7 +106,7 @@ const handlers: { [key: string]: Handler } = {
 
         async resolveName(ids) {
             if (!ids.myanimelist) return null
-            const res = await mal.get_anime_by_id(parseInt(ids.myanimelist))
+            const res = await mal.get_anime_by_id(ids.myanimelist)
             if (res.title) {
                 return [res.title]
             }
@@ -113,6 +115,52 @@ const handlers: { [key: string]: Handler } = {
 
         name: 'MAL',
         link: (id) => `https://myanimelist.net/anime/${id}`
+    },
+    anilist: {
+        extractor(url) {
+            const match = url.match(/anilist.co\/anime\/(\d+)/)
+            if (!match) {
+                return null
+            }
+            return { type: 'anilist', id: parseInt(match[1]) }
+        },
+
+        async resolve(ids) {
+            if(ids.myanimelist && !ids.anilist) {
+                const res = await anilist.request(findByMalId, {
+                    idMal: ids.myanimelist
+                })
+                if(res.Media) {
+                    ids.anilist = res.Media.id
+                    return true
+                }
+            }
+
+            if(ids.anilist && !ids.myanimelist) {
+                const res = await anilist.request(findById, {
+                    mediaId: ids.anilist
+                })
+                if(res.Media && res.Media.idMal) {
+                    ids.myanimelist = res.Media.idMal
+                    return true
+                }
+            }
+            return false
+        },
+
+        async resolveName(ids) {
+            if (!ids.anilist) return null
+            const res = await anilist.request(findById, {
+                mediaId: ids.anilist
+            })
+            if (res.Media?.title?.romaji) {
+                return [res.Media.title.romaji]
+            }
+            return null
+        },
+
+        name: 'Anilist',
+        link: (id) => `https://anilist.co/anime/${id}`
     }
 }
 
