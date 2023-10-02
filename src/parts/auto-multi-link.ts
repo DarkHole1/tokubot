@@ -1,9 +1,13 @@
 import { autoQuote } from '@roziscoding/grammy-autoquote'
-import { Composer } from 'grammy'
+import { Composer, InlineKeyboard } from 'grammy'
 import { API } from 'shikimori'
 
 const shikimori = new API({
-    userAgent: 'Toku-bot'
+    baseURL: 'https://shikimori.one/api/',
+    userAgent: 'Toku-bot',
+    axios: {
+        headers: { "Accept-Encoding": "gzip,deflate,compress" }
+    }
 })
 
 export const autoMultiLink = new Composer().use(autoQuote)
@@ -13,6 +17,9 @@ type UniversalID = { type: keyof typeof handlers, id: string }
 type Handler = {
     extractor: (url: string) => UniversalID | null
     resolve: (ids: AllIDs) => Promise<boolean>
+    resolveName: (ids: AllIDs) => Promise<[string, string] | [string] | null>
+    name: string
+    link: (id: string) => string
 }
 
 type AllIDs = { [type: keyof typeof handlers]: string | null }
@@ -20,17 +27,32 @@ type AllIDs = { [type: keyof typeof handlers]: string | null }
 const handlers: { [key: string]: Handler } = {
     shikimori: {
         extractor(url) {
-            const match = url.match(/shikimori.(?:me|one)\/animes\/.+?(\d+)/)
+            const match = url.match(/shikimori.(?:me|one)\/animes\/.*?(\d+)/)
             if (!match) {
                 return null
             }
             return { type: 'shikimori', id: match[1] }
         },
 
-        async resolve(ids: AllIDs) {
+        async resolve(ids) {
             // if(ids.shikimori)
             return false
-        }
+        },
+
+        async resolveName(ids) {
+            if (!ids.shikimori) return null
+            console.log('Fetching')
+            const res = await shikimori.animes.getById({
+                id: parseInt(ids.shikimori)
+            })
+            if (res.russian) {
+                return [res.russian, res.name]
+            }
+            return [res.name]
+        },
+
+        name: 'Shiki',
+        link: (id) => `https://shikimori.me/animes/${id}`
     }
 }
 
@@ -47,11 +69,15 @@ async function resolveGlobal(uid: UniversalID): Promise<AllIDs> {
             changed ||= await handler.resolve(res)
         }
     } while (changed)
-    
+
     return res
 }
 
-async function resolveName(ids: AllIDs): Promise<[ string, string ] | [string] | null> {
+async function resolveName(ids: AllIDs): Promise<[string, string] | [string] | null> {
+    for (const handler of Object.values(handlers)) {
+        const res = handler.resolveName(ids)
+        if (res) return res
+    }
     return null
 }
 
@@ -78,10 +104,20 @@ autoMultiLink.command('i', async ctx => {
         const allIDs = await resolveGlobal(uid)
         console.log(allIDs)
         const name = await resolveName(allIDs)
-        if(!name) {
+        console.log(allIDs)
+        if (!name) {
             // await ctx.reply()
             // TODO
             return
         }
+        const buttons = new InlineKeyboard([
+            Object.entries(allIDs).filter(([_, value]) => !!value).map(([name, value]) => (console.log(name), {
+                text: handlers[name].name,
+                url: handlers[name].link(value!)
+            }))
+        ])
+        await ctx.reply(name.join(' / '), {
+            reply_markup: buttons
+        })
     }
 })
