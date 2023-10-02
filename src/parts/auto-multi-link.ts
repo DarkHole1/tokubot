@@ -3,6 +3,33 @@ import { Composer, InlineKeyboard } from 'grammy'
 import { API } from 'shikimori'
 import { HELP } from '../constants'
 import * as mal from '../mal/api'
+import { graphql } from '../gql/gql'
+
+const findByMalId = graphql(`
+  query ByMalId($idMal: Int) {
+    Media(idMal: $idMal) {
+      title {
+        romaji
+      }
+      id
+      idMal
+      type
+    }
+  }
+`)
+
+const findById = graphql(`
+  query ById($mediaId: Int) {
+    Media(id: $mediaId) {
+      title {
+        romaji
+      }
+      id
+      idMal
+      type
+    }
+  }
+`)
 
 const shikimori = new API({
     baseURL: 'https://shikimori.one/api/',
@@ -37,11 +64,11 @@ const handlers: { [key: string]: Handler } = {
         },
 
         async resolve(ids) {
-            if(ids.shikimori && !ids.myanimelist) {
+            if (ids.shikimori && !ids.myanimelist) {
                 ids.myanimelist = ids.shikimori
                 return true
             }
-            if(ids.myanimelist && !ids.shikimori) {
+            if (ids.myanimelist && !ids.shikimori) {
                 ids.shikimori = ids.myanimelist
                 return true
             }
@@ -78,7 +105,7 @@ const handlers: { [key: string]: Handler } = {
         async resolveName(ids) {
             if (!ids.myanimelist) return null
             const res = await mal.get_anime_by_id(parseInt(ids.myanimelist))
-            if(res.title) {
+            if (res.title) {
                 return [res.title]
             }
             return null

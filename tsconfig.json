@@ -9,6 +9,6 @@
     "skipLibCheck": true
   },
   "exclude": [
-    "scripts/**/*"
+    "scripts/**/*", "codegen.ts"
   ]
 }
