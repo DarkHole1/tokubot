@@ -99,7 +99,7 @@ export class Anime {
             if (update.category == 'Finale') {
                 completed = true
             }
-            if (update.episode <= this.series) {
+            if (typeof update.episode != 'number' || update.episode <= this.series) {
                 continue
             }
             this.data.series = update.episode as number
