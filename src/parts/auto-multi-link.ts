@@ -114,7 +114,7 @@ async function resolveName(ids: AllIDs): Promise<[string, string] | [string] | n
     return null
 }
 
-autoMultiLink.command('i', async ctx => {
+autoMultiLink.command('a', async ctx => {
     const msg = ctx.msg.reply_to_message
     if (!msg || !msg.entities || !msg.text) return
     for (const entity of msg.entities) {
