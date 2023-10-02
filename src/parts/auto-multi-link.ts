@@ -1,6 +1,7 @@
 import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { Composer, InlineKeyboard } from 'grammy'
 import { API } from 'shikimori'
+import { HELP } from '../constants'
 import * as mal from '../mal/api'
 
 const shikimori = new API({
@@ -137,8 +138,7 @@ autoMultiLink.command('i', async ctx => {
         console.log(allIDs)
         const name = await resolveName(allIDs)
         if (!name) {
-            // await ctx.reply()
-            // TODO
+            await ctx.replyWithSticker(HELP)
             return
         }
         const buttons = new InlineKeyboard([
