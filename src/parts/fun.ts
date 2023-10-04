@@ -42,7 +42,7 @@ quoted.hears(/противоречи/i, ctx => ctx.replyWithAnimation(COUNTER))
 
 quoted.hears(/Руби мяу/i, ctx => ctx.replyWithVoice(choice(RUBY_MEOW)))
 
-debounced.hears(/86|восемьдесят шесть/i, ctx => (lastTime = Date.now(), ctx.replyWithPhoto(EIGHTY_SIX)))
+debounced.hears(/(\P{L}|^)86(\P{L}|$)|восемьдесят шесть/iu, ctx => (lastTime = Date.now(), ctx.replyWithPhoto(EIGHTY_SIX)))
 
 debounced.hears(/(\P{L}|^)дб(\P{L}|$)|драгонбол/iu, ctx => (lastTime = Date.now(), ctx.replyWithVideo(DRAGONBALL)))
 
