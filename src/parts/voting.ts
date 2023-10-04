@@ -6,7 +6,7 @@ const MIN_PERCENT = 0.3
 const VOTES_FILE = 'data/votes3.json'
 
 export const voting = new Composer
-const until = new Date('10 Oct 2023')
+const until = new Date('1 Oct 2023')
 const votes = Votes.loadSync(VOTES_FILE)
 
 voting.command('startvoting', async ctx => {
