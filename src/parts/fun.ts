@@ -3,7 +3,7 @@ import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { Composer, InputFile } from "grammy"
 import type { Sticker } from "grammy/out/types"
 import { pluralize } from "numeralize-ru"
-import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL } from "../constants"
+import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY } from "../constants"
 import { DrinkCounters } from "../data"
 import { choice } from '../utils'
 
@@ -50,7 +50,7 @@ quoted.command(
     'inspect',
     ctx => {
         const text = JSON.stringify(ctx.msg.reply_to_message, null, 2)
-        if(text.length > 2048) {
+        if (text.length > 2048) {
             return ctx.replyWithDocument(new InputFile(Buffer.from(text), 'inspect.json'))
         }
         const msg = pre(JSON.stringify(ctx.msg.reply_to_message, null, 2), 'json')
@@ -59,7 +59,7 @@ quoted.command(
 )
 
 // Tomorrow
-debounced.hears(/(\P{L}|^)завтра(\P{L}|$)/ui, ctx => (lastTime = Date.now(), ctx.replyWithVideo(Math.random() > 0.3 ? NOT_TOMORROW : TOMORROW)))
+debounced.hears(/(\P{L}|^)завтра(\P{L}|$)/ui, ctx => (lastTime = Date.now(), ctx.replyWithVideo(Math.random() > 0.3 ? NOT_TOMORROW : (Math.random() > 0.3 ? TOMORROW_HAPPY : TOMORROW))))
 
 quoted.hears(/^Руби, (.+) или (.+)\?$/i, async ctx => {
     const a = ctx.match[1]
