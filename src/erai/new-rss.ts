@@ -111,7 +111,7 @@ export async function parseFeed(link: string): Promise<RSSItem[]> {
     let items = feed.items.map(item => {
         if (!item.title) throw new Error('No title')
         const title = item.title.replace(/\[.+?\]/g, '').trim()
-        const titleParsed = title.match(/^(.+) \- (?:(\d+(?:\.\d)?)|(\d+ ~ \d+)|(SP))( END)?(?: \((.+)\))?$/)
+        const titleParsed = title.match(/^(.+) \- (?:(\d+(?:\.\d)?)|(\d+ ~ \d+)|(SP))(?:v\d+)?( END)?(?: \((.+)\))?$/)
         if (!titleParsed) throw new Error(`Cant parse title '${title}'. Feed is broken`)
         const anime = titleParsed[1]
         const episode = parseEpisode(titleParsed)
