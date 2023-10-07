@@ -42,9 +42,9 @@ export async function watchGroups(token: string, groupIds: number[], cb: (newPos
                 cb(newPosts)
             }
         } catch(e) {
-            console.error('Error during parsing erai-raws feed %o', e)
+            console.error('Error during parsing vk feed %o', e)
         }
-    }, fullConfig.every)
+    }, fullConfig.every * 1000)
 }
 
 const sleep = (ms: number) => new Promise(res => setTimeout(res, ms))
