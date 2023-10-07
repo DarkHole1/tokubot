@@ -17,6 +17,7 @@ import { solidScript } from './parts/solid-scritpt'
 import { service } from './parts/service'
 import { worldTrigger } from './parts/world-trigger'
 import { autoMultiLink } from './parts/auto-multi-link'
+import { watchGroups } from './vk/watcher'
 
 const config = new Config()
 const animes = Animes.fromFileSafe('data/titles.json', config.ERAI_TOKEN)
@@ -84,10 +85,10 @@ bot.catch(async err => {
     console.error(err.error)
     try {
         const e = err.error
-        if(e instanceof GrammyError) {
+        if (e instanceof GrammyError) {
             await bot.api.sendMessage(DARK_HOLE, `An error occured:\n${e.description}`)
         }
-    } catch(e) {
+    } catch (e) {
         console.log(`Send failed`)
     }
 })
@@ -144,7 +145,7 @@ bot.command('recommend', async ctx => {
 bot.command('recommendExtended', async ctx => {
     console.log(animeRecommendationsExtended)
     bot.api.sendChatAction(ctx.chat.id, "typing")
-    let anime: { node: { title: string, id: number }}
+    let anime: { node: { title: string, id: number } }
     let whoami: string
     if (ctx.msg.from?.id == EGOID) {
         whoami = 'Эгоизм'
@@ -285,6 +286,12 @@ animes.start(async (updates) => {
     console.log(message)
     bot.api.sendMessage(TOKU_CHAT, message.toString(), { entities: message.entities })
     console.log("Successfully ended")
+})
+
+watchGroups(config.VK_SERVICE_KEY, [-199157142], async (posts) => {
+    for (const post of posts) {
+        await bot.api.sendMessage(TOKU_CHAT, `https://vk.com/wall${post.owner_id}_${post.id}`)
+    }
 })
 
 bot.start()
