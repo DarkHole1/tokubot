@@ -1,4 +1,3 @@
-import { reduceEachLeadingCommentRange } from 'typescript'
 import { VK } from 'vk-io'
 import { WallWallpostFull } from 'vk-io/lib/api/schemas/objects'
 
