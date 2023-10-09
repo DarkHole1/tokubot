@@ -5,20 +5,24 @@ import { readFileSync, writeFile } from "fs-extra"
 import { DARK_HOLE, TOKU_CHAT } from "../constants"
 import { guard, isPrivateChat } from "grammy-guard"
 import { ParseModeFlavor } from "@grammyjs/parse-mode"
+import { CountersModel } from '../models/counters'
+import { EverydayPostModel } from '../models/everyday-post'
 
-const wtFile = RawBRS.parse(JSON.parse(readFileSync('data/world-trigger.json', { encoding: 'utf-8' })))
-
+const type = 'world trigger'
 export function worldTrigger(bot: Bot<ParseModeFlavor<Context>>) {
     cron.schedule('0 0 20 * * *', async () => {
-        const photo = wtFile.queue.shift()
-        if (!photo) {
+        const counters = await CountersModel.findOne()
+        const photo = await EverydayPostModel.findOne({ type })
+        if (!counters || !photo) {
             return
         }
-        wtFile.days++
-        await bot.api.sendPhoto(TOKU_CHAT, photo, {
-            caption: 'Постим World Trigger день ' + wtFile.days
+
+        counters.worldTriggerDays++
+        await bot.api.sendPhoto(TOKU_CHAT, photo.fileId, {
+            caption: 'Постим World Trigger день ' + counters.worldTriggerDays
         })
-        await writeFile('data/world-trigger.json', JSON.stringify(wtFile))
+        await counters.save()
+        await photo.deleteOne()
     })
 
     bot.on(':media', guard(isPrivateChat)).filter(
@@ -29,9 +33,16 @@ export function worldTrigger(bot: Bot<ParseModeFlavor<Context>>) {
                 await ctx.reply('Чот странное', { reply_to_message_id: ctx.msg.message_id })
                 return
             }
-            wtFile.queue.push(photo.slice(-1)[0].file_id)
-            await writeFile('data/world-trigger.json', JSON.stringify(wtFile))
-            await ctx.reply(`Успешно добавлено на день ${wtFile.days + wtFile.queue.length}`, { reply_to_message_id: ctx.msg.message_id })
+            const post = new EverydayPostModel({
+                type,
+                fileId: photo.slice(-1)[0].file_id
+            })
+            await post.save()
+
+            const postCount = await EverydayPostModel.countDocuments({ type })
+            const counters = await CountersModel.findOne()
+
+            await ctx.reply(`Успешно добавлено на день ${counters!.worldTriggerDays + postCount}`, { reply_to_message_id: ctx.msg.message_id })
         }
     )
 }
