@@ -18,12 +18,15 @@ import { service } from './parts/service'
 import { worldTrigger } from './parts/world-trigger'
 import { autoMultiLink } from './parts/auto-multi-link'
 import { watchGroups } from './vk/watcher'
+import mongoose from 'mongoose'
 
 const config = new Config()
 const animes = Animes.fromFileSafe('data/titles.json', config.ERAI_TOKEN)
 const animeRecommendations = Recommendations.fromFileSyncSafe('data/recommendations.json')
 const animeRecommendationsExtended = Recommendations.fromFileSyncSafe('data/extended.json')
 const thanksStickers = ThanksStickers.fromFileSyncSafe('data/thanks.json')
+
+mongoose.connect(config.MONGODB_URI)
 
 function escape_string(s: string) {
     return s.replace(/[\_\*\[\]\(\)\~\`\>\#\+\-\=\|\{\}\.\!]/g, '\\$&')
