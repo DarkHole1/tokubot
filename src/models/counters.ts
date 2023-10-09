@@ -2,7 +2,7 @@ import { DocumentType, getModelForClass, prop } from '@typegoose/typegoose'
 
 class Counters {
     @prop({ default: 0 })
-    worldTrigger!: number
+    worldTriggerDays!: number
 }
 
 export type CountersDocument = DocumentType<Counters>
