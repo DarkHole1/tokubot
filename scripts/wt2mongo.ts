@@ -7,10 +7,14 @@ import { EverydayPostModel } from '../src/models/everyday-post'
 import { debug } from 'debug'
 
 const log = debug('script:wt2mongo')
+
+log('Loading config & wt file')
 const config = new Config()
 const wtFile = RawBRS.parse(JSON.parse(readFileSync('data/world-trigger.json', { encoding: 'utf-8' })))
+log('Loaded')
 
 void (async () => {
+    log('Starting connecting to mongo...')
     await mongoose.connect(config.MONGODB_URI)
     log('Connected to mongodb')
 
