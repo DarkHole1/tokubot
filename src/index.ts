@@ -8,7 +8,7 @@ import { Config } from './config'
 import { isAdmin, randomString, throttle } from "./utils"
 import { Recommendations, ThanksStickers } from './data'
 import { Anime } from './erai/anime'
-import { TOKU_NAME, EGOID, BOT_ID, TOKU_CHAT, TOKU_CHANNEL, ANGELINA_LIST, DARK_HOLE } from './constants'
+import { TOKU_NAME, EGOID, BOT_ID, TOKU_CHAT, TOKU_CHANNEL, ANGELINA_LIST, DARK_HOLE, ADMINS } from './constants'
 import { fun } from './parts/fun'
 import { brs } from './parts/brs'
 import { voting } from './parts/voting'
@@ -274,9 +274,24 @@ bot.on('callback_query:data', async ctx => {
     await handler(ctx)
 })
 
-bot.command('observed', ctx => ctx.reply(`Всё что я наблюдаю:\n${animes.list().map(anime => `* ${anime.name} (серий: ${anime.series})`).join('\n')}`, {
+bot.command('observed', ctx => ctx.reply(`Всё что я наблюдаю:\n${animes.list().map((anime, i) => `${i + 1}. ${anime.name} (серий: ${anime.series})`).join('\n')}`, {
     reply_to_message_id: ctx.message?.message_id
 }))
+
+bot.command('rename').filter(
+    ctx => ADMINS.includes(ctx.from?.id ?? 0),
+    async ctx => {
+        const match = ctx.match.match(/(\d+) (.+)/)
+        if (!match) {
+            return await ctx.reply('Хмф', { reply_to_message_id: ctx.msg.message_id })
+        }
+        const id = parseInt(match[1])
+        const newName = match[2]
+        animes.rename(id - 1, newName)
+        await animes.toFileAsync('data/titles.json')
+        return await ctx.reply('Переимяуновали')
+    }
+)
 
 animes.start(async (updates) => {
     await animes.toFileAsync('data/titles.json')

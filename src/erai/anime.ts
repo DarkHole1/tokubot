@@ -18,6 +18,10 @@ export class Anime {
         return this.data.name
     }
 
+    set name(newName: string) {
+        this.data.name = newName
+    }
+
     get russian() {
         return this.data.russian
     }

@@ -37,6 +37,14 @@ export class Animes {
         return series.flat()
     }
 
+    rename(id: number, newName: string) {
+        const anime = this.animes[id]
+        if (!anime) {
+            return
+        }
+        anime.name = newName
+    }
+
     add(anime: Anime) {
         this.animes.push(anime)
     }
