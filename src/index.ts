@@ -279,7 +279,7 @@ bot.command('observed', ctx => ctx.reply(`Всё что я наблюдаю:\n${
 }))
 
 bot.command('rename').filter(
-    ctx => ADMINS.includes(ctx.from?.id ?? 0),
+    isAdmin,
     async ctx => {
         const match = ctx.match.match(/(\d+) (.+)/)
         if (!match) {
@@ -294,7 +294,7 @@ bot.command('rename').filter(
 )
 
 bot.command('delete').filter(
-    ctx => ADMINS.includes(ctx.from?.id ?? 0),
+    isAdmin,
     async ctx => {
         const match = ctx.match.match(/(\d+)/)
         if (!match) {
