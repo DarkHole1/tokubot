@@ -2,6 +2,9 @@ import { readFileSync, writeFileSync } from "fs"
 import { outputFile, outputFileSync, writeFile } from "fs-extra"
 import { Anime } from "./anime"
 import { makeLink, watchUpdates } from "./new-rss"
+import debug from 'debug'
+
+const log = debug("tokubot:animes")
 
 export class Animes {
     private animes: Anime[]
@@ -66,6 +69,7 @@ export class Animes {
             linkType: 'magnet',
             token: this.token
         }), updates => {
+            log("Starting processing updates, got %d updates", updates.length)
             let res = [] as ({ anime: string, episode: number, completed: boolean }[])
             this.animes = this.animes.filter(anime => {
                 const { completed, handled } = anime.handle(updates)
