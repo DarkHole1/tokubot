@@ -45,6 +45,13 @@ export class Animes {
         anime.name = newName
     }
 
+    delete(id: number) {
+        if(id < 0 || id >= this.animes.length) {
+            return
+        }
+        this.animes.splice(id, 1)
+    }
+
     add(anime: Anime) {
         this.animes.push(anime)
     }

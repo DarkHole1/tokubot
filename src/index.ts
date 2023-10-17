@@ -293,6 +293,20 @@ bot.command('rename').filter(
     }
 )
 
+bot.command('delete').filter(
+    ctx => ADMINS.includes(ctx.from?.id ?? 0),
+    async ctx => {
+        const match = ctx.match.match(/(\d+)/)
+        if (!match) {
+            return await ctx.reply('Хмф', { reply_to_message_id: ctx.msg.message_id })
+        }
+        const id = parseInt(match[1])
+        animes.delete(id - 1)
+        await animes.toFileAsync('data/titles.json')
+        return await ctx.reply('[ДАННЫЕ УДАЛЕНЫ]')
+    }
+)
+
 animes.start(async (updates) => {
     await animes.toFileAsync('data/titles.json')
     let message: FormattedString
