@@ -5,10 +5,10 @@ import { Animes } from './erai/animes'
 import * as statics from './static'
 import { fmt, FormattedString, hydrateReply, ParseModeFlavor, link } from '@grammyjs/parse-mode'
 import { Config } from './config'
-import { isAdmin, randomString, throttle } from "./utils"
-import { Recommendations, ThanksStickers } from './data'
+import { isAdmin, randomString } from "./utils"
+import { Recommendations } from './data'
 import { Anime } from './erai/anime'
-import { TOKU_NAME, EGOID, BOT_ID, TOKU_CHAT, TOKU_CHANNEL, ANGELINA_LIST, DARK_HOLE, ADMINS } from './constants'
+import { TOKU_NAME, EGOID, TOKU_CHAT, ANGELINA_LIST, DARK_HOLE } from './constants'
 import { fun } from './parts/fun'
 import { brs } from './parts/brs'
 import { voting } from './parts/voting'
@@ -19,12 +19,12 @@ import { worldTrigger } from './parts/world-trigger'
 import { autoMultiLink } from './parts/auto-multi-link'
 import { watchGroups } from './vk/watcher'
 import mongoose from 'mongoose'
+import { thanks } from './parts/thanks'
 
 const config = new Config()
 const animes = Animes.fromFileSafe('data/titles.json', config.ERAI_TOKEN)
 const animeRecommendations = Recommendations.fromFileSyncSafe('data/recommendations.json')
 const animeRecommendationsExtended = Recommendations.fromFileSyncSafe('data/extended.json')
-const thanksStickers = ThanksStickers.fromFileSyncSafe('data/thanks.json')
 
 mongoose.connect(config.MONGODB_URI)
 
@@ -79,7 +79,7 @@ async function get_random_anime_recommendation_extended() {
     return animeRecommendationsExtended.getRandomRecommendation(all_animes)
 }
 
-const bot = new Bot<ParseModeFlavor<Context>>(config.TOKEN)
+export const bot = new Bot<ParseModeFlavor<Context>>(config.TOKEN)
 bot.use(hydrateReply)
 
 const help = statics.help
@@ -177,36 +177,8 @@ brs(bot)
 worldTrigger(bot)
 
 
-bot.hears(/(с)?пасиб(о|a)/gim).filter(async ctx => ctx.message?.reply_to_message?.from?.id == BOT_ID ?? false, async ctx => {
-    ctx.api.sendSticker(
-        ctx.chat.id,
-        thanksStickers.getRandomSticker().fileId,
-        { reply_to_message_id: ctx.message?.message_id }
-    )
-})
-
 bot.filter(ctx => !ANGELINA_LIST.includes(ctx.from?.id ?? 0)).use(fun)
-
-bot.command('addsticker').filter(
-    isAdmin,
-    async ctx => {
-        const sticker = ctx.msg.reply_to_message?.sticker
-        if (!sticker) {
-            await ctx.reply("Надо отвечать на сообщение со стикером", {
-                reply_to_message_id: ctx.message?.message_id
-            })
-            return
-        }
-        const success = thanksStickers.add(sticker)
-        const reply = success ? 'Стикер добавлен супер успешно!' : 'Что-то пошло не так. Скорее всего стикер уже супер добавлен.'
-        if (success) {
-            await thanksStickers.toFile('data/thanks.json')
-        }
-        await ctx.reply(reply, {
-            reply_to_message_id: ctx.message?.message_id
-        })
-    }
-)
+bot.use(thanks)
 
 bot.command('add').filter(
     isAdmin,
