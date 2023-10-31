@@ -18,6 +18,7 @@ import { watchGroups } from './vk/watcher'
 import mongoose from 'mongoose'
 import { thanks } from './parts/thanks'
 import { sadAnimeWatcher } from './parts/sad-anime-watcher'
+import { voting2 } from './parts/voting2'
 
 const config = new Config()
 const animeRecommendations = Recommendations.fromFileSyncSafe('data/recommendations.json')
@@ -165,7 +166,7 @@ bot.command('recommendExtended', async ctx => {
 })
 
 bot.use(service)
-bot.use(voting)
+bot.use(voting2)
 bot.use(backArrow(config))
 bot.use(solidScript)
 bot.use(autoMultiLink)

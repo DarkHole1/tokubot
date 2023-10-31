@@ -4,8 +4,9 @@ import { Animes, Answers, Votes2 } from "../models/votes2"
 import * as statics from '../static'
 
 export const voting2 = new Composer
-const until = new Date('3 August 2023')
-const votes = Votes2.loadSync('data/votes2.json')
+const until = new Date('1 December 2023')
+const VOTES_FILE = 'data/votes4.json'
+const votes = Votes2.loadSync(VOTES_FILE)
 
 voting2.command('startvoting', async ctx => {
     if (new Date() > until) {
@@ -150,7 +151,7 @@ voting2.callbackQuery(/^voting:(\d+):(not_planning|planning|dropped|not_finished
         if (!final) {
             await sendNext(ctx, id)
         }
-        await votes.save('data/votes2.json')
+        await votes.save(VOTES_FILE)
     }
 
     await ctx.answerCallbackQuery()
