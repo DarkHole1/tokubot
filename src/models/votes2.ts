@@ -10,6 +10,7 @@ export const Answers = z.enum([
 export type Answers = z.infer<typeof Answers>
 
 const RawVote = z.object({
+    id: z.number(),
     name: z.string(),
     russian: z.string(),
     url: z.string(),
@@ -47,6 +48,14 @@ export class Votes2 {
             return
         }
         this.votes[id].votes[member] = answer
+    }
+
+    addVoteByMalId(malId: number, member: number, answer: Answers) {
+        const anime = this.votes.find(anime => anime.id == malId)
+        if (!anime) {
+            return
+        }
+        anime.votes[member] = answer
     }
 
     get(id: number) {

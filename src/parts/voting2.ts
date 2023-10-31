@@ -2,8 +2,19 @@ import { pre } from '@grammyjs/parse-mode'
 import { Composer, Context, InlineKeyboard, InputFile } from "grammy"
 import { Animes, Answers, Votes2 } from "../models/votes2"
 import * as statics from '../static'
+import { API } from 'shikimori'
+import debug from 'debug'
 
 export const voting2 = new Composer
+const log = debug("tokubot:voting")
+const shikimori = new API({
+    baseURL: 'https://shikimori.one/api',
+    axios: {
+        headers: {
+            'Accept-Encoding': '*'
+        }
+    }
+})
 const until = new Date('1 December 2023')
 const VOTES_FILE = 'data/votes4.json'
 const votes = Votes2.loadSync(VOTES_FILE)
@@ -13,13 +24,49 @@ voting2.command('startvoting', async ctx => {
         await ctx.reply('Прости, время закончилось :(')
         return
     }
-    const inlineKeyboard = new InlineKeyboard().text('Понятненька', 'voting:start')
-    try {
-        await ctx.reply(statics.startVoting, {
-            reply_markup: inlineKeyboard
-        })
-    } catch (e) {
 
+    if (ctx.match.length == 0) {
+        const inlineKeyboard = new InlineKeyboard().text('Понятненька', 'voting:start')
+        try {
+            await ctx.reply(statics.startVoting, {
+                reply_markup: inlineKeyboard
+            })
+        } catch (e) { }
+        return
+    } else {
+        try {
+            log("Trying to get scores of %s", ctx.match)
+            const scores = await shikimori.users.animeRates({
+                id: ctx.match,
+                limit: 5000
+            })
+            log("Got %d scores", scores.length)
+            for (const score of scores) {
+                switch (score.status) {
+                    case 'planned':
+                        votes.addVoteByMalId(score.anime.id, ctx.from!.id, 'planning')
+                        break
+                    case 'dropped':
+                        votes.addVoteByMalId(score.anime.id, ctx.from!.id, 'dropped')
+                        break
+                    case 'on_hold':
+                    case 'rewatching':
+                    case 'watching':
+                        votes.addVoteByMalId(score.anime.id, ctx.from!.id, 'not_finished')
+                        break
+                    case 'completed':
+                        // Lol
+                        if (score.score == 0) break
+                        votes.addVoteByMalId(score.anime.id, ctx.from!.id, score.score.toFixed(0) as ('1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10'))
+                        break
+                }
+            }
+            await votes.save(VOTES_FILE)
+            await ctx.reply('Успешно добавили аниме в списочек')
+        } catch (e) {
+            console.log(e)
+            await ctx.reply('Похоже что-то пошло не так. Проверьте ник, попробуйте позже, напишите @darkhole1...')
+        }
     }
 })
 
