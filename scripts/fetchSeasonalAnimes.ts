@@ -41,6 +41,7 @@ void async function () {
 
     const res = animes.map(anime => {
         return {
+            id: anime.id,
             name: anime.name,
             russian: anime.russian,
             url: anime.url,
