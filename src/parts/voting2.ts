@@ -137,7 +137,7 @@ voting2.command('rating', async ctx => {
     const topDroppedBlock = `Не оправдавшие надежды (дропнутые):\n${topDroppedFormatted.slice(0, 5).join('\n')}`
 
     try {
-        await ctx.reply([totalBlock, perspectiveAnimesBlock, topWatchedBlock, topDroppedBlock].join('\n\n'))
+        await ctx.reply([totalBlock, topAnimesBlock, topWeightedBlock, topAnimesFixedBlock, perspectiveAnimesBlock, topWatchedBlock].join('\n\n'))
     } catch (e) {
         await ctx.reply(`Error: ${e}`)
     }
