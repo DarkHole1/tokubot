@@ -19,6 +19,7 @@ import mongoose from 'mongoose'
 import { thanks } from './parts/thanks'
 import { sadAnimeWatcher } from './parts/sad-anime-watcher'
 import { voting2 } from './parts/voting2'
+import { isAdmin } from 'grammy-guard'
 
 const config = new Config()
 const animeRecommendations = Recommendations.fromFileSyncSafe('data/recommendations.json')
@@ -93,6 +94,8 @@ bot.catch(async err => {
         console.log(`Send failed`)
     }
 })
+
+bot.command('stop').filter(isAdmin, _ => bot.stop())
 
 bot.command('start', (ctx) =>
     ctx.replyFmt(help, {
