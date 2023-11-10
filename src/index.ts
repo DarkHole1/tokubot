@@ -179,7 +179,7 @@ bot.filter(ctx => !ANGELINA_LIST.includes(ctx.from?.id ?? 0)).use(fun)
 bot.use(thanks)
 bot.use(sadAnimeWatcher(config, bot))
 
-watchGroups(config.VK_SERVICE_KEY, [-199157142], async (posts) => {
+watchGroups(config.VK_SERVICE_KEY, [-199157142, -202849544, -103839633], async (posts) => {
     for (const post of posts) {
         await bot.api.sendMessage(TOKU_CHAT, `https://vk.com/wall${post.owner_id}_${post.id}`)
     }
