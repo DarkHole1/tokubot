@@ -11,6 +11,7 @@ export async function watchGroups(token: string, groupIds: number[], cb: (newPos
     const vk = new VK({
         token
     })
+    const getLatest = (dates: { date?: number }[]) => Math.max(...dates.flatMap(({ date }) => date ? [date] : []))
 
     // Initialize
     const lastDates = new Array<number>(groupIds.length).fill(0)
@@ -19,9 +20,7 @@ export async function watchGroups(token: string, groupIds: number[], cb: (newPos
             owner_id: group,
             count: 1
         })
-        if (res.items.length > 0 && res.items[0].date) {
-            lastDates[i] = res.items[0].date
-        }
+        lastDates[i] = getLatest(res.items)
         await sleep(fullConfig.wait * 1000)
     }
 
@@ -35,9 +34,7 @@ export async function watchGroups(token: string, groupIds: number[], cb: (newPos
                     count: 10
                 })
                 newPosts = newPosts.concat(res.items.filter(post => post.date && post.date > lastDates[i]))
-                if (res.items[0].date) {
-                    lastDates[i] = res.items[0].date
-                }
+                lastDates[i] = getLatest(res.items)
                 sleep(fullConfig.wait)
             }
             if (newPosts.length > 0) {
