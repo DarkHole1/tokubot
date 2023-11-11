@@ -18,7 +18,7 @@ export async function watchGroups(token: string, groupIds: number[], cb: (newPos
     for (const [i, group] of groupIds.entries()) {
         const res = await vk.api.wall.get({
             owner_id: group,
-            count: 1
+            count: 10
         })
         lastDates[i] = getLatest(res.items)
         await sleep(fullConfig.wait * 1000)
