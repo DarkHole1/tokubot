@@ -3,7 +3,6 @@ import { outputFile, outputFileSync, writeFile } from "fs-extra"
 import { Anime } from "./anime"
 import { makeLink, watchUpdates } from "./new-rss"
 import debug from 'debug'
-import { error } from 'console'
 
 const log = debug("tokubot:animes")
 
