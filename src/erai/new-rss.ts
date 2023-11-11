@@ -97,10 +97,10 @@ const parser = new Parser({
 })
 
 function parseEpisode(match: RegExpMatchArray) {
-    if(match[2]) {
+    if (match[2]) {
         return parseFloat(match[2])
     }
-    if(match[3]) {
+    if (match[3]) {
         return match[3].split(' ~ ').map(d => parseFloat(d)) as [number, number]
     }
     return 'SP' as const
@@ -137,26 +137,27 @@ type WatchUpdatesArgs = {
     initial: boolean
 }
 
-export async function watchUpdates(link: string, cb: (newItemts: RSSItem[]) => void, config?: Partial<WatchUpdatesArgs>) {
+export async function watchUpdates(link: string, cb: (newItemts: RSSItem[]) => void, config?: Partial<WatchUpdatesArgs>, err?: (e: unknown) => void) {
     const fullConfig: WatchUpdatesArgs = Object.assign({}, {
         every: 60, initial: false
     }, config)
+    const errH = err ?? (e => console.error('Error during parsing erai-raws feed %o', e))
     let lastDate = new Date()
     try {
         const items = await parseFeed(link)
-        if(fullConfig.initial) cb(items)
+        if (fullConfig.initial) cb(items)
         lastDate = items[0].date
-    } catch(e) {
-        console.error('Error during parsing erai-raws feed %o', e)
+    } catch (e) {
+        errH(e)
     }
     setInterval(async () => {
         try {
             const items = await parseFeed(link)
             const newItems = items.filter(item => item.date > lastDate)
             lastDate = items[0].date
-            if(newItems.length > 0) cb(newItems)
-        } catch(e) {
-            console.error('Error during parsing erai-raws feed %o', e)
+            if (newItems.length > 0) cb(newItems)
+        } catch (e) {
+            errH(e)
         }
     }, fullConfig.every * 1000)
 }
