@@ -3,6 +3,7 @@ import { outputFile, outputFileSync, writeFile } from "fs-extra"
 import { Anime } from "./anime"
 import { makeLink, watchUpdates } from "./new-rss"
 import debug from 'debug'
+import { error } from 'console'
 
 const log = debug("tokubot:animes")
 
@@ -49,7 +50,7 @@ export class Animes {
     }
 
     delete(id: number) {
-        if(id < 0 || id >= this.animes.length) {
+        if (id < 0 || id >= this.animes.length) {
             return
         }
         this.animes.splice(id, 1)
@@ -63,7 +64,7 @@ export class Animes {
         return this.animes.slice()
     }
 
-    start(update: (animes: ({ anime: string, russian?: string, episode: number, completed: boolean })[]) => void) {
+    start(update: (animes: ({ anime: string, russian?: string, episode: number, completed: boolean })[]) => void, err?: (e: unknown) => void) {
         watchUpdates(makeLink({
             category: 'airing',
             linkType: 'magnet',
@@ -80,6 +81,6 @@ export class Animes {
         }, {
             initial: true,
             every: 60
-        })
+        }, err)
     }
 }

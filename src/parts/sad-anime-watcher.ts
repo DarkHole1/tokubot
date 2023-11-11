@@ -5,7 +5,7 @@ import { Animes } from '../erai/animes'
 import { FormattedString, ParseModeFlavor, fmt } from '@grammyjs/parse-mode'
 import * as statics from '../static'
 import { Config } from '../config'
-import { TOKU_CHAT } from '../constants'
+import { DARK_HOLE, TOKU_CHAT } from '../constants'
 
 
 export function sadAnimeWatcher(config: Config, bot: Bot<ParseModeFlavor<Context>>) {
@@ -117,6 +117,10 @@ export function sadAnimeWatcher(config: Config, bot: Bot<ParseModeFlavor<Context
         console.log(message)
         bot.api.sendMessage(TOKU_CHAT, message.toString(), { entities: message.entities })
         console.log("Successfully ended")
+    }, async (err) => {
+        try {
+            bot.api.sendMessage(DARK_HOLE, (err as Error).toString())
+        } catch (_) { }
     })
 
     return sadAnimeWatcher
