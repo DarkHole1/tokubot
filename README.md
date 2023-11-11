@@ -21,4 +21,4 @@ yarn exec -- ts-node src/index.ts
 * Recommends anime from the Toku's face :D
 * Reminds to forward TG posts to the YT
 * Sends notifications about the new anime series
-* SHOK PATALOCK
+* SHOCK PATALOCK
