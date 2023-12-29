@@ -30,5 +30,12 @@ export const ALCO_STICKERS = ['AgADtxoAAqDgEUs', 'AgADFBgAAmsrgUg', 'AgADrBgAAj0
 export const TEA_EMOJIS = ['🍵']
 export const COFFEE_EMOJIS = ['☕️']
 export const ALCO_EMOJIS = ['🥃', '🍻', '🍺', '🍷', '🍾']
+export const KUGA_YUMA = [
+    'AgACAgIAAx0CbgUG4QACAuNljxx1KftaJnn3lTIUWBKtIaibZAACUdMxG-56eUhofgABM2Ma0zYBAAMCAAN5AAM0BA',
+    'AgACAgIAAx0CbgUG4QACAuRljxx1ikHHi3-dVbvzgajJOWgYugACUtMxG-56eUj__lBD7Re9iQEAAwIAA3kAAzQE',
+    'AgACAgIAAx0CbgUG4QACAuVljxx1rEb0sc2_VlQduVQNX1kTPwACU9MxG-56eUjoSN3eccdb8wEAAwIAA3kAAzQE',
+    'AgACAgIAAx0CbgUG4QACAuZljxx1xN_Ckm9h5SKMgTmVOKswyAACVdMxG-56eUhvCNTgJbmWngEAAwIAA3kAAzQE',
+    'AgACAgIAAx0CbgUG4QACAudljxx1AbGUwzStcS5aXWg4n6InhAACVtMxG-56eUjXfyMZKbd4oQEAAwIAA3kAAzQE'
+]
 // Пон
 export const PON_STICKER = 'CAACAgIAAxkBAAEhnnNkblkm-YkHGOAR1ltwGrPGDhGvMgACmygAAqCNOUshhm_UzqyrcC8E'

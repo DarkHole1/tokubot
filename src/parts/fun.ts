@@ -3,7 +3,7 @@ import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { Composer, InputFile } from "grammy"
 import type { Sticker } from "grammy/out/types"
 import { pluralize } from "numeralize-ru"
-import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY, PATPAT } from "../constants"
+import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY, PATPAT, KUGA_YUMA } from "../constants"
 import { DrinkCounters } from "../data"
 import { choice, isAdmin } from '../utils'
 
@@ -17,7 +17,10 @@ let lastTime = 0
 const debounced = quoted.filter(_ => Date.now() > lastTime + 5 * 60 * 1000)
 
 // Похвала
-quoted.filter(_ => Math.random() > 0.998, ctx => ctx.reply('Ты умничка'))
+quoted.on('msg').filter(_ => Math.random() > 0.998, ctx => ctx.reply('Ты умничка'))
+
+// Фрирен
+quoted.on('msg').filter(_ => Math.random() > 0.99999, ctx => ctx.reply('Ты умничка'))
 
 // ШОК ПАТАЛОК
 quoted.hears(/п(а|a)т(а|a)л(о|o)к|501\s?271|область/gim, ctx => (lastTime = Date.now(), ctx.replyWithAudio(SHOCK_PATALOCK)))
@@ -61,9 +64,12 @@ quoted.command(
 // Tomorrow
 debounced.hears(/(\P{L}|^)завтра(\P{L}|$)/ui, ctx => (lastTime = Date.now(), ctx.replyWithVideo(Math.random() > 0.3 ? NOT_TOMORROW : (Math.random() > 0.3 ? TOMORROW_HAPPY : TOMORROW))))
 
+// Триггер
+debounced.hears(/(\P{L}|^)триггер(\P{L}|$)/ui, ctx => (lastTime = Date.now(), ctx.replyWithPhoto(choice(KUGA_YUMA))))
+
 quoted.filter(ctx => ctx.msg?.sticker?.file_unique_id == 'AgADjRQAAqfaKUs', ctx => ctx.replyWithAnimation(PATPAT))
 
-quoted.hears(/^Руби, (.+) или (.+)\?$/i, async ctx => {
+quoted.hears(/^Руби,? (.+) или (.+)\??$/i, async ctx => {
     const a = ctx.match[1]
     const b = ctx.match[2]
     let res: string
