@@ -22,7 +22,8 @@ export class Animes {
     static fromFileSafe(path: string, token: string) {
         try {
             return this.fromFile(path, token)
-        } catch (_) {
+        } catch (e) {
+            log('An error occured during loading file, falling back to empty list: %o', e)
             return new this([], token)
         }
     }
