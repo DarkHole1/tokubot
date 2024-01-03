@@ -6,7 +6,7 @@ const RawAnime = z.object({
     name: z.string(),
     russian: z.string().optional(),
     feedUrl: z.string().optional(),
-    series: z.number().int()
+    series: z.number()
 })
 type RawAnime = z.infer<typeof RawAnime>
 
