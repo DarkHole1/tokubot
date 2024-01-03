@@ -21,6 +21,7 @@ export class Animes {
 
     static fromFileSafe(path: string, token: string) {
         try {
+            log('Loading animes from file %s', path)
             return this.fromFile(path, token)
         } catch (e) {
             log('An error occured during loading file, falling back to empty list: %o', e)
