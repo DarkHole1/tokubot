@@ -6,10 +6,13 @@ import { FormattedString, ParseModeFlavor, fmt } from '@grammyjs/parse-mode'
 import * as statics from '../static'
 import { Config } from '../config'
 import { DARK_HOLE, TOKU_CHAT } from '../constants'
+import debug from 'debug'
 
+const log = debug('tokubot:sad-anime-watcher')
 
 export function sadAnimeWatcher(config: Config, bot: Bot<ParseModeFlavor<Context>>) {
     const animes = Animes.fromFileSafe('data/titles.json', config.ERAI_TOKEN)
+    log('Animes loadad %o', animes.list())
 
     const sadAnimeWatcher = new Composer
 
