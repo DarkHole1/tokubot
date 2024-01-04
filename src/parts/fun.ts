@@ -34,7 +34,13 @@ quoted.hears(/(\P{L}|^)ало(\P{L}|$)/gimu, ctx => ctx.replyWithAnimation(NADEK
 // P-word
 quoted.hears(/пидор/i, ctx => ctx.reply('ОБНАРУЖЕНА ДЕМОНИЧЕСКАЯ УГРОЗА'))
 
-quoted.hears(/не\s+ешь/i, ctx => ctx.reply('Ням!'))
+quoted.hears(/не\s+ешь/i, ctx => ctx.reply('Ням!', {
+    reply_parameters: {
+        message_id: ctx.msg.message_id,
+        quote: ctx.match[0],
+        quote_position: (ctx.match as RegExpMatchArray).index
+    }
+}))
 
 quoted.hears(/(\P{L}|^)бан(\P{L}|$)/gimu).filter(
     isAdmin,
