@@ -3,7 +3,7 @@ import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { Composer, InputFile } from "grammy"
 import type { Sticker } from "grammy/out/types"
 import { pluralize } from "numeralize-ru"
-import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY, PATPAT, KUGA_YUMA } from "../constants"
+import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY, PATPAT, KUGA_YUMA, LELOUCH_ID } from "../constants"
 import { DrinkCounters } from "../data"
 import { choice, isAdmin } from '../utils'
 
@@ -21,6 +21,14 @@ quoted.on('msg').filter(_ => Math.random() > 0.998, ctx => ctx.reply('Ты ум�
 
 // Фрирен
 quoted.on('msg').filter(_ => Math.random() > 0.99999, ctx => ctx.reply('Ты умничка'))
+
+quoted.on('msg').filter(ctx => ctx.message?.sender_chat?.id == LELOUCH_ID, async (ctx, next) => {
+    await ctx.api.setMessageReaction(ctx.msg.chat.id, ctx.msg.message_id, [{
+        type: 'emoji',
+        emoji: '👍'
+    }])
+    await next()
+})
 
 // ШОК ПАТАЛОК
 quoted.hears(/п(а|a)т(а|a)л(о|o)к|501\s?271|область/gim, ctx => (lastTime = Date.now(), ctx.replyWithAudio(SHOCK_PATALOCK)))
