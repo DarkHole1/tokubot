@@ -23,7 +23,7 @@ export const backArrow = (config: Config) => {
             const photos = ctx.msg.reply_to_message.photo
             const photo = photos.slice(-1)[0]
             const file = await ctx.api.getFile(photo.file_id)
-            const file_path = `https://api.telegram.org/file/bot${config.TOKEN}/${file.file_path}`
+            const file_path = `https://api.telegram.org/file/bot${config.TOKEN}/${file.name}`
             https.get(file_path, async stream => {
                 const res = await client(stream)
                 const filteredRes = res.filter(res => res.similarity >= 60)

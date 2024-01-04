@@ -509,10 +509,10 @@
   resolved "https://registry.yarnpkg.com/@grammyjs/parse-mode/-/parse-mode-1.5.0.tgz#7cef50a68e41b45d084dee4a980757b3caae2cb1"
   integrity sha512-6M1aM1CZh2JxTLuE/M7sUqTvjc3/SQHrlwCZq2kZDlprDYQGBFBiRr3F5SKN4u5MMP1iHYfWMDbcWiDzSPxmaA==
 
-"@grammyjs/types@^2.11.0":
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/@grammyjs/types/-/types-2.11.0.tgz#e9d4c9fcde99ea1c9df335255733a6c7839e06bd"
-  integrity sha512-x3Q1ngj89Sxu4bsLLPPAzAhAn+dqtaVtRPGXagVCZO7MJFbiWKdhs0aJKtC+HNaSlEhCS1unBOVde0ecAh9MZQ==
+"@grammyjs/types@3.4.4":
+  version "3.4.4"
+  resolved "https://registry.yarnpkg.com/@grammyjs/types/-/types-3.4.4.tgz#6f6fca693bc35dccba22f12966d9ee3ef920e399"
+  integrity sha512-r/m54PnAb1Yh76SNlU/3uc2K9t0cYfZXiYZ6IqJfb245m7QeIH7DnjFTg/OtymybKehdkm3PFlw7QODJNyDqhQ==
 
 "@graphql-codegen/add@^5.0.0":
   version "5.0.0"
@@ -2056,15 +2056,15 @@ grammy-guard@^0.5.0:
   dependencies:
     callback-data "^1.0.0"
 
-grammy@^1.13.0:
-  version "1.13.0"
-  resolved "https://registry.yarnpkg.com/grammy/-/grammy-1.13.0.tgz#14305bdd12c1454e1f8773fe066bca3c1d5291d8"
-  integrity sha512-3C9ClsH05NogyZ68MXGDjS3rsieIWsEfx904CR48cfwG1m8fAgSLRi2HLuZOF6HPMEHsyYFwjtvOU312QcADdw==
+grammy@^1.20.2:
+  version "1.20.2"
+  resolved "https://registry.yarnpkg.com/grammy/-/grammy-1.20.2.tgz#bf260869fd4b4f92aa6b522fcbe97dd0fc4a2841"
+  integrity sha512-hZ2ZIB8n9rcglpcnerqOgn+duVvB144mdbLAgKfE18Nj/ZBi+6SzXT/P5dIz89F56Q6YynzrwUFN8+uCPVuc1A==
   dependencies:
-    "@grammyjs/types" "^2.11.0"
+    "@grammyjs/types" "3.4.4"
     abort-controller "^3.0.0"
     debug "^4.3.4"
-    node-fetch "^2.6.7"
+    node-fetch "^2.7.0"
 
 graphql-config@^5.0.2:
   version "5.0.2"
@@ -2656,17 +2656,10 @@ node-domexception@1.0.0, node-domexception@^1.0.0:
   resolved "https://registry.yarnpkg.com/node-domexception/-/node-domexception-1.0.0.tgz#6888db46a1f71c0b76b3f7555016b63fe64766e5"
   integrity sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==
 
-node-fetch@^2.6.1, node-fetch@^2.6.12:
+node-fetch@^2.6.1, node-fetch@^2.6.12, node-fetch@^2.7.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.7.0.tgz#d0f0fa6e3e2dc1d27efcd8ad99d550bda94d187d"
   integrity sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==
-  dependencies:
-    whatwg-url "^5.0.0"
-
-node-fetch@^2.6.7:
-  version "2.6.7"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
-  integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
   dependencies:
     whatwg-url "^5.0.0"
 
