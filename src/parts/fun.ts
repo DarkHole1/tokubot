@@ -16,12 +16,6 @@ const ENABLE_EMOJI = false
 let lastTime = 0
 const debounced = quoted.filter(_ => Date.now() > lastTime + 5 * 60 * 1000)
 
-// Похвала
-quoted.on('msg').filter(_ => Math.random() > 0.998, ctx => ctx.reply('Ты умничка'))
-
-// Фрирен
-quoted.on('msg').filter(_ => Math.random() > 0.99999, ctx => ctx.reply('Ты умничка'))
-
 quoted.on('msg').filter(ctx => ctx.message?.sender_chat?.id == LELOUCH_ID, async (ctx, next) => {
     await ctx.api.setMessageReaction(ctx.msg.chat.id, ctx.msg.message_id, [{
         type: 'emoji',
