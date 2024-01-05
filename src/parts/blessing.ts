@@ -8,4 +8,4 @@ const quoted = blessing.use(autoQuote)
 quoted.on('msg').filter(_ => Math.random() > 0.998, ctx => ctx.reply('Ты умничка'))
 
 // Фрирен
-quoted.on('msg').filter(_ => Math.random() > 0.99999, ctx => ctx.reply('Ты умничка'))
+quoted.on('msg').filter(_ => Math.random() > 0.99999, ctx => ctx.reply('Фрирен'))
