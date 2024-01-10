@@ -32,7 +32,6 @@ unspoil.command('unspoil', async ctx => {
         )
     }
     try {
-        await ctx.api.deleteMessage(ctx.chat.id, ctx.msg.message_id)
         await ctx.api.deleteMessage(reply.chat.id, reply.message_id)
     } catch (e) {
         log(e)

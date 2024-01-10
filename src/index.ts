@@ -20,6 +20,7 @@ import { sadAnimeWatcher } from './parts/sad-anime-watcher'
 import { voting2 } from './parts/voting2'
 import { isAdmin } from 'grammy-guard'
 import { blessing } from './parts/blessing'
+import { unspoil } from './parts/unspoil'
 
 const config = new Config()
 const animeRecommendations = Recommendations.fromFileSyncSafe('data/recommendations.json')
@@ -179,6 +180,7 @@ worldTrigger(bot)
 
 
 bot.filter(ctx => !ANGELINA_LIST.includes(ctx.from?.id ?? 0)).use(fun)
+bot.use(unspoil)
 bot.use(blessing)
 bot.use(thanks)
 bot.use(sadAnimeWatcher(config, bot))
