@@ -7,7 +7,7 @@ export const unspoil = new Composer().use(autoQuote)
 
 unspoil.command('unspoil', async ctx => {
     const reply = ctx.msg.reply_to_message
-    if (!reply || (!reply.photo && !reply.animation) || reply.has_media_spoiler) {
+    if (!reply || (!reply.photo && !reply.animation && !reply.video) || reply.has_media_spoiler) {
         await ctx.reply('Для того чтобы убрать спойлер ответьте на сообщение с кортинкой / гифкай')
         return
     }
@@ -24,6 +24,15 @@ unspoil.command('unspoil', async ctx => {
     } else if (reply.animation) {
         await ctx.replyWithAnimation(
             reply.animation.file_id,
+            {
+                caption: reply.caption,
+                caption_entities: reply.caption_entities,
+                has_spoiler: true
+            }
+        )
+    } else if (reply.video) {
+        await ctx.replyWithVideo(
+            reply.video.file_id,
             {
                 caption: reply.caption,
                 caption_entities: reply.caption_entities,
