@@ -55,6 +55,7 @@ export const haruno = async () => {
             }
             user.words.push(word)
             await user.save()
+            list = await HarunoModel.find()
             await ctx.reply('Успешно добавили в список')
         }
     )
@@ -75,6 +76,7 @@ export const haruno = async () => {
             }
             user.words.splice(user.words.indexOf(word), 1)
             await user.save()
+            list = await HarunoModel.find()
             await ctx.reply('Успешно удалили из списка')
         }
     )
@@ -84,7 +86,7 @@ export const haruno = async () => {
         privateGuard,
         async ctx => {
             const user = await findOrCreate(ctx.from!.id)
-            if(user.words.length) {
+            if(user.words.length == 0) {
                 await ctx.reply('Ты пока ни за чем не следишь')
                 return
             }
