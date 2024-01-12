@@ -55,6 +55,7 @@ export const haruno = async () => {
             }
             user.words.push(word)
             await user.save()
+            await ctx.reply('Успешно добавили в список')
         }
     )
 
@@ -74,6 +75,7 @@ export const haruno = async () => {
             }
             user.words.splice(user.words.indexOf(word), 1)
             await user.save()
+            await ctx.reply('Успешно удалили из списка')
         }
     )
 
