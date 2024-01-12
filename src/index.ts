@@ -149,7 +149,7 @@ void (async () => {
         })
     })
 
-    bot.command('recommendExtended', async ctx => {
+    bot.command('recommend_extended', async ctx => {
         console.log(animeRecommendationsExtended)
         bot.api.sendChatAction(ctx.chat.id, "typing")
         let anime: { node: { title: string, id: number } }
