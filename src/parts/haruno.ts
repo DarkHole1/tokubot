@@ -22,7 +22,19 @@ export const haruno = async () => {
     const haruno = new Composer()
 
     haruno.filter(ctx => ctx.chat?.id == TOKU_CHAT).on('message:text', async (ctx, next) => {
-        // TODO
+        const text = ctx.msg.text.toLowerCase()
+        for(const user of list) {
+            for(const word of user.words) {
+                if(text.includes(word)) {
+                    try {
+                        ctx.api.sendMessage(user.whoami, `В чате упомянули слово "${word}"`)
+                    } catch(e) {
+                        log('Error %o', e)
+                    }
+                    break
+                }
+            }
+        }
         await next()
     })
 
