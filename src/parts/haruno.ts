@@ -53,6 +53,8 @@ export const haruno = async () => {
                 await ctx.reply('Слово уже есть в твоём списке')
                 return
             }
+            user.words.push(word)
+            await user.save()
         }
     )
 
