@@ -6,6 +6,15 @@ import debug from 'debug'
 
 const log = debug('app:parts:haruno')
 
+async function findOrCreate(whoami: number) {
+    const data = await HarunoModel.findOne({ whoami })
+    if(data != null) {
+        return data
+    }
+
+    return new HarunoModel({ whoami })
+}
+
 export const haruno = async () => {
     log('Starting module...')
     let list = await HarunoModel.find()
