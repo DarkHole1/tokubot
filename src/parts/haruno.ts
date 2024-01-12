@@ -43,7 +43,16 @@ export const haruno = async () => {
         'haruno',
         privateGuard,
         async ctx => {
-            // TODO
+            if(ctx.match.length == 0) {
+                await ctx.reply('Укажи слово за которым ты хочешь смотреть после команды')
+                return
+            }
+            const word = ctx.match.toLowerCase()
+            const user = await findOrCreate(ctx.from!.id)
+            if(user.words.includes(word)) {
+                await ctx.reply('Слово уже есть в твоём списке')
+                return
+            }
         }
     )
 
