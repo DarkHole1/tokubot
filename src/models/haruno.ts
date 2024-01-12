@@ -2,7 +2,7 @@ import { DocumentType, getModelForClass, prop } from '@typegoose/typegoose'
 
 class Haruno {
     @prop({ required: true })
-    whoami!: string
+    whoami!: number
 
     @prop({ type: String, required: true, default: [] })
     words!: string[]
