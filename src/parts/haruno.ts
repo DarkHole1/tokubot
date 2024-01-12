@@ -81,7 +81,13 @@ export const haruno = async () => {
         'yukino',
         privateGuard,
         async ctx => {
-            // TODO
+            const user = await findOrCreate(ctx.from!.id)
+            if(user.words.length) {
+                await ctx.reply('Ты пока ни за чем не следишь')
+                return
+            }
+
+            await ctx.reply(['Ты следишь за словами:'].concat(user.words.map(w => `* ${w}`)).join('\n'))
         }
     )
 
