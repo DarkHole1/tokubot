@@ -45,7 +45,28 @@ export const events = (cache: Cache) => {
     })
 
     quoted.command('full', async ctx => {
-        // TODO
+        const reply = ctx.msg.reply_to_message
+        if(!reply || !reply.photo) {
+            await ctx.reply('Ответьте на сообщение с картинкой, которую вы хотите поставить на аватарку')
+            return
+        }
+
+        const event = new EventModel({
+            approved: false,
+            duration: reply.caption ? 1 : 7,
+            name: reply.caption,
+            pic: reply.photo.at(-1),
+        })
+        await event.save()
+        await ctx.reply('Дождитесь одобрения @tokutonariwa', {
+            reply_markup: new InlineKeyboard([[{
+                text: 'Approve',
+                callback_data: `approve:${event.id}`
+            }, {
+                text: 'Decline',
+                callback_data: `decline:${event.id}`
+            }]])
+        })
     })
 
     // TODO
