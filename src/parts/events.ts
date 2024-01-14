@@ -3,6 +3,7 @@ import { Cache } from '../models/cache'
 import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { EventModel } from '../models/events'
 import { TOKUID } from '../constants'
+import { schedule } from 'node-cron'
 
 export const events = (cache: Cache) => {
     const events = new Composer
@@ -103,5 +104,7 @@ export const events = (cache: Cache) => {
         })
     })
 
-    // TODO
+    schedule('0 0 0 * * *', () => {
+        // TODO
+    })
 }
