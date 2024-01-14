@@ -22,7 +22,7 @@ export const events = (cache: Cache) => {
 
         event.approved = true
         await event.save()
-        await ctx.answerCallbackQuery('Успешно поменяли')
+        await ctx.answerCallbackQuery('Успешно одобрили')
         if(ctx.callbackQuery.message) {
             const msg = ctx.callbackQuery.message
             await ctx.api.editMessageText(msg.chat.id, msg.message_id, 'ОДОБРЕНО')
@@ -30,7 +30,23 @@ export const events = (cache: Cache) => {
     })
 
     events.callbackQuery(/decline:(.+)/, async ctx => {
-        // TODO
+        if(ctx.from.id != TOKUID) {
+            await ctx.answerCallbackQuery('Ты не Току -_-')
+            return
+        }
+
+        const event = await EventModel.findById(ctx.match[1])
+        if(!event) {
+            await ctx.answerCallbackQuery('Чёто поломалось')
+            return
+        }
+
+        await event.deleteOne()
+        await ctx.answerCallbackQuery('Успешно отклонили')
+        if(ctx.callbackQuery.message) {
+            const msg = ctx.callbackQuery.message
+            await ctx.api.editMessageText(msg.chat.id, msg.message_id, 'НЕОДОБРЕНО')
+        }
     })
 
     quoted.command('row', async ctx => {
