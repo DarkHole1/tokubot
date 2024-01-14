@@ -2,7 +2,6 @@ import { Bot, Context, InlineKeyboard } from "grammy";
 import { Config } from "./config";
 import { fmt, hydrateReply, ParseModeFlavor, pre } from '@grammyjs/parse-mode'
 import { ThanksStickers } from "./data";
-import { createExportAssignment } from "typescript";
 
 const DARK_HOLE = 369810644
 const config = new Config()
@@ -14,6 +13,11 @@ bot.use(hydrateReply)
 bot.command(['start', 'hastokuwatched', 'recommend', 'observed', 'addsticker'], ctx => ctx.reply(message, {
     reply_to_message_id: ctx.msg.message_id
 }))
+
+bot.use(async (ctx, next) => {
+    console.log(ctx.update.message)
+    await next()
+})
 
 const admin = bot.filter(ctx => ctx.from?.id == DARK_HOLE)
 
