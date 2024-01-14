@@ -4,6 +4,9 @@ class Event {
     @prop({ required: true })
     approved!: boolean
 
+    @prop({ required: true })
+    duration!: Number
+
     @prop()
     name?: string
 
