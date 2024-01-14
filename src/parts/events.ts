@@ -1,11 +1,12 @@
-import { Composer, InlineKeyboard, Keyboard } from 'grammy'
+import { Bot, Composer, InlineKeyboard, Keyboard } from 'grammy'
 import { Cache } from '../models/cache'
 import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { EventModel } from '../models/events'
-import { TOKUID } from '../constants'
+import { TOKUID, TOKU_CHAT } from '../constants'
 import { schedule } from 'node-cron'
+import { Chat, InputFile } from 'grammy/types'
 
-export const events = (cache: Cache) => {
+export const events = (cache: Cache, bot: Bot) => {
     const events = new Composer
     const quoted = events.use(autoQuote)
 
@@ -104,7 +105,43 @@ export const events = (cache: Cache) => {
         })
     })
 
-    schedule('0 0 0 * * *', () => {
-        // TODO
+    schedule('0 0 0 * * *', async () => {
+        const event = await EventModel.findOne({ approved: true })
+        if(event) {
+            const chatInfo = await bot.api.getChat(TOKU_CHAT) as Chat.SupergroupGetChat
+            if(event.name && !cache.name.is_event) {
+                cache.startNameEvent(chatInfo.title)
+            }
+            if(event.pic && !cache.pic.is_event) {
+                cache.startPicEvent(chatInfo.photo!.big_file_id)
+            }
+            await cache.save()
+
+            if(event.name && chatInfo.title != event.name) {
+                await bot.api.setChatTitle(TOKU_CHAT, event.name)
+            }
+            if(event.pic && chatInfo.photo?.big_file_id != event.pic) {
+                await bot.api.setChatPhoto(TOKU_CHAT, new InputFile(event.pic))
+                const newChatInfo = await bot.api.getChat(TOKU_CHAT) as Chat.SupergroupGetChat
+                event.pic = newChatInfo.photo!.big_file_id
+            }
+
+            event.duration -= 1;
+            if(event.duration == 0) {
+                await event.deleteOne()
+            } else {
+                await event.save()
+            }
+        } else {
+            if(cache.name.is_event) {
+                await bot.api.setChatTitle(TOKU_CHAT, cache.name.original)
+                cache.stopNameEvent()
+            }
+            if(cache.pic.is_event) {
+                await bot.api.setChatPhoto(TOKU_CHAT, new InputFile(cache.pic.original))
+                cache.stopPicEvent()
+            }
+            await cache.save()
+        }
     })
 }

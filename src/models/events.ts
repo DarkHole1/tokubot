@@ -5,7 +5,7 @@ class Event {
     approved!: boolean
 
     @prop({ required: true })
-    duration!: Number
+    duration!: number
 
     @prop()
     name?: string
