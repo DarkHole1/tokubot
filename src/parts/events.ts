@@ -2,16 +2,34 @@ import { Composer, InlineKeyboard, Keyboard } from 'grammy'
 import { Cache } from '../models/cache'
 import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { EventModel } from '../models/events'
+import { TOKUID } from '../constants'
 
 export const events = (cache: Cache) => {
     const events = new Composer
     const quoted = events.use(autoQuote)
 
-    events.callbackQuery(/approve:.+/, async ctx => {
-        // TODO
+    events.callbackQuery(/approve:(.+)/, async ctx => {
+        if(ctx.from.id != TOKUID) {
+            await ctx.answerCallbackQuery('Ты не Току -_-')
+            return
+        }
+
+        const event = await EventModel.findById(ctx.match[1])
+        if(!event) {
+            await ctx.answerCallbackQuery('Чёто поломалось')
+            return
+        }
+
+        event.approved = true
+        await event.save()
+        await ctx.answerCallbackQuery('Успешно поменяли')
+        if(ctx.callbackQuery.message) {
+            const msg = ctx.callbackQuery.message
+            await ctx.api.editMessageText(msg.chat.id, msg.message_id, 'ОДОБРЕНО')
+        }
     })
 
-    events.callbackQuery(/decline:.+/, async ctx => {
+    events.callbackQuery(/decline:(.+)/, async ctx => {
         // TODO
     })
 
