@@ -78,11 +78,12 @@ export class Cache implements RawCache {
         }
     }
 
-    startPicEvent(original: string) {
-        this.data.pic = {
-            is_event: true,
-            original
-        }
+    setOriginalPic(original: string) {
+        this.data.pic.original = original
+    }
+
+    startPicEvent() {
+        this.data.pic.is_event = true
     }
 
     stopNameEvent() {

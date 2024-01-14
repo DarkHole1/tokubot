@@ -22,11 +22,14 @@ import { isAdmin } from 'grammy-guard'
 import { blessing } from './parts/blessing'
 import { unspoil } from './parts/unspoil'
 import { haruno } from './parts/haruno'
+import { events } from './parts/events'
+import { Cache } from './models/cache'
 
 void (async () => {
     const config = new Config()
     const animeRecommendations = Recommendations.fromFileSyncSafe('data/recommendations.json')
     const animeRecommendationsExtended = Recommendations.fromFileSyncSafe('data/extended.json')
+    const cache = await Cache.load('./data/cache.json')
 
     await mongoose.connect(config.MONGODB_URI)
 
@@ -170,18 +173,19 @@ void (async () => {
             reply_to_message_id: ctx.message?.message_id
         })
     })
-
+    
     bot.use(await haruno())
     bot.use(service)
     bot.use(voting2)
     bot.use(backArrow(config))
     bot.use(solidScript)
     bot.use(autoMultiLink)
+    
+    bot.use(events(cache, bot as any, config))
 
     brs(bot)
     worldTrigger(bot)
-
-
+    
     bot.filter(ctx => !ANGELINA_LIST.includes(ctx.from?.id ?? 0)).use(fun)
     bot.use(unspoil)
     bot.use(blessing)
