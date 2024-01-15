@@ -30,7 +30,10 @@ export const haruno = async () => {
                     try {
                         const message = fmt`В чате ${linkMessage(`упомянули`, ctx.chat.id, ctx.message.message_id)} слово "${word}"`
                         ctx.api.sendMessage(user.whoami, message.text, {
-                            entities: message.entities
+                            entities: message.entities,
+                            link_preview_options: {
+                                is_disabled: true
+                            }
                         })
                     } catch(e) {
                         log('Error %o', e)
