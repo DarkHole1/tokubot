@@ -3,6 +3,7 @@ import { TOKU_CHAT } from '../constants'
 import { guard, isPrivateChat, reply } from 'grammy-guard'
 import { HarunoModel } from '../models/haruno'
 import debug from 'debug'
+import { fmt, linkMessage } from '@grammyjs/parse-mode'
 
 const log = debug('app:parts:haruno')
 
@@ -27,7 +28,10 @@ export const haruno = async () => {
             for(const word of user.words) {
                 if(text.includes(word)) {
                     try {
-                        ctx.api.sendMessage(user.whoami, `В чате упомянули слово "${word}"`)
+                        const message = fmt`В чате ${linkMessage(`упомянули`, ctx.chat.id, ctx.message.message_id)} слово "${word}"`
+                        ctx.api.sendMessage(user.whoami, message.text, {
+                            entities: message.entities
+                        })
                     } catch(e) {
                         log('Error %o', e)
                     }
