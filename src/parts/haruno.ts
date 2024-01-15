@@ -26,15 +26,27 @@ export const haruno = async () => {
         const text = ctx.msg.text.toLowerCase()
         for(const user of list) {
             for(const word of user.words) {
-                if(text.includes(word)) {
+                const match = text.indexOf(word)
+                if(match >= 0) {
                     try {
-                        const message = fmt`В чате ${linkMessage(`упомянули`, ctx.chat.id, ctx.message.message_id)} слово "${word}"`
-                        ctx.api.sendMessage(user.whoami, message.text, {
-                            entities: message.entities,
-                            link_preview_options: {
-                                is_disabled: true
-                            }
-                        })
+                        if(!user.newReply) {
+                            const message = fmt`В чате ${linkMessage(`упомянули`, ctx.chat.id, ctx.message.message_id)} слово "${word}"`
+                            await ctx.api.sendMessage(user.whoami, message.text, {
+                                entities: message.entities,
+                                link_preview_options: {
+                                    is_disabled: true
+                                }
+                            })
+                        } else {
+                            await ctx.api.sendMessage(user.whoami, "В чате упомянули слово за которым ты следишь", {
+                                reply_parameters: {
+                                    chat_id: ctx.chat.id,
+                                    message_id: ctx.message.message_id,
+                                    quote: ctx.msg.text.slice(match, match + word.length),
+                                    quote_position: match
+                                }
+                            })
+                        }
                     } catch(e) {
                         log('Error %o', e)
                     }
@@ -99,6 +111,19 @@ export const haruno = async () => {
             }
 
             await ctx.reply(['Ты следишь за словами:'].concat(user.words.map(w => `* ${w}`)).join('\n'))
+        }
+    )
+
+    haruno.command(
+        'totsuka',
+        privateGuard,
+        async ctx => {
+            const user = await findOrCreate(ctx.from!.id)
+            user.newReply = !user.newReply
+            await user.save()
+            list = await HarunoModel.find()
+
+            await ctx.reply(`Теперь я буду отвечать через ${user.newReply ? `ответы` : `ссылку`}`)
         }
     )
 
