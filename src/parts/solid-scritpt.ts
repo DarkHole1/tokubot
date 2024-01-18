@@ -3,7 +3,7 @@ import { KILLING_STICKER } from '../constants'
 
 export const solidScript = new Composer
 
-solidScript.hears(/пидор|негр|нигга|лесбух/i, async ctx => {
+solidScript.hears(/пидор|негр|нигга|ниггер|лесбух/i, async ctx => {
     await ctx.reply('быстро исправила/исправил', { reply_to_message_id: ctx.msg.message_id })
     await ctx.replyWithSticker(KILLING_STICKER)
 })
