@@ -24,16 +24,17 @@ quoted.on('msg').filter(ctx => ctx.message?.sender_chat?.id == LELOUCH_ID, async
     await next()
 })
 
-const hasCaptionHashtag = (ctx: Context, hashtag: string) => {
+const hasCaptionHashtag = (hashtag: string) => (ctx: Context) => {
     const caption = ctx.msg?.caption
     const enttities = ctx.msg?.caption_entities
     if(!caption || !enttities) {
         return false
     }
+    console.log(enttities.map(v => caption.slice(v.offset, v.offset + v.length)))
     return enttities.some(v => v.type == 'hashtag' && caption.slice(v.offset, v.offset + v.length) == hashtag)
 }
 
-quoted.on(':caption_entities:hashtag').filter(ctx => hasCaptionHashtag(ctx, '#dunmeshi'), async (ctx, next) => {
+quoted.on(':caption_entities:hashtag').filter(hasCaptionHashtag('#dunmeshi'), async (ctx, next) => {
     await ctx.api.setMessageReaction(ctx.msg.chat.id, ctx.msg.message_id, [{
         type: 'emoji',
         emoji: "❤"

@@ -23,8 +23,8 @@ export function worldTrigger(bot: Bot<ParseModeFlavor<Context>>) {
         await photo.deleteOne()
     })
 
-    bot.on(':media', guard(isPrivateChat)).filter(
-        ctx => ctx.from?.id == DARK_HOLE,
+    bot.on(':media').filter(
+        ctx => isPrivateChat(ctx) && ctx.from?.id == DARK_HOLE,
         async ctx => {
             const photo = ctx.msg.photo
             if (!photo) {
