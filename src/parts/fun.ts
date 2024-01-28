@@ -30,7 +30,6 @@ const hasCaptionHashtag = (hashtag: string) => (ctx: Context) => {
     if(!caption || !enttities) {
         return false
     }
-    console.log(enttities.map(v => caption.slice(v.offset, v.offset + v.length)))
     return enttities.some(v => v.type == 'hashtag' && caption.slice(v.offset, v.offset + v.length) == hashtag)
 }
 
