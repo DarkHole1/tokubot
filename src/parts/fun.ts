@@ -73,7 +73,7 @@ quoted.hears(/Руби мяу/i, ctx => ctx.replyWithVoice(choice(RUBY_MEOW)))
 
 debounced.hears(/([^\d]|^)86([^\d]|$)|восемьдесят шесть/i, ctx => (lastTime = Date.now(), ctx.replyWithPhoto(EIGHTY_SIX)))
 
-debounced.hears(/анлак/i, ctx => ctx.replyWithSticker(choice([UNDEAD, UNLUCK])))
+debounced.hears(/анлак/i, ctx => (lastTime = Date.now(), ctx.replyWithSticker(choice([UNDEAD, UNLUCK]))))
 
 debounced.hears(/(\P{L}|^)дб(\P{L}|$)|драгонбол/iu, ctx => (lastTime = Date.now(), ctx.replyWithVideo(DRAGONBALL)))
 
