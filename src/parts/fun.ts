@@ -3,7 +3,7 @@ import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { Composer, Context, InputFile } from "grammy"
 import type { Sticker } from "grammy/out/types"
 import { pluralize } from "numeralize-ru"
-import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY, PATPAT, KUGA_YUMA, LELOUCH_ID } from "../constants"
+import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY, PATPAT, KUGA_YUMA, LELOUCH_ID, UNDEAD, UNLUCK } from "../constants"
 import { DrinkCounters } from "../data"
 import { choice, isAdmin } from '../utils'
 
@@ -27,7 +27,7 @@ quoted.on('msg').filter(ctx => ctx.message?.sender_chat?.id == LELOUCH_ID, async
 const hasCaptionHashtag = (hashtag: string) => (ctx: Context) => {
     const caption = ctx.msg?.caption
     const enttities = ctx.msg?.caption_entities
-    if(!caption || !enttities) {
+    if (!caption || !enttities) {
         return false
     }
     return enttities.some(v => v.type == 'hashtag' && caption.slice(v.offset, v.offset + v.length) == hashtag)
@@ -53,6 +53,7 @@ quoted.hears(/(\P{L}|^)ало(\P{L}|$)/gimu, ctx => ctx.replyWithAnimation(NADEK
 // P-word
 quoted.hears(/пидор/i, ctx => ctx.reply('ОБНАРУЖЕНА ДЕМОНИЧЕСКАЯ УГРОЗА'))
 
+
 quoted.hears(/не\s+ешь/i, ctx => ctx.reply('Ням!', {
     reply_parameters: {
         message_id: ctx.msg.message_id,
@@ -71,6 +72,8 @@ quoted.hears(/противоречи/i, ctx => ctx.replyWithAnimation(COUNTER))
 quoted.hears(/Руби мяу/i, ctx => ctx.replyWithVoice(choice(RUBY_MEOW)))
 
 debounced.hears(/([^\d]|^)86([^\d]|$)|восемьдесят шесть/i, ctx => (lastTime = Date.now(), ctx.replyWithPhoto(EIGHTY_SIX)))
+
+debounced.hears(/анлак/i, ctx => ctx.replyWithSticker(choice([UNDEAD, UNLUCK])))
 
 debounced.hears(/(\P{L}|^)дб(\P{L}|$)|драгонбол/iu, ctx => (lastTime = Date.now(), ctx.replyWithVideo(DRAGONBALL)))
 
