@@ -41,6 +41,14 @@ quoted.on(':caption_entities:hashtag').filter(hasCaptionHashtag('#dunmeshi'), as
     await next()
 })
 
+quoted.on('edit:caption_entities:hashtag').filter(hasCaptionHashtag('#dunmeshi'), async (ctx, next) => {
+    await ctx.api.setMessageReaction(ctx.msg.chat.id, ctx.msg.message_id, [{
+        type: 'emoji',
+        emoji: "❤"
+    }])
+    await next()
+})
+
 // ШОК ПАТАЛОК
 quoted.hears(/п(а|a)т(а|a)л(о|o)к|501\s?271|область/gim, ctx => (lastTime = Date.now(), ctx.replyWithAudio(SHOCK_PATALOCK)))
 
