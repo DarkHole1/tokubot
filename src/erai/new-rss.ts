@@ -108,15 +108,21 @@ function parseEpisode(match: RegExpMatchArray) {
 
 export async function parseFeed(link: string): Promise<RSSItem[]> {
     const feed = await parser.parseURL(link)
-    let items = feed.items.map(item => {
+    let items = feed.items.flatMap(item => {
         if (!item.title) throw new Error('No title')
         const title = item.title.replace(/\[.+?\]/g, '').trim()
         const titleParsed = title.match(/^(.+) \- (?:(\d+(?:\.\d)?)|(\d+ ~ \d+)|(SP\d*|Special))(?:v\d+)?( END)?(?: \((.+)\))?$/)
-        if (!titleParsed) throw new Error(`Cant parse title '${title}'. Feed is broken`)
+        if (!titleParsed) {
+            if(item['erai:category'] == '[Movie or Special Episode]') {
+                // TODO: Parsing movies
+                return []
+            }
+            throw new Error(`Cant parse title '${title}'. Feed is broken`)
+        }
         const anime = titleParsed[1]
         const episode = parseEpisode(titleParsed)
         const modifier = titleParsed[6]
-        return {
+        return [{
             title,
             linkType: item['erai:linktype'],
             size: item['erai:size'],
@@ -127,7 +133,7 @@ export async function parseFeed(link: string): Promise<RSSItem[]> {
             episode,
             modifier,
             date: new Date(item.isoDate!)
-        }
+        }]
     })
     return items
 }
