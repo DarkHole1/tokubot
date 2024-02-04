@@ -190,7 +190,7 @@ void (async () => {
     bot.use(unspoil)
     bot.use(blessing)
     bot.use(thanks)
-    bot.use(sadAnimeWatcher(config, bot))
+    // bot.use(sadAnimeWatcher(config, bot))
 
     watchGroups(config.VK_SERVICE_KEY, [-199157142], async (posts) => {
         for (const post of posts) {
