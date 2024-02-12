@@ -26,7 +26,7 @@ export const allFiction = (api: Api) => {
         }
     )
 
-    cron.schedule('0 * * * * *', async () => {
+    cron.schedule('0 0 0 * * *', async () => {
         const doc = await findOrCreate()
         const yesterday = new Date()
         yesterday.setDate(yesterday.getDate() - 1)
