@@ -24,6 +24,7 @@ import { unspoil } from './parts/unspoil'
 import { haruno } from './parts/haruno'
 import { events } from './parts/events'
 import { Cache } from './models/cache'
+import { allFiction } from './all-fiction'
 
 void (async () => {
     const config = new Config()
@@ -173,19 +174,21 @@ void (async () => {
             reply_to_message_id: ctx.message?.message_id
         })
     })
-    
+
+    bot.use(allFiction(bot.api))
+
     bot.use(await haruno())
     bot.use(service)
     bot.use(voting2)
     bot.use(backArrow(config))
     bot.use(solidScript)
     bot.use(autoMultiLink)
-    
+
     bot.use(events(cache, bot as any, config))
 
     brs(bot)
     worldTrigger(bot)
-    
+
     bot.filter(ctx => !ANGELINA_LIST.includes(ctx.from?.id ?? 0)).use(fun)
     bot.use(unspoil)
     bot.use(blessing)
