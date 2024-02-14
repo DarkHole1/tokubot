@@ -37,7 +37,7 @@ export const allFiction = (api: Api) => {
         ].map(n => n.toString().padStart(2, '0')).join('.')
         let estimated = ''
         if(doc.lastStats.length > 0) {
-            const estimatedDays = (1_000_000 - lastMessageId) * doc.lastStats.length / doc.lastStats.reduce((a, b) => a + b)
+            const estimatedDays = (1_000_000 - lastMessageId) * doc.lastStats.length / doc.lastStats.concat(lastMessageId - doc.lastStartMessage).reduce((a, b) => a + b)
             estimated = `Этого хватит приблизительно на ${estimatedDays.toFixed(0)} дней!`
         }
 
@@ -48,7 +48,7 @@ export const allFiction = (api: Api) => {
         }
 
         doc.lastStats.push(lastMessageId - doc.lastStartMessage)
-        doc.lastStats = doc.lastStats.slice(-7)
+        doc.lastStats = doc.lastStats.slice(-6)
         doc.lastStartMessage = lastMessageId
         await doc.save()
     })
