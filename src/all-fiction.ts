@@ -35,11 +35,8 @@ export const allFiction = (api: Api) => {
             yesterday.getMonth() + 1,
             yesterday.getFullYear()
         ].map(n => n.toString().padStart(2, '0')).join('.')
-        let estimated = ''
-        if(doc.lastStats.length > 0) {
-            const estimatedDays = (1_000_000 - lastMessageId) * doc.lastStats.length / doc.lastStats.concat(lastMessageId - doc.lastStartMessage).reduce((a, b) => a + b)
-            estimated = `Этого хватит приблизительно на ${estimatedDays.toFixed(0)} дней!`
-        }
+        const estimatedDays = (1_000_000 - lastMessageId) * (doc.lastStats.length + 1) / doc.lastStats.concat(lastMessageId - doc.lastStartMessage).reduce((a, b) => a + b)
+        let estimated = `Этого хватит приблизительно на ${estimatedDays.toFixed(0)} дней!`
 
         try {
             await api.sendMessage(TOKU_CHAT, `Последнее сообщение на ${yesterdayFormatted} было под номером ${lastMessageId}! За сегодня было написано ${lastMessageId - doc.lastStartMessage} сообщений! До тепловой смерти чата осталось ${1_000_000 - lastMessageId} сообщений! ${estimated}`)
