@@ -105,7 +105,7 @@ debounced.hears(/триггер/ui, ctx => (lastTime = Date.now(), ctx.replyWith
 
 quoted.filter(ctx => ctx.msg?.sticker?.file_unique_id == 'AgADjRQAAqfaKUs', ctx => ctx.replyWithAnimation(PATPAT))
 
-quoted.hears(/^Руби,? (.+) или (.+)\??$/i, async ctx => {
+quoted.hears(/^Руби,? (.+?) или (.+?)\??$/i, async ctx => {
     const a = ctx.match[1]
     const b = ctx.match[2]
     let res: string
