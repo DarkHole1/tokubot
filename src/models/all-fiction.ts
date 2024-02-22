@@ -4,7 +4,7 @@ class AllFiction {
     @prop({ default: 0 })
     lastStartMessage!: number
 
-    @prop({ default: [] })
+    @prop({ type: Number, default: [] })
     lastStats!: number[] 
 }
 
