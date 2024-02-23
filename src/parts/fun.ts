@@ -6,6 +6,7 @@ import { pluralize } from "numeralize-ru"
 import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY, PATPAT, KUGA_YUMA, LELOUCH_ID, UNDEAD, UNLUCK } from "../constants"
 import { DrinkCounters } from "../data"
 import { choice, isAdmin } from '../utils'
+import { actions, triggerKeeper, triggers } from './trigger-keeper'
 
 export const fun = new Composer
 const quoted = fun.use(autoQuote)
@@ -13,6 +14,7 @@ const quoted = fun.use(autoQuote)
 const drinksCounters = DrinkCounters.fromFileSyncSafe('data/drinks.json')
 const ENABLE_EMOJI = false
 
+const DEBOUNCE_TIME = 5 * 60 * 1000
 let lastTime = 0
 const debounced = quoted.filter(_ => Date.now() > lastTime + 5 * 60 * 1000)
 
@@ -49,41 +51,25 @@ quoted.on('edit:caption_entities:hashtag').filter(hasCaptionHashtag('#dunmeshi')
     await next()
 })
 
-// ШОК ПАТАЛОК
-quoted.hears(/п(а|a)т(а|a)л(о|o)к|501\s?271|область/gim, ctx => (lastTime = Date.now(), ctx.replyWithAudio(SHOCK_PATALOCK)))
-
-// Пон
-quoted.hears(/(\P{L}|^)пон(\P{L}|$)/gimu, ctx => ctx.replyWithSticker(PON_STICKER))
-
-// Nadeko
-quoted.hears(/(\P{L}|^)ало(\P{L}|$)/gimu, ctx => ctx.replyWithAnimation(NADEKO_CALLING))
-
-// P-word
-quoted.hears(/пидор/i, ctx => ctx.reply('ОБНАРУЖЕНА ДЕМОНИЧЕСКАЯ УГРОЗА'))
-
-
-quoted.hears(/не\s+ешь/i, ctx => ctx.reply('Ням!', {
-    reply_parameters: {
-        message_id: ctx.msg.message_id,
-        quote: ctx.match[0],
-        quote_position: (ctx.match as RegExpMatchArray).index
-    }
-}))
+fun.use(triggerKeeper([
+    triggers.regex('п(а|a)т(а|a)л(о|o)к|501\\s?271|область', actions.reply.audio(SHOCK_PATALOCK)),
+    triggers.wholeWord('пон', actions.reply.sticker(PON_STICKER)),
+    triggers.wholeWord('ало', actions.reply.gif(NADEKO_CALLING)),
+    triggers.regex('пидор', actions.reply.text('ОБНАРУЖЕНА ДЕМОНИЧЕСКАЯ УГРОЗА')),
+    triggers.regex('не\\s+ешь', actions.preciseReply.text('Ням!')),
+    triggers.regex('противоречи', actions.reply.gif(COUNTER)),
+    triggers.regex('Руби мяу', actions.reply.voice(RUBY_MEOW)),
+    triggers.debounced(DEBOUNCE_TIME).regex('([^\\d]|^)86([^\\d]|$)|восемьдесят шесть', actions.reply.photo(EIGHTY_SIX)),
+    triggers.debounced(DEBOUNCE_TIME).regex('анлак', actions.reply.sticker([UNDEAD, UNLUCK])),
+    triggers.debounced(DEBOUNCE_TIME).wholeWord('дб', actions.reply.sticker(DRAGONBALL)),
+    triggers.debounced(DEBOUNCE_TIME).regex('драгонбол', actions.reply.video(DRAGONBALL)),
+    triggers.debounced(DEBOUNCE_TIME).regex('триггер', actions.reply.photo(KUGA_YUMA))
+]))
 
 quoted.hears(/(\P{L}|^)бан(\P{L}|$)/gimu).filter(
     isAdmin,
     ctx => ctx.replyWithAnimation(MONOKUMA)
 )
-
-quoted.hears(/противоречи/i, ctx => ctx.replyWithAnimation(COUNTER))
-
-quoted.hears(/Руби мяу/i, ctx => ctx.replyWithVoice(choice(RUBY_MEOW)))
-
-debounced.hears(/([^\d]|^)86([^\d]|$)|восемьдесят шесть/i, ctx => (lastTime = Date.now(), ctx.replyWithPhoto(EIGHTY_SIX)))
-
-debounced.hears(/анлак/i, ctx => (lastTime = Date.now(), ctx.replyWithSticker(choice([UNDEAD, UNLUCK]))))
-
-debounced.hears(/(\P{L}|^)дб(\P{L}|$)|драгонбол/iu, ctx => (lastTime = Date.now(), ctx.replyWithVideo(DRAGONBALL)))
 
 quoted.command(
     'inspect',
@@ -101,7 +87,7 @@ quoted.command(
 debounced.hears(/(\P{L}|^)завтра(\P{L}|$)/ui, ctx => (lastTime = Date.now(), ctx.replyWithVideo(Math.random() > 0.3 ? NOT_TOMORROW : (Math.random() > 0.3 ? TOMORROW_HAPPY : TOMORROW))))
 
 // Триггер
-debounced.hears(/триггер/ui, ctx => (lastTime = Date.now(), ctx.replyWithPhoto(choice(KUGA_YUMA))))
+// debounced.hears(/триггер/ui, ctx => (lastTime = Date.now(), ctx.replyWithPhoto(choice(KUGA_YUMA))))
 
 quoted.filter(ctx => ctx.msg?.sticker?.file_unique_id == 'AgADjRQAAqfaKUs', ctx => ctx.replyWithAnimation(PATPAT))
 
