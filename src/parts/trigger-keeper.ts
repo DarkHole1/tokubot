@@ -202,37 +202,37 @@ type SkipFirst<T> = T extends (t: any, ...args: infer Args) => infer Return ? (.
 type MapSkipFirst<T> = { [K in keyof T]: SkipFirst<T[K]> }
 
 const raw = {
-    text(type: 'reply' | 'preciseReply' | 'message', text: string) {
+    text(type: 'reply' | 'preciseReply' | 'message', text: string | string[]) {
         return {
             type, text
         }
     },
-    sticker(type: 'reply' | 'preciseReply' | 'message', sticker: string) {
+    sticker(type: 'reply' | 'preciseReply' | 'message', sticker: string | string[]) {
         return {
             type, sticker
         }
     },
-    photo(type: 'reply' | 'preciseReply' | 'message', photo: string, caption?: string) {
+    photo(type: 'reply' | 'preciseReply' | 'message', photo: string | string[], caption?: string) {
         return {
             type, photo, caption
         }
     },
-    video(type: 'reply' | 'preciseReply' | 'message', video: string, caption?: string) {
+    video(type: 'reply' | 'preciseReply' | 'message', video: string | string[], caption?: string) {
         return {
             type, video, caption
         }
     },
-    audio(type: 'reply' | 'preciseReply' | 'message', audio: string, caption?: string) {
+    audio(type: 'reply' | 'preciseReply' | 'message', audio: string | string[], caption?: string) {
         return {
             type, audio, caption
         }
     },
-    gif(type: 'reply' | 'preciseReply' | 'message', gif: string, caption?: string) {
+    gif(type: 'reply' | 'preciseReply' | 'message', gif: string | string[], caption?: string) {
         return {
             type, gif, caption
         }
     },
-    voice(type: 'reply' | 'preciseReply' | 'message', voice: string) {
+    voice(type: 'reply' | 'preciseReply' | 'message', voice: string | string[]) {
         return {
             type, voice
         }
