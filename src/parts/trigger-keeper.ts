@@ -1,40 +1,45 @@
 import { Composer, Context } from 'grammy'
 import { choice } from '../utils'
 
-export type Trigger = ({
-    type: 'string',
-    string: string
+export type Action = {
+    type: 'reply' | 'preciseReply' | 'message'
+} & ({
+    text: string | string[]
 } | {
-    type: 'regex',
-    regex: string,
+    sticker: string | string[]
+} | {
+    photo: string | string[],
+    caption?: string
+} | {
+    video: string | string[],
+    caption?: string
+} | {
+    gif: string | string[],
+    caption?: string
+} | {
+    voice: string | string[]
+} | {
+    audio: string | string[],
+    caption?: string
+})
+
+type Flags = {
     global?: boolean,
     multiline?: boolean,
     ignoreCase?: boolean,
     unicode?: boolean,
     wholeWord?: boolean
-}) & {
+}
+
+export type Trigger = ({
+    type: 'string',
+    string: string
+} | ({
+    type: 'regex',
+    regex: string
+} & Flags)) & {
     debounce?: number,
-    action: {
-        type: 'reply' | 'preciseReply' | 'message'
-    } & ({
-        text: string | string[]
-    } | {
-        sticker: string | string[]
-    } | {
-        photo: string | string[],
-        caption?: string
-    } | {
-        video: string | string[],
-        caption?: string
-    } | {
-        gif: string | string[],
-        caption?: string
-    } | {
-        voice: string | string[]
-    } | {
-        audio: string | string[],
-        caption?: string
-    })
+    action: Action
 }
 
 export const triggerKeeper = (triggers: Trigger[]) => {
@@ -161,4 +166,84 @@ export const triggerKeeper = (triggers: Trigger[]) => {
         triggerKeeper.hears(convertedTrigger, convertedAction)
     }
     return triggerKeeper
+}
+
+export const triggers = {
+    regex(regex: string, action: Action, flags?: Flags) {
+        const flagsWithDefaults = {
+            global: true,
+            ignoreCase: true,
+            multiline: true,
+            ...flags
+        }
+        return {
+            type: 'regex',
+            regex, action,
+            ...flagsWithDefaults
+        }
+    },
+
+    wholeWord(regex: string, action: Action, flags?: Omit<Flags, 'wholeWord'>) {
+        return triggers.regex(regex, action, {
+            wholeWord: true,
+            ...flags
+        })
+    },
+
+    string(string: string, action: Action) {
+        return {
+            type: 'string',
+            string, action
+        }
+    }
+}
+
+type SkipFirst<T> = T extends (t: any, ...args: infer Args) => infer Return ? (...args: Args) => Return : never
+type MapSkipFirst<T> = { [K in keyof T]: SkipFirst<T[K]> }
+
+const raw = {
+    text(type: 'reply' | 'preciseReply' | 'message', text: string) {
+        return {
+            type, text
+        }
+    },
+    sticker(type: 'reply' | 'preciseReply' | 'message', sticker: string) {
+        return {
+            type, sticker
+        }
+    },
+    photo(type: 'reply' | 'preciseReply' | 'message', photo: string, caption?: string) {
+        return {
+            type, photo, caption
+        }
+    },
+    video(type: 'reply' | 'preciseReply' | 'message', video: string, caption?: string) {
+        return {
+            type, video, caption
+        }
+    },
+    audio(type: 'reply' | 'preciseReply' | 'message', audio: string, caption?: string) {
+        return {
+            type, audio, caption
+        }
+    },
+    gif(type: 'reply' | 'preciseReply' | 'message', gif: string, caption?: string) {
+        return {
+            type, gif, caption
+        }
+    },
+    voice(type: 'reply' | 'preciseReply' | 'message', voice: string) {
+        return {
+            type, voice
+        }
+    }
+}
+
+// Trust me :3
+const reply = Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, (...args: any) => v('reply', ...args as [any])])) as any as MapSkipFirst<typeof raw>
+const preciseReply = Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, (...args: any) => v('preciseReply', ...args as [any])])) as any as MapSkipFirst<typeof raw>
+const message = Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, (...args: any) => v('message', ...args as [any])])) as any as MapSkipFirst<typeof raw>
+
+export const actions = {
+    raw, reply, preciseReply, message
 }
