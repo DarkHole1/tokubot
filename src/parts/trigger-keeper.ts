@@ -13,6 +13,7 @@ export type Trigger = ({
     unicode?: boolean,
     wholeWord?: boolean
 }) & {
+    debounce?: number,
     action: {
         type: 'reply' | 'preciseReply' | 'message'
     } & ({
@@ -127,6 +128,20 @@ export const triggerKeeper = (triggers: Trigger[]) => {
             })
         } else {
             continue
+        }
+
+        if (trigger.debounce) {
+            let lastTime = 0
+            const debounce = trigger.debounce
+            const trueConvertedAction = convertedAction
+            convertedAction = async ctx => {
+                const now = Date.now()
+                if (now - lastTime < debounce) {
+                    return
+                }
+                lastTime = Date.now()
+                return await trueConvertedAction(ctx)
+            }
         }
 
         triggerKeeper.hears(convertedTrigger, convertedAction)
