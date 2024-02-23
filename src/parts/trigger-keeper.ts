@@ -29,6 +29,11 @@ export type Trigger = ({
     } | {
         gif: string | string[],
         caption?: string
+    } | {
+        voice: string | string[]
+    } | {
+        audio: string | string[],
+        caption?: string
     })
 }
 
@@ -53,7 +58,7 @@ export const triggerKeeper = (triggers: Trigger[]) => {
             }
 
             if (trigger.wholeWord) {
-                convertedTrigger = new RegExp(`(\P{L}|^)${trigger.regex}(\P{L}|$)`, flags)
+                convertedTrigger = new RegExp(`(\\P{L}|^)${trigger.regex}(\\P{L}|$)`, flags)
             } else {
                 convertedTrigger = new RegExp(trigger.regex, flags)
             }
@@ -126,6 +131,15 @@ export const triggerKeeper = (triggers: Trigger[]) => {
                 caption: action.caption,
                 ...params(ctx)
             })
+        } else if ('audio' in action) {
+            const audio = singleOrRandom(action.audio)
+            convertedAction = ctx => ctx.replyWithAudio(audio(), {
+                caption: action.caption,
+                ...params(ctx)
+            })
+        } else if ('voice' in action) {
+            const voice = singleOrRandom(action.voice)
+            convertedAction = ctx => ctx.replyWithVoice(voice(), params(ctx))
         } else {
             continue
         }
