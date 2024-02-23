@@ -168,7 +168,9 @@ export const triggerKeeper = (triggers: Trigger[]) => {
     return triggerKeeper
 }
 
-export const triggers = {
+type Args<T> = T extends (...args: infer A) => any ? A : never
+
+let simpleTriggers = {
     regex(regex: string, action: Action, flags?: Flags) {
         const flagsWithDefaults = {
             global: true,
@@ -196,6 +198,15 @@ export const triggers = {
             string, action
         }
     }
+}
+
+type Triggers = typeof simpleTriggers & { debounced: (time: number) => { [V in keyof typeof simpleTriggers]: (...args: Args<(typeof simpleTriggers)[V]>) => Trigger } }
+
+const debounced = (time: number) => Object.fromEntries(Object.entries(simpleTriggers).map(([k, v]) => [k, (...args: any) => ({ ...v(...args as [any, any]), debounce: time })]))
+
+export const triggers: Triggers = {
+    ...simpleTriggers,
+    debounced: debounced as any
 }
 
 type SkipFirst<T> = T extends (t: any, ...args: infer Args) => infer Return ? (...args: Args) => Return : never
