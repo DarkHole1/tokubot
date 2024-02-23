@@ -177,7 +177,7 @@ export const triggers = {
             ...flags
         }
         return {
-            type: 'regex',
+            type: 'regex' as const,
             regex, action,
             ...flagsWithDefaults
         }
@@ -192,7 +192,7 @@ export const triggers = {
 
     string(string: string, action: Action) {
         return {
-            type: 'string',
+            type: 'string' as const,
             string, action
         }
     }
