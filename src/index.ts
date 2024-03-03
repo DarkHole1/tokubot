@@ -25,6 +25,7 @@ import { haruno } from './parts/haruno'
 import { events } from './parts/events'
 import { Cache } from './models/cache'
 import { allFiction } from './all-fiction'
+import express from 'express'
 
 void (async () => {
     const config = new Config()
