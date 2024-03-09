@@ -22,10 +22,12 @@ import { haruno } from './parts/haruno'
 import { events } from './parts/events'
 import { Cache } from './models/cache'
 import { allFiction } from './all-fiction'
-import express from 'express'
 import { recommendations } from './parts/recommendations'
+import { server } from './server'
+import debug from 'debug'
 
 void (async () => {
+    const log = debug('tokubot')
     const config = new Config()
     const cache = await Cache.load('./data/cache.json')
 
@@ -83,6 +85,9 @@ void (async () => {
         }
     })
 
+    server.listen(9000, () => {
+        log('Server listening on http://localhost:9000/');
+    })
     bot.start()
 })().then(console.log, console.log)
 
