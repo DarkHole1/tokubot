@@ -25,7 +25,7 @@ const TAGS = [
     'monogatari'
 ] as const
 
-ryo.get('/picture/tags', (req, res) => {
+ryo.get('/ryo/tags', (req, res) => {
     return res.json({
         success: true,
         data: TAGS
@@ -37,7 +37,7 @@ const Options = z.object({
     tag: z.enum(TAGS)
 })
 
-ryo.post('/picture', ifCanPost(async (req, res) => {
+ryo.post('/ryo', ifCanPost(async (req, res) => {
     const result = Options.safeParse(req.query)
     if(!result.success) {
         return res.json({
