@@ -1,13 +1,5 @@
 import { DocumentType, getModelForClass, prop } from '@typegoose/typegoose'
 
-class Token {
-    @prop({ required: true })
-    token!: string
-
-    @prop({ required: true })
-    user!: UserInfo
-}
-
 class UserInfo {
     @prop({ required: true })
     id!: number
@@ -17,6 +9,14 @@ class UserInfo {
 
     @prop({ required: true })
     allowPost!: boolean
+}
+
+class Token {
+    @prop({ required: true })
+    token!: string
+
+    @prop({ required: true })
+    user!: UserInfo
 }
 
 export const TokenModel = getModelForClass(Token)
