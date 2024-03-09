@@ -13,7 +13,7 @@ export function authorize(f: Authorized) {
             })
         }
 
-        const token = await TokenModel.findOne({ token: req.query.token })
+        const token = await tryAuthorize(req.query.token)
 
         if (!token) {
             return res.json({
@@ -26,4 +26,8 @@ export function authorize(f: Authorized) {
 
         return f(token.user, req, res)
     }
+}
+
+export async function tryAuthorize(token: string) {
+    return await TokenModel.findOne({ token })
 }
