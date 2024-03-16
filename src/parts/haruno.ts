@@ -25,6 +25,9 @@ export const haruno = async () => {
     haruno.filter(ctx => ctx.chat?.id == TOKU_CHAT).on('message:text', async (ctx, next) => {
         const text = ctx.msg.text.toLowerCase()
         for(const user of list) {
+            if(user.whoami == ctx.message.from.id) {
+                continue
+            }
             for(const word of user.words) {
                 const match = text.indexOf(word)
                 if(match >= 0) {
