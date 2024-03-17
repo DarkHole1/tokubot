@@ -21,7 +21,7 @@ const ifCanPost = (cb: Callback) => {
 }
 
 const TAGS = [
-    'worldtrigger',
+    'world trigger',
     'monogatari'
 ] as const
 
