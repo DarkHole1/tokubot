@@ -21,9 +21,15 @@ const SCHEDULE: Post[] = [{
 
 export function everydayPost(bot: Bot) {
     cron.schedule('0 0 * * * *', async () => {
+        const now = new Date()
+        const hour = now.getHours()
         const counters = await CountersModel.findOne()
         if (!counters) return
         for (const post of SCHEDULE) {
+            if(!post.hours.includes(hour)) {
+                return
+            }
+            
             const photo = await EverydayPostModel.findOne({ type: post.type })
             if (!photo) {
                 return
@@ -35,6 +41,7 @@ export function everydayPost(bot: Bot) {
                 await bot.api.sendPhoto(TOKU_CHAT, photo.fileId, {
                     caption: post.caption
                 })
+                counters.genericDays.set(post.type, current)
             } catch (e) {
                 log(e)
             }
