@@ -9,13 +9,13 @@ const log = debug('tokubot:everyday-post')
 
 type Post = {
     type: string,
-    text: string,
+    caption: string,
     hours: number[]
 }
 
 const SCHEDULE: Post[] = [{
     type: 'monogatari',
-    text: 'Irregular Monogatari Posting Day ???',
+    caption: 'Irregular Monogatari Posting Day ???',
     hours: [8]
 }]
 
@@ -33,7 +33,7 @@ export function everydayPost(bot: Bot) {
             current++
             try {
                 await bot.api.sendPhoto(TOKU_CHAT, photo.fileId, {
-                    caption: 'Постим World Trigger день ' + counters.worldTriggerDays
+                    caption: post.caption
                 })
             } catch (e) {
                 log(e)
