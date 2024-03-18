@@ -1,4 +1,4 @@
-import { Bot, Context } from 'grammy'
+import { Bot, Context, GrammyError } from 'grammy'
 import cron from 'node-cron'
 import { CountersModel } from '../models/counters'
 import { EverydayPostModel } from '../models/everyday-post'
@@ -17,7 +17,7 @@ type Post = {
 const SCHEDULE: Post[] = [{
     type: 'monogatari',
     caption: 'Irregular Monogatari Posting Day ???',
-    hours: [11]
+    hours: [8]
 }]
 
 export function everydayPost(bot: Bot<ParseModeFlavor<Context>>) {
@@ -27,26 +27,34 @@ export function everydayPost(bot: Bot<ParseModeFlavor<Context>>) {
         const counters = await CountersModel.findOne()
         if (!counters) return
         for (const post of SCHEDULE) {
-            if(!post.hours.includes(hour)) {
-                return
-            }
-            
-            const photo = await EverydayPostModel.findOne({ type: post.type })
-            if (!photo) {
+            if (!post.hours.includes(hour)) {
                 return
             }
 
             let current = counters.genericDays.get(post.type) ?? 0
             current++
-            try {
-                await bot.api.sendPhoto(TOKU_CHAT, photo.fileId, {
-                    caption: post.caption
-                })
-                counters.genericDays.set(post.type, current)
-            } catch (e) {
-                log(e)
+            while (true) {
+                const photo = await EverydayPostModel.findOne({ type: post.type })
+                if (!photo) {
+                    return
+                }
+
+                try {
+                    await bot.api.sendPhoto(TOKU_CHAT, photo.fileId, {
+                        caption: post.caption
+                    })
+                    counters.genericDays.set(post.type, current)
+                    await photo.deleteOne()
+                    break
+                } catch (e) {
+                    if (e instanceof GrammyError && e.description == 'Bad Request: failed to get HTTP URL content') {
+                        log('Picture unavailable, skipping')
+                        await photo.deleteOne()
+                    }
+                    log(e)
+                    break
+                }
             }
-            await photo.deleteOne()
         }
         await counters.save()
     })
