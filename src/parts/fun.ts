@@ -64,7 +64,7 @@ fun.use(triggerKeeper([
     triggers.debounced(DEBOUNCE_TIME).wholeWord('дб', actions.reply.sticker(DRAGONBALL)),
     triggers.debounced(DEBOUNCE_TIME).regex('драгонбол', actions.reply.video(DRAGONBALL)),
     triggers.debounced(DEBOUNCE_TIME).regex('триггер', actions.reply.photo(KUGA_YUMA)),
-    triggers.regex('нормис', actions.reply.photo(NORMIES))
+    triggers.debounced(DEBOUNCE_TIME).regex('нормис', actions.reply.photo(NORMIES))
 ]))
 
 quoted.hears(/(\P{L}|^)бан(\P{L}|$)/gimu).filter(
