@@ -2,9 +2,10 @@ import { Bot, Context, GrammyError } from 'grammy'
 import cron from 'node-cron'
 import { CountersModel } from '../models/counters'
 import { EverydayPostModel } from '../models/everyday-post'
-import { TOKU_CHAT } from '../constants'
+import { MARVIN_ID, TOKU_CHAT } from '../constants'
 import debug from 'debug'
 import { ParseModeFlavor } from '@grammyjs/parse-mode'
+import { isPrivateChat } from 'grammy-guard'
 
 const log = debug('tokubot:everyday-post')
 
@@ -58,4 +59,26 @@ export function everydayPost(bot: Bot<ParseModeFlavor<Context>>) {
         }
         await counters.save()
     })
+
+    bot.on(':media').filter(
+        ctx => isPrivateChat(ctx) && ctx.from?.id == MARVIN_ID,
+        async ctx => {
+            const type = 'monogatari'
+            const photo = ctx.msg.photo
+            if (!photo) {
+                await ctx.reply('Чот странное', { reply_to_message_id: ctx.msg.message_id })
+                return
+            }
+            const post = new EverydayPostModel({
+                type,
+                fileId: photo.slice(-1)[0].file_id
+            })
+            await post.save()
+
+            const postCount = await EverydayPostModel.countDocuments({ type })
+            const counters = await CountersModel.findOne()
+
+            await ctx.reply(`Успешно добавлено на день ${counters!.genericDays.get(type)! + postCount}`, { reply_to_message_id: ctx.msg.message_id })
+        }
+    )
 }

@@ -8,6 +8,7 @@ export const EGOID = 1016239817
 export const VIKA_ID = 503220461
 export const FIREWORKY_ID = 5711731837
 export const LELOUCH_ID = -1002063312382
+export const MARVIN_ID = 459889760
 export const BOT_ID = 5627801063
 export const TOKUID = 332320628
 // export const TOKUID = DARK_HOLE
