@@ -25,6 +25,7 @@ import { allFiction } from './all-fiction'
 import { recommendations } from './parts/recommendations'
 import { server } from './server'
 import debug from 'debug'
+import { everydayPost } from './parts/everyday-post'
 
 void (async () => {
     const log = debug('tokubot')
@@ -72,6 +73,7 @@ void (async () => {
 
     brs(bot)
     worldTrigger(bot)
+    everydayPost(bot)
 
     bot.filter(ctx => !ANGELINA_LIST.includes(ctx.from?.id ?? 0)).use(fun)
     bot.use(unspoil)

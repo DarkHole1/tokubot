@@ -1,9 +1,10 @@
-import { Bot } from 'grammy'
+import { Bot, Context } from 'grammy'
 import cron from 'node-cron'
 import { CountersModel } from '../models/counters'
 import { EverydayPostModel } from '../models/everyday-post'
 import { TOKU_CHAT } from '../constants'
 import debug from 'debug'
+import { ParseModeFlavor } from '@grammyjs/parse-mode'
 
 const log = debug('tokubot:everyday-post')
 
@@ -16,10 +17,10 @@ type Post = {
 const SCHEDULE: Post[] = [{
     type: 'monogatari',
     caption: 'Irregular Monogatari Posting Day ???',
-    hours: [8]
+    hours: [11]
 }]
 
-export function everydayPost(bot: Bot) {
+export function everydayPost(bot: Bot<ParseModeFlavor<Context>>) {
     cron.schedule('0 0 * * * *', async () => {
         const now = new Date()
         const hour = now.getHours()
