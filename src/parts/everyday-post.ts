@@ -48,7 +48,7 @@ export function everydayPost(bot: Bot<ParseModeFlavor<Context>>) {
                     await photo.deleteOne()
                     break
                 } catch (e) {
-                    if (e instanceof GrammyError && e.description == 'Bad Request: failed to get HTTP URL content') {
+                    if (e instanceof GrammyError && (e.description == 'Bad Request: failed to get HTTP URL content' || e.description == 'Bad Request: wrong file identifier/HTTP URL specified')) {
                         log('Picture unavailable, skipping')
                         await photo.deleteOne()
                     }
