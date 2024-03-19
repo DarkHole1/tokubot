@@ -18,7 +18,7 @@ type Post = {
 const SCHEDULE: Post[] = [{
     type: 'monogatari',
     caption: 'Irregular Monogatari Posting Day ???',
-    hours: [9]
+    hours: [19]
 }]
 
 export function everydayPost(bot: Bot<ParseModeFlavor<Context>>) {
@@ -51,6 +51,7 @@ export function everydayPost(bot: Bot<ParseModeFlavor<Context>>) {
                     if (e instanceof GrammyError && (e.description == 'Bad Request: failed to get HTTP URL content' || e.description == 'Bad Request: wrong file identifier/HTTP URL specified')) {
                         log('Picture unavailable, skipping')
                         await photo.deleteOne()
+                        continue
                     }
                     log(e)
                     break
