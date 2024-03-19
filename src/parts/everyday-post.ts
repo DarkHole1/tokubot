@@ -18,7 +18,7 @@ type Post = {
 const SCHEDULE: Post[] = [{
     type: 'monogatari',
     caption: 'Irregular Monogatari Posting Day ???',
-    hours: [19]
+    hours: [8, 16]
 }]
 
 export function everydayPost(bot: Bot<ParseModeFlavor<Context>>) {
