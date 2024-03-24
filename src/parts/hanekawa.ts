@@ -5,7 +5,7 @@ import { ProfileDocument, ProfileModel } from '../models/profile'
 export const hanekawa = new Composer().use(autoQuote)
 
 hanekawa.command('my', async ctx => {
-    if (ctx.match.length || !ctx.message?.from?.id) {
+    if (ctx.match.length == 0 || !ctx.message?.from?.id) {
         await ctx.reply('Для использования напишите /my ссылка_на_ваш_аниме_профиль')
         return
     }
@@ -47,7 +47,7 @@ hanekawa.command('yours', async ctx => {
     }
 
     const profile = await ProfileModel.findOne({ telegramID: ctx.message.reply_to_message.from.id })
-    if (!profile || !(profile.shikimoriUsername && profile.anilistUsername && profile.myanimelistUsernme)) {
+    if (!profile || !(profile.shikimoriUsername || profile.anilistUsername || profile.myanimelistUsernme)) {
         await ctx.reply('Я не знаю всего. Я знаю только то, что знаю.')
         return
     }

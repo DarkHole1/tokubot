@@ -26,6 +26,7 @@ import { recommendations } from './parts/recommendations'
 import { server } from './server'
 import debug from 'debug'
 import { everydayPost } from './parts/everyday-post'
+import { hanekawa } from './parts/hanekawa'
 
 void (async () => {
     const log = debug('tokubot')
@@ -62,6 +63,7 @@ void (async () => {
     bot.use(allFiction(bot.api))
 
     bot.use(recommendations)
+    bot.use(hanekawa)
     bot.use(await haruno())
     bot.use(service)
     bot.use(voting2)
