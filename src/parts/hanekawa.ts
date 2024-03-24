@@ -32,8 +32,8 @@ hanekawa.command('yours', async ctx => {
     if(profile.anilistUsername) {
         results.push(`https://anilist.co/user/${profile.anilistUsername}/`)
     }
-    if(profile.shikimoriUsername) {
-        results.push(`https://shikimori.one/${profile.shikimoriUsername}`)
+    if(profile.myanimelistUsernme) {
+        results.push(`https://myanimelist.net/profile/${profile.myanimelistUsernme}`)
     }
 
     await ctx.reply(results.join('\n'))
