@@ -17,7 +17,7 @@ type Post = {
 
 const SCHEDULE: Post[] = [{
     type: 'monogatari',
-    caption: 'Irregular Monogatari Posting Day ???',
+    caption: 'Daily Oddity number {count}',
     hours: [8, 16]
 }]
 
@@ -41,9 +41,8 @@ export function everydayPost(bot: Bot<ParseModeFlavor<Context>>) {
                 }
 
                 try {
-                    await bot.api.sendPhoto(TOKU_CHAT, photo.fileId, {
-                        caption: post.caption
-                    })
+                    const caption = post.caption.replace('{counter}', current.toString())
+                    await bot.api.sendPhoto(TOKU_CHAT, photo.fileId, { caption })
                     counters.genericDays.set(post.type, current)
                     await photo.deleteOne()
                     break
@@ -54,7 +53,7 @@ export function everydayPost(bot: Bot<ParseModeFlavor<Context>>) {
                         continue
                     }
                     log(e)
-                    break
+                    continue
                 }
             }
         }
