@@ -41,7 +41,7 @@ export function everydayPost(bot: Bot<ParseModeFlavor<Context>>) {
                 }
 
                 try {
-                    const caption = post.caption.replace('{counter}', current.toString())
+                    const caption = post.caption.replace('{count}', current.toString())
                     await bot.api.sendPhoto(TOKU_CHAT, photo.fileId, { caption })
                     counters.genericDays.set(post.type, current)
                     await photo.deleteOne()
