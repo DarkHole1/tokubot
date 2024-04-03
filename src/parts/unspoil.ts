@@ -7,8 +7,10 @@ export const unspoil = new Composer().use(autoQuote)
 
 unspoil.command('unspoil', async ctx => {
     const reply = ctx.msg.reply_to_message
-    if (!reply || (!reply.photo && !reply.animation && !reply.video) || reply.has_media_spoiler) {
-        await ctx.reply('Для того чтобы убрать спойлер ответьте на сообщение с кортинкой / гифкай')
+   //if (!reply || (!reply.photo && !reply.animation && !reply.video) || reply.has_media_spoiler) {
+    if (!reply) {
+        await ctx.reply('Для того чтобы убрать спойлер ответьте на сообщение')
+        //await ctx.reply('Для того чтобы убрать спойлер ответьте на сообщение с кортинкой / гифкай')
         return
     }
 
@@ -40,6 +42,7 @@ unspoil.command('unspoil', async ctx => {
             }
         )
     }
+    if (reply.text) {await ctx.reply(reply.from() + 'пишет: ||' + reply.text + '||')}
     try {
         await ctx.api.deleteMessage(reply.chat.id, reply.message_id)
     } catch (e) {
