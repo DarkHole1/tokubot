@@ -117,9 +117,9 @@ export async function parseFeed(link: string): Promise<RSSItem[]> {
                 // TODO: Parsing movies
                 return []
             }
-            return []
+            // return []
             // TODO: Better title handling + detecting movies
-            // throw new Error(`Cant parse title '${title}'. Feed is broken`)
+            throw new Error(`Cant parse title '${title}'. Feed is broken`)
         }
         const anime = titleParsed[1]
         const episode = parseEpisode(titleParsed)
