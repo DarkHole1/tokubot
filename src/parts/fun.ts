@@ -89,9 +89,6 @@ quoted.command('bingo', ctx => ctx.reply('https://docs.google.com/spreadsheets/d
 // Tomorrow
 debounced.hears(/(\P{L}|^)завтра(\P{L}|$)/ui, ctx => (lastTime = Date.now(), ctx.replyWithVideo(Math.random() > 0.3 ? NOT_TOMORROW : (Math.random() > 0.3 ? TOMORROW_HAPPY : TOMORROW))))
 
-// Триггер
-// debounced.hears(/триггер/ui, ctx => (lastTime = Date.now(), ctx.replyWithPhoto(choice(KUGA_YUMA))))
-
 quoted.filter(ctx => ctx.msg?.sticker?.file_unique_id == 'AgADjRQAAqfaKUs', ctx => ctx.replyWithAnimation(PATPAT))
 
 quoted.hears(/^Руби,? (.+?) или (.+?)\??$/i, async ctx => {
