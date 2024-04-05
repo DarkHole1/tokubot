@@ -1,6 +1,9 @@
 import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { Composer } from 'grammy'
 import { ProfileDocument, ProfileModel } from '../models/profile'
+import debug from 'debug'
+
+const log = debug('app:parts:hanekawa')
 
 export const hanekawa = new Composer().use(autoQuote)
 
@@ -51,6 +54,8 @@ hanekawa.command('yours', async ctx => {
         await ctx.reply('Я не знаю всего. Я знаю только то, что знаю.')
         return
     }
+
+    log('Main account %s', profile.mainAccount)
 
     const results = [] as string[]
     if (profile.shikimoriUsername) {
