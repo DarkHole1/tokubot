@@ -89,7 +89,7 @@ const handlers: { [key: string]: Handler } = {
         },
 
         name: 'Shiki',
-        link: (id) => `https://shikimori.me/animes/${id}`
+        link: (id) => `https://shikimori.one/animes/${id}`
     },
     myanimelist: {
         extractor(url) {
