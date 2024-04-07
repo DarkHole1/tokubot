@@ -8,7 +8,8 @@ export const unspoil = new Composer<ParseModeFlavor<Context>>().use(autoQuote)
 
 unspoil.command('unspoil', async ctx => {
     const reply = ctx.msg.reply_to_message
-    if (!reply || reply.has_media_spoiler) {//let's assume that if sender added spoiler to media they remember to add spoiler to text too. Or maybe we chould resend regardless of media spoiler on original message
+    // Let's assume that if sender added spoiler to media they remember to add spoiler to text too. Or maybe we chould resend regardless of media spoiler on original message
+    if (!reply || reply.has_media_spoiler) {
         await ctx.reply('Для того чтобы убрать спойлер ответьте на сообщение')
         return
     }
