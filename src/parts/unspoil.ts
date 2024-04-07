@@ -40,8 +40,7 @@ unspoil.command('unspoil', async ctx => {
                 has_spoiler: true
             }
         )
-    }
-    if (reply.text) {
+    } else if (reply.text) {
         await ctx.replyFmt(
              fmt`${reply.from?.username ?? reply.from?.first_name ?? 'Анонимус'} пишет: ${spoiler(reply.text)}`
         )
