@@ -41,8 +41,13 @@ unspoil.command('unspoil', async ctx => {
             }
         )
     } else if (reply.text) {
+        const header = `${reply.from?.username ?? reply.from?.first_name ?? 'Анонимус'} пишет: `
+        let text = reply.text
+        if (text.length >= 2048 - header.length) {
+            text = text.slice(0, 2048 - header.length - 4) + '...'
+        }
         await ctx.replyFmt(
-             fmt`${reply.from?.username ?? reply.from?.first_name ?? 'Анонимус'} пишет: ${spoiler(reply.text)}`
+            fmt`${reply.from?.username ?? reply.from?.first_name ?? 'Анонимус'} пишет: ${spoiler(reply.text)}`
         )
     }
     try {
