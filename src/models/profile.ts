@@ -12,6 +12,9 @@ class Profile {
 
     @prop()
     myanimelistUsernme?: string
+
+    @prop({ default: 'shikimori', required: true, enum: ['shikimori', 'anilist', 'mal'] })
+    mainAccount!: 'shikimori' | 'anilist' | 'mal'
 }
 
 export const ProfileModel = getModelForClass(Profile)
