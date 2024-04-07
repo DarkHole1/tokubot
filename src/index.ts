@@ -78,7 +78,7 @@ void (async () => {
     everydayPost(bot)
 
     bot.filter(ctx => !ANGELINA_LIST.includes(ctx.from?.id ?? 0)).use(fun)
-    bot.use(unspoil)
+    // bot.use(unspoil)
     bot.use(blessing)
     bot.use(thanks)
     bot.use(sadAnimeWatcher(config, bot))
