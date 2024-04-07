@@ -1,16 +1,15 @@
+import { ParseModeFlavor, fmt, spoiler } from '@grammyjs/parse-mode'
 import { autoQuote } from '@roziscoding/grammy-autoquote'
 import debug from 'debug'
-import { Composer } from 'grammy'
+import { Composer, Context } from 'grammy'
 
 const log = debug('app:unspoil')
-export const unspoil = new Composer().use(autoQuote)
+export const unspoil = new Composer<ParseModeFlavor<Context>>().use(autoQuote)
 
 unspoil.command('unspoil', async ctx => {
     const reply = ctx.msg.reply_to_message
-   //if (!reply || (!reply.photo && !reply.animation && !reply.video) || reply.has_media_spoiler) {
     if (!reply || reply.has_media_spoiler) {//let's assume that if sender added spoiler to media they remember to add spoiler to text too. Or maybe we chould resend regardless of media spoiler on original message
         await ctx.reply('Для того чтобы убрать спойлер ответьте на сообщение')
-        //await ctx.reply('Для того чтобы убрать спойлер ответьте на сообщение с кортинкой / гифкай')
         return
     }
 
@@ -44,7 +43,7 @@ unspoil.command('unspoil', async ctx => {
     }
     if (reply.text) {
         await ctx.replyFmt(
-             fmt`${reply.from.username} пишет: ${spoiler(reply.text)}`
+             fmt`${reply.from?.username ?? reply.from?.first_name ?? 'Анонимус'} пишет: ${spoiler(reply.text)}`
         )
     }
     try {
