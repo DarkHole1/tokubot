@@ -39,7 +39,7 @@ export const allFiction = (api: Api) => {
         let estimated = `Этого хватит приблизительно на ${estimatedDays.toFixed(0)} дней!`
 
         try {
-            await api.sendMessage(TOKU_CHAT, `Последнее сообщение на ${yesterdayFormatted} было под номером ${lastMessageId}! За сегодня было написано ${lastMessageId - doc.lastStartMessage} сообщений! До тепловой смерти чата осталось ${1_000_000 - lastMessageId} сообщений! ${estimated}`)
+            await api.sendMessage(TOKU_CHAT, `Последнее сообщение на ${yesterdayFormatted} было под номером ${lastMessageId}!\n\nЗа сегодня было написано ${lastMessageId - doc.lastStartMessage} сообщений!\n\nДо тепловой смерти чата осталось ${1_000_000 - lastMessageId} сообщений!\n\n${estimated}`)
         } catch(e) {
             // Nothing
         }
