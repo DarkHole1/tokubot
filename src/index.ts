@@ -78,7 +78,7 @@ void (async () => {
     worldTrigger(bot)
     everydayPost(bot)
 
-    bot.use(angelinaList(['fun'], ANGELINA_LIST)).use(fun)
+    bot.filter(angelinaList(['fun'], ANGELINA_LIST)).use(fun)
     // bot.use(unspoil)
     bot.use(blessing)
     bot.use(thanks)

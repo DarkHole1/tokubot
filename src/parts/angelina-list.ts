@@ -1,6 +1,6 @@
 // Heavy Object
 
-import { Composer } from "grammy"
+import { Composer, Context } from "grammy"
 
 type AngelinaEntry = {
     restricted: string[],
@@ -17,8 +17,8 @@ export const angelinaList = (type: string[], list: AngelinaEntry[]) => {
             .map(entry => entry.id)
     )
 
-    return new Composer().filter(ctx => {
+    return (ctx: Context) => {
         if (!ctx.from?.id) return true
         return !actualIds.has(ctx.from.id)
-    })
+    }
 }
