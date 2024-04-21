@@ -9,7 +9,7 @@ export const unspoil = new Composer<ParseModeFlavor<Context>>().use(autoQuote)
 unspoil.command('unspoil', async ctx => {
     const reply = ctx.msg.reply_to_message
     // Let's assume that if sender added spoiler to media they remember to add spoiler to text too. Or maybe we chould resend regardless of media spoiler on original message
-    if (!reply || reply.has_media_spoiler) {
+    if (!reply || reply.has_media_spoiler || reply.sticker || reply.story) {
         await ctx.reply('Для того чтобы убрать спойлер ответьте на сообщение')
         return
     }
@@ -50,7 +50,10 @@ unspoil.command('unspoil', async ctx => {
         await ctx.replyFmt(
             fmt`${reply.from?.username ?? reply.from?.first_name ?? 'Анонимус'} пишет: ${spoiler(reply.text)}`
         )
+    } else {
+        return
     }
+
     try {
         await ctx.api.deleteMessage(reply.chat.id, reply.message_id)
     } catch (e) {
