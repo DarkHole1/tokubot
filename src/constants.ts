@@ -13,7 +13,16 @@ export const BOT_ID = 5627801063
 export const TOKUID = 332320628
 // export const TOKUID = DARK_HOLE
 export const ADMINS = [TOKU_CHANNEL, DARK_HOLE, EGOID, TOKUID, FIREWORKY_ID, VIKA_ID]
-export const ANGELINA_LIST: number[] = [554683512, 267563558] // 6256371434
+export const ANGELINA_LIST = [
+    {
+        restricted: ['fun'],
+        id: 554683512
+    },
+    {
+        restricted: ['fun'],
+        id: 267563558
+    }
+] // 6256371434
 export const SHOCK_PATALOCK = 'CQACAgIAAx0EbgUG4QACARhkQSVHnxcut0o6kWQPtWKq2lsTXwACfywAAr81uUlinNRcNS2fFC8E'
 export const WORLD_TRIGGER = 'CAACAgEAAx0CbgUG4QACAS5kQTVsPpYJb3nUAAHDaO9_YTfgvNYAAtAAA3u8bAw_gR9puBpcHy8E'
 export const NOT_TOMORROW = 'BAACAgIAAxkBAAIS_mTagYxp1cu4YSR72xOujVkbFEnJAAJNMQACouPYSrs03uFp0sRSMAQ'

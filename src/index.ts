@@ -27,6 +27,7 @@ import { server } from './server'
 import debug from 'debug'
 import { everydayPost } from './parts/everyday-post'
 import { hanekawa } from './parts/hanekawa'
+import { angelinaList } from './parts/angelina-list'
 
 void (async () => {
     const log = debug('tokubot')
@@ -77,7 +78,7 @@ void (async () => {
     worldTrigger(bot)
     everydayPost(bot)
 
-    bot.filter(ctx => !ANGELINA_LIST.includes(ctx.from?.id ?? 0)).use(fun)
+    bot.use(angelinaList(['fun'], ANGELINA_LIST)).use(fun)
     // bot.use(unspoil)
     bot.use(blessing)
     bot.use(thanks)
