@@ -23,6 +23,10 @@ unspoil.command('unspoil', async ctx => {
         return
     }
 
+    if (reply.from?.id == ctx.me.id && !isAdmin) {
+        return
+    }
+
     if (reply.photo) {
         await ctx.replyWithPhoto(
             reply.photo.at(-1)!.file_id,
