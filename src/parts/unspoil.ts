@@ -16,7 +16,7 @@ unspoil.command('unspoil', async ctx => {
         return
     }
 
-    const isAdmin = reply.from ? ADMINS.includes(reply.from.id) : false
+    const isAdmin = ctx.from ? ADMINS.includes(ctx.from.id) : false
 
     if (Date.now() - reply.date > ROT_TIME && !isAdmin) {
         await ctx.reply('Сообщение слишком старое')
