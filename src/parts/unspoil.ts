@@ -2,8 +2,10 @@ import { ParseModeFlavor, fmt, spoiler } from '@grammyjs/parse-mode'
 import { autoQuote } from '@roziscoding/grammy-autoquote'
 import debug from 'debug'
 import { Composer, Context } from 'grammy'
+import { ADMINS } from '../constants'
 
 const log = debug('app:unspoil')
+const ROT_TIME = 5 * 60 * 1000
 export const unspoil = new Composer<ParseModeFlavor<Context>>().use(autoQuote)
 
 unspoil.command('unspoil', async ctx => {
@@ -11,6 +13,13 @@ unspoil.command('unspoil', async ctx => {
     // Let's assume that if sender added spoiler to media they remember to add spoiler to text too. Or maybe we chould resend regardless of media spoiler on original message
     if (!reply || reply.has_media_spoiler || reply.sticker || reply.story) {
         await ctx.reply('Для того чтобы убрать спойлер ответьте на сообщение')
+        return
+    }
+
+    const isAdmin = reply.from ? ADMINS.includes(reply.from.id) : false
+
+    if (Date.now() - reply.date > ROT_TIME && !isAdmin) {
+        await ctx.reply('Сообщение слишком старое')
         return
     }
 
