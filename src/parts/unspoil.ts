@@ -5,7 +5,7 @@ import { Composer, Context } from 'grammy'
 import { ADMINS } from '../constants'
 
 const log = debug('app:unspoil')
-const ROT_TIME = 5 * 60 * 1000
+const ROT_TIME = 5 * 60
 export const unspoil = new Composer<ParseModeFlavor<Context>>().use(autoQuote)
 
 unspoil.command('unspoil', async ctx => {
@@ -18,7 +18,7 @@ unspoil.command('unspoil', async ctx => {
 
     const isAdmin = ctx.from ? ADMINS.includes(ctx.from.id) : false
 
-    if (Date.now() - reply.date > ROT_TIME && !isAdmin) {
+    if (Date.now() / 1000 - reply.date > ROT_TIME && !isAdmin) {
         await ctx.reply('Сообщение слишком старое')
         return
     }
