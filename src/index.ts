@@ -79,7 +79,7 @@ void (async () => {
     everydayPost(bot)
 
     bot.filter(angelinaList(['fun'], ANGELINA_LIST)).use(fun)
-    // bot.use(unspoil)
+    bot.filter(angelinaList(['unspoil'], ANGELINA_LIST)).use(unspoil)
     bot.use(blessing)
     bot.use(thanks)
     bot.use(sadAnimeWatcher(config, bot))
