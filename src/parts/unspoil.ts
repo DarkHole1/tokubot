@@ -1,12 +1,49 @@
-import { ParseModeFlavor, fmt, spoiler } from '@grammyjs/parse-mode'
+import { FormattedString, ParseModeFlavor, fmt, spoiler } from '@grammyjs/parse-mode'
 import { autoQuote } from '@roziscoding/grammy-autoquote'
 import debug from 'debug'
 import { Composer, Context } from 'grammy'
 import { ADMINS } from '../constants'
+import { MessageEntity } from 'grammy/types'
 
 const log = debug('app:unspoil')
 const ROT_TIME = 5 * 60
 export const unspoil = new Composer<ParseModeFlavor<Context>>().use(autoQuote)
+
+function spoilerEntities(text: string, entities: MessageEntity[], range?: { offset: number, length: number }): FormattedString {
+    const { offset, length } = range ?? { offset: 0, length: text.length }
+    let start = offset, end = offset + length
+
+    const filteredEntities = entities.filter(entity => {
+        if (entity.type != 'spoiler')
+            return true
+
+        const entityStart = entity.offset, entityEnd = entity.offset + entity.length
+
+        // Start overlap; extending
+        if (entityStart < start && entityEnd > entityStart) {
+            start = entityStart
+        }
+
+        // End overlap; extending
+        if (entityStart < end && entityEnd > end) {
+            end = entityEnd
+        }
+
+        if (entityStart >= start && entityEnd <= end)
+            return false
+
+        return true
+    })
+
+    return new FormattedString(
+        text,
+        filteredEntities.concat([{
+            type: 'spoiler',
+            offset: start,
+            length: end - start
+        }])
+    )
+}
 
 unspoil.command('unspoil', async ctx => {
     const reply = ctx.msg.reply_to_message
@@ -65,7 +102,7 @@ unspoil.command('unspoil', async ctx => {
             text = text.slice(0, 2048 - header.length - 4) + '...'
         }
         await ctx.replyFmt(
-            fmt`${header}${spoiler(reply.text)}`
+            fmt`${header}${spoilerEntities(reply.text, reply.entities ?? [])}`
         )
     } else {
         return
