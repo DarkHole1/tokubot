@@ -49,6 +49,18 @@ function spoilerEntities(text: string, entities: MessageEntity[], range?: { offs
     )
 }
 
+function getSpoilText(text: string, entities: MessageEntity[], sender: string, reason: string, limit: number) {
+    const spoilerReason = reason.length > 0 ? ` спойлер к ${reason}` : ``
+    const ending = text.length > 0 ? `: ` : ``
+    const header = `${sender} пишет${spoilerReason}${ending}`
+
+    if (text.length >= limit - header.length) {
+        text = text.slice(0, limit - header.length - 4) + '...'
+    }
+
+    return fmt`${header}${spoilerEntities(text, entities)}`
+}
+
 unspoil.command('unspoil', async ctx => {
     const reply = ctx.msg.reply_to_message
     // Let's assume that if sender added spoiler to media they remember to add spoiler to text too. Or maybe we chould resend regardless of media spoiler on original message
@@ -72,41 +84,38 @@ unspoil.command('unspoil', async ctx => {
     const reason = ctx.match.trim()
 
     if (reply.photo) {
+        const caption = getSpoilText(reply.caption ?? '', reply.caption_entities ?? [], sender, reason, 1024)
         await ctx.replyWithPhoto(
             reply.photo.at(-1)!.file_id,
             {
-                caption: reply.caption,
-                caption_entities: reply.caption_entities,
+                caption: caption.text,
+                caption_entities: caption.entities,
                 has_spoiler: true
             }
         )
     } else if (reply.animation) {
+        const caption = getSpoilText(reply.caption ?? '', reply.caption_entities ?? [], sender, reason, 1024)
         await ctx.replyWithAnimation(
             reply.animation.file_id,
             {
-                caption: reply.caption,
-                caption_entities: reply.caption_entities,
+                caption: caption.text,
+                caption_entities: caption.entities,
                 has_spoiler: true
             }
         )
     } else if (reply.video) {
+        const caption = getSpoilText(reply.caption ?? '', reply.caption_entities ?? [], sender, reason, 1024)
         await ctx.replyWithVideo(
             reply.video.file_id,
             {
-                caption: reply.caption,
-                caption_entities: reply.caption_entities,
+                caption: caption.text,
+                caption_entities: caption.entities,
                 has_spoiler: true
             }
         )
     } else if (reply.text) {
-        const spoilerReason = reason.length > 0 ? ` спойлер к ${reason}` : ``
-        const header = `${sender} пишет${spoilerReason}: `
-        let text = reply.text
-        if (text.length >= 2048 - header.length) {
-            text = text.slice(0, 2048 - header.length - 4) + '...'
-        }
         await ctx.replyFmt(
-            fmt`${header}${spoilerEntities(reply.text, reply.entities ?? [])}`
+            getSpoilText(reply.text, reply.entities ?? [], sender, reason, 2048)
         )
     } else {
         return
