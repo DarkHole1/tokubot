@@ -65,7 +65,7 @@ unspoil.command('unspoil', async ctx => {
             text = text.slice(0, 2048 - header.length - 4) + '...'
         }
         await ctx.replyFmt(
-            fmt`${sender} пишет: ${spoiler(reply.text)}`
+            fmt`${header}${spoiler(reply.text)}`
         )
     } else {
         return
