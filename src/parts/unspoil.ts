@@ -27,6 +27,9 @@ unspoil.command('unspoil', async ctx => {
         return
     }
 
+    const sender = reply.from?.username ?? reply.from?.first_name ?? 'Анонимус'
+    const reason = ctx.match.trim()
+
     if (reply.photo) {
         await ctx.replyWithPhoto(
             reply.photo.at(-1)!.file_id,
@@ -55,13 +58,14 @@ unspoil.command('unspoil', async ctx => {
             }
         )
     } else if (reply.text) {
-        const header = `${reply.from?.username ?? reply.from?.first_name ?? 'Анонимус'} пишет: `
+        const spoilerReason = reason.length > 0 ? ` спойлер к ${reason}` : ``
+        const header = `${sender} пишет${spoilerReason}: `
         let text = reply.text
         if (text.length >= 2048 - header.length) {
             text = text.slice(0, 2048 - header.length - 4) + '...'
         }
         await ctx.replyFmt(
-            fmt`${reply.from?.username ?? reply.from?.first_name ?? 'Анонимус'} пишет: ${spoiler(reply.text)}`
+            fmt`${sender} пишет: ${spoiler(reply.text)}`
         )
     } else {
         return
