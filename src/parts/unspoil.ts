@@ -14,6 +14,10 @@ function spoilerEntities(text: string, entities: MessageEntity[], range?: { offs
     let start = offset, end = offset + length
 
     const filteredEntities = entities.filter(entity => {
+        // Telegram forcefully unspoils monotype
+        if (entity.type == 'pre' || entity.type == 'code')
+            return false
+
         if (entity.type != 'spoiler')
             return true
 
