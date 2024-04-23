@@ -9,7 +9,12 @@ const log = debug('app:unspoil')
 const ROT_TIME = 5 * 60
 export const unspoil = new Composer<ParseModeFlavor<Context>>().use(autoQuote)
 
-function spoilerEntities(text: string, entities: MessageEntity[], range?: { offset: number, length: number }): FormattedString {
+type Range = {
+    offset: number
+    length: number
+}
+
+function spoilerEntities(text: string, entities: MessageEntity[], range?: Range): FormattedString {
     const { offset, length } = range ?? { offset: 0, length: text.length }
     let start = offset, end = offset + length
 
@@ -49,7 +54,7 @@ function spoilerEntities(text: string, entities: MessageEntity[], range?: { offs
     )
 }
 
-function getSpoilText(text: string, entities: MessageEntity[], sender: string, reason: string, limit: number) {
+function getSpoilText(text: string, entities: MessageEntity[], sender: string, reason: string, limit: number, range?: Range) {
     const spoilerReason = reason.length > 0 ? ` спойлер к ${reason}` : ``
     const ending = text.length > 0 ? `: ` : ``
     const header = `${sender} пишет${spoilerReason}${ending}`
@@ -58,12 +63,13 @@ function getSpoilText(text: string, entities: MessageEntity[], sender: string, r
         text = text.slice(0, limit - header.length - 4) + '...'
     }
 
-    return fmt`${header}${spoilerEntities(text, entities)}`
+    return fmt`${header}${spoilerEntities(text, entities, range)}`
 }
 
 unspoil.command('unspoil', async ctx => {
     const reply = ctx.msg.reply_to_message
-    // Let's assume that if sender added spoiler to media they remember to add spoiler to text too. Or maybe we chould resend regardless of media spoiler on original message
+    const quote = ctx.msg.quote
+
     if (!reply || reply.has_media_spoiler || reply.sticker || reply.story) {
         await ctx.reply('Для того чтобы убрать спойлер ответьте на сообщение')
         return
@@ -82,9 +88,10 @@ unspoil.command('unspoil', async ctx => {
 
     const sender = reply.from?.username ?? reply.from?.first_name ?? 'Анонимус'
     const reason = ctx.match.trim()
+    const range = quote ? { offset: quote.position, length: quote.text.length } : undefined
 
     if (reply.photo) {
-        const caption = getSpoilText(reply.caption ?? '', reply.caption_entities ?? [], sender, reason, 1024)
+        const caption = getSpoilText(reply.caption ?? '', reply.caption_entities ?? [], sender, reason, 1024, range)
         await ctx.replyWithPhoto(
             reply.photo.at(-1)!.file_id,
             {
@@ -94,7 +101,7 @@ unspoil.command('unspoil', async ctx => {
             }
         )
     } else if (reply.animation) {
-        const caption = getSpoilText(reply.caption ?? '', reply.caption_entities ?? [], sender, reason, 1024)
+        const caption = getSpoilText(reply.caption ?? '', reply.caption_entities ?? [], sender, reason, 1024, range)
         await ctx.replyWithAnimation(
             reply.animation.file_id,
             {
@@ -104,7 +111,7 @@ unspoil.command('unspoil', async ctx => {
             }
         )
     } else if (reply.video) {
-        const caption = getSpoilText(reply.caption ?? '', reply.caption_entities ?? [], sender, reason, 1024)
+        const caption = getSpoilText(reply.caption ?? '', reply.caption_entities ?? [], sender, reason, 1024, range)
         await ctx.replyWithVideo(
             reply.video.file_id,
             {
@@ -115,7 +122,7 @@ unspoil.command('unspoil', async ctx => {
         )
     } else if (reply.text) {
         await ctx.replyFmt(
-            getSpoilText(reply.text, reply.entities ?? [], sender, reason, 2048)
+            getSpoilText(reply.text, reply.entities ?? [], sender, reason, 2048, range)
         )
     } else {
         return
