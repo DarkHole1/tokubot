@@ -3,7 +3,7 @@ import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { Composer, Context, InputFile } from "grammy"
 import type { Sticker } from "grammy/out/types"
 import { pluralize } from "numeralize-ru"
-import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY, PATPAT, KUGA_YUMA, LELOUCH_ID, UNDEAD, UNLUCK, NORMIES, KAZAKHSTAN } from "../constants"
+import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY, PATPAT, KUGA_YUMA, LELOUCH_ID, UNDEAD, UNLUCK, NORMIES, KAZAKHSTAN, FIRST_YEAR_SUMMER } from "../constants"
 import { DrinkCounters } from "../data"
 import { choice, isAdmin } from '../utils'
 import { actions, triggerKeeper, triggers } from './trigger-keeper'
@@ -65,7 +65,8 @@ fun.use(triggerKeeper([
     triggers.debounced(DEBOUNCE_TIME).regex('драгонбол', actions.reply.video(DRAGONBALL)),
     triggers.debounced(DEBOUNCE_TIME).regex('триггер', actions.reply.photo(KUGA_YUMA)),
     triggers.debounced(DEBOUNCE_TIME).regex('нормис', actions.reply.photo(NORMIES)),
-    triggers.debounced(DEBOUNCE_TIME).regex('казахстан|караганд', actions.reply.photo(KAZAKHSTAN))
+    triggers.debounced(DEBOUNCE_TIME).regex('казахстан|караганд', actions.reply.photo(KAZAKHSTAN)),
+    triggers.debounced(DEBOUNCE_TIME).regex('121|лето первого года', actions.reply.photo(FIRST_YEAR_SUMMER))
 ]))
 
 quoted.hears(/(\P{L}|^)бан(\P{L}|$)/gimu).filter(

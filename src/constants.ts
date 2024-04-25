@@ -63,5 +63,6 @@ export const KUGA_YUMA = [
     'AgACAgIAAx0CbgUG4QACAuZljxx1xN_Ckm9h5SKMgTmVOKswyAACVdMxG-56eUhvCNTgJbmWngEAAwIAA3kAAzQE',
     'AgACAgIAAx0CbgUG4QACAudljxx1AbGUwzStcS5aXWg4n6InhAACVtMxG-56eUjXfyMZKbd4oQEAAwIAA3kAAzQE'
 ]
+export const FIRST_YEAR_SUMMER = 'CgACAgIAAx0CbgUG4QACBMtmKiAjbRnn3tYDudpF_tdo6rR6ywAC-E0AAmJ3UEndpEJVrKI1EzQE'
 // Пон
 export const PON_STICKER = 'CAACAgIAAxkBAAEhnnNkblkm-YkHGOAR1ltwGrPGDhGvMgACmygAAqCNOUshhm_UzqyrcC8E'
