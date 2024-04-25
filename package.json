@@ -38,6 +38,7 @@
     "@graphql-codegen/client-preset": "4.1.0"
   },
   "scripts": {
+    "dev": "DEBUG=* ts-node .",
     "codegen": "graphql-codegen --config codegen.ts"
   }
 }
