@@ -72,7 +72,7 @@ const tryCapitalize = (s: string, really = true) => really ? s[0].toUpperCase() 
 export const formatUpdate = ({ anime, russian, episode, completed }: { anime: string, russian?:string, episode: number, completed: boolean }, capitalize = false) => fmt
 `${completed ? tryCapitalize('последняя ', capitalize) : ''}${episode} серия ${anime}${russian ? fmt` / ${spoiler(russian)}` : ''}`
 
-export const missMessage =
+export const missMessage = fmt
 `Упс, кажется вы хотели оставить комментарий к посту, но промазали. Ответьте на любое сообщение или сам пост чтобы оно было видно в комментариях.
 
-А для обычных обсуждений у нас есть ${link(`другой чат`, `https://t.me/tokuchatt`)}`
+А для обычных обсуждений у нас есть ${link(`другой чат`, `https://t.me/tokuchatt`)}.`
