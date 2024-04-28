@@ -48,6 +48,10 @@ export const greeting = fmt
 
 Приходи, присаживайся, читай ${link(`правила`, `https://t.me/tokuchatt/361`)} и список рекомендуемых аниме к ${link(`просмотру`, `https://t.me/tokuchatt/410`)}, а также ${link(`список проектов участников`, `https://t.me/tokuchatt/422`)} и ${link(`список их списков тайтлов`, `https://t.me/tokuchatt/425`)}.`
 
+export const greetingOld = fmt
+`Nya~~ хотя подождите, вы оказались в неправильном чате. Все обсуждения происходят в ${link(`другом чате`, `https://t.me/tokuchatt`)}. Тут остались лишь комментарии к постам.
+`
+
 export const post = fmt
 `Бип-боп, это Руби, бот канала! 
 

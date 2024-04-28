@@ -7,6 +7,10 @@ import { throttle } from '../utils'
 export const service = new Composer<ParseModeFlavor<Context>>
 
 service.on('message:new_chat_members', async ctx => {
+    if (ctx.chat.id == OLD_TOKU_CHAT) {
+        await ctx.replyFmt(statics.greetingOld)
+        return
+    }
     await ctx.replyFmt(statics.greeting)
 })
 
