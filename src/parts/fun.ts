@@ -66,7 +66,7 @@ fun.use(triggerKeeper([
     triggers.debounced(DEBOUNCE_TIME).regex('триггер', actions.reply.photo(KUGA_YUMA)),
     triggers.debounced(DEBOUNCE_TIME).regex('нормис', actions.reply.photo(NORMIES)),
     triggers.debounced(DEBOUNCE_TIME).regex('казахстан|караганд', actions.reply.photo(KAZAKHSTAN)),
-    triggers.debounced(DEBOUNCE_TIME).regex('121|лето первого года', actions.reply.gif(FIRST_YEAR_SUMMER))
+    triggers.debounced(DEBOUNCE_TIME).regex('([^\\d]|^)121([^\\d]|$)|лето первого года', actions.reply.gif(FIRST_YEAR_SUMMER))
 ]))
 
 quoted.hears(/(\P{L}|^)бан(\P{L}|$)/gimu).filter(
