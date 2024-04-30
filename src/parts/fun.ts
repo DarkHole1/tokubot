@@ -3,7 +3,7 @@ import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { Composer, Context, InputFile } from "grammy"
 import type { Sticker } from "grammy/out/types"
 import { pluralize } from "numeralize-ru"
-import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY, PATPAT, KUGA_YUMA, LELOUCH_ID, UNDEAD, UNLUCK, NORMIES, KAZAKHSTAN, FIRST_YEAR_SUMMER, TORU, MAHO_AKO } from "../constants"
+import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY, PATPAT, KUGA_YUMA, LELOUCH_ID, UNDEAD, UNLUCK, NORMIES, KAZAKHSTAN, FIRST_YEAR_SUMMER, TORU, MAHO_AKO, CAT_TORU } from "../constants"
 import { DrinkCounters } from "../data"
 import { choice, isAdmin } from '../utils'
 import { actions, triggerKeeper, triggers } from './trigger-keeper'
@@ -54,7 +54,7 @@ quoted.on('edit:caption_entities:hashtag').filter(hasCaptionHashtag('#dunmeshi')
 fun.use(triggerKeeper([
     triggers.regex('п(а|a)т(а|a)л(о|o)к|501\\s?271|область', actions.reply.audio(SHOCK_PATALOCK)),
     triggers.wholeWord('пон', actions.reply.sticker(PON_STICKER)),
-    triggers.wholeWord('ало', actions.reply.gif(NADEKO_CALLING)),
+    triggers.wholeWord('ало|алло|алё', actions.reply.gif(NADEKO_CALLING)),
     triggers.regex('пидор', actions.reply.text('ОБНАРУЖЕНА ДЕМОНИЧЕСКАЯ УГРОЗА')),
     triggers.regex('не\\s+ешь', actions.preciseReply.text('Ням!')),
     triggers.regex('противоречи', actions.reply.gif(COUNTER)),
@@ -67,8 +67,9 @@ fun.use(triggerKeeper([
     triggers.debounced(DEBOUNCE_TIME).regex('нормис', actions.reply.photo(NORMIES)),
     triggers.debounced(DEBOUNCE_TIME).regex('казахстан|караганд', actions.reply.photo(KAZAKHSTAN)),
     triggers.debounced(DEBOUNCE_TIME).regex('([^\\d]|^)121([^\\d]|$)|лето первого года', actions.reply.gif(FIRST_YEAR_SUMMER)),
-    triggers.debounced(DEBOUNCE_TIME).regex('toru|тору', actions.reply.gif(TORU)),
-    triggers.debounced(DEBOUNCE_TIME).regex('mahoako|махоако', actions.reply.gif(MAHO_AKO))
+    triggers.debounced(DEBOUNCE_TIME).ignoreCase('(^|[^ко])(toru|тору)', actions.reply.gif(TORU)),
+    triggers.debounced(DEBOUNCE_TIME).ignoreCase('catoru|cattoru|котору', actions.reply.gif(CAT_TORU)),
+    triggers.debounced(DEBOUNCE_TIME).ignoreCase('mahoako|махоако', actions.reply.gif(MAHO_AKO))
 ]))
 
 quoted.hears(/(\P{L}|^)бан(\P{L}|$)/gimu).filter(
