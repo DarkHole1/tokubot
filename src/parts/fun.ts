@@ -69,7 +69,7 @@ fun.use(triggerKeeper([
     triggers.debounced(DEBOUNCE_TIME).regex('([^\\d]|^)121([^\\d]|$)|лето первого года', actions.reply.gif(FIRST_YEAR_SUMMER)),
     triggers.debounced(DEBOUNCE_TIME).regex('catoru|cattoru|котору', actions.reply.photo(CAT_TORU)),
     triggers.debounced(DEBOUNCE_TIME).regex('toru|тору', actions.preciseReply.gif(TORU)),
-    triggers.debounced(DEBOUNCE_TIME).regex('mahoako|махоако', actions.reply.gif(MAHO_AKO))
+    triggers.debounced(DEBOUNCE_TIME).regex('mahoako|махоако', actions.reply.sticker(MAHO_AKO))
 ]))
 
 quoted.hears(/(\P{L}|^)бан(\P{L}|$)/gimu).filter(
