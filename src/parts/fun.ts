@@ -3,7 +3,7 @@ import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { Composer, Context, InputFile } from "grammy"
 import type { Sticker } from "grammy/out/types"
 import { pluralize } from "numeralize-ru"
-import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY, PATPAT, KUGA_YUMA, LELOUCH_ID, UNDEAD, UNLUCK, NORMIES, KAZAKHSTAN, FIRST_YEAR_SUMMER, TORU, MAHO_AKO } from "../constants"
+import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY, PATPAT, KUGA_YUMA, LELOUCH_ID, UNDEAD, UNLUCK, NORMIES, KAZAKHSTAN, FIRST_YEAR_SUMMER, TORU, MAHO_AKO, CAT_TORU } from "../constants"
 import { DrinkCounters } from "../data"
 import { choice, isAdmin } from '../utils'
 import { actions, triggerKeeper, triggers } from './trigger-keeper'
@@ -67,7 +67,7 @@ fun.use(triggerKeeper([
     triggers.debounced(DEBOUNCE_TIME).regex('нормис', actions.reply.photo(NORMIES)),
     triggers.debounced(DEBOUNCE_TIME).regex('казахстан|караганд', actions.reply.photo(KAZAKHSTAN)),
     triggers.debounced(DEBOUNCE_TIME).regex('([^\\d]|^)121([^\\d]|$)|лето первого года', actions.reply.gif(FIRST_YEAR_SUMMER)),
-    triggers.debounced(DEBOUNCE_TIME).ignoreCase('[^а-яА-Яa-zA-Z](toru|тору)', actions.reply.gif(TORU)),
+    triggers.debounced(DEBOUNCE_TIME).ignoreCase('(^|[^ко])(toru|тору)', actions.reply.gif(TORU)),
     triggers.debounced(DEBOUNCE_TIME).ignoreCase('catoru|cattoru|котору', actions.reply.gif(CAT_TORU)),
     triggers.debounced(DEBOUNCE_TIME).ignoreCase('mahoako|махоако', actions.reply.gif(MAHO_AKO))
 ]))
