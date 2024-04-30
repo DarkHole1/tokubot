@@ -4,6 +4,7 @@ export const OLD_TOKU_CHAT = -1001311183194
 export const TOKU_CHAT = -1002000257215
 // export const TOKU_CHAT = -1001845823201
 export const TOKU_CHANNEL = -1001446681491
+export const TOKU_CHANNEL_2 = -1001896051989
 export const EGOID = 1016239817
 export const VIKA_ID = 503220461
 export const FIREWORKY_ID = 5711731837
@@ -12,7 +13,7 @@ export const MARVIN_ID = 459889760
 export const BOT_ID = 5627801063
 export const TOKUID = 332320628
 // export const TOKUID = DARK_HOLE
-export const ADMINS = [TOKU_CHANNEL, DARK_HOLE, EGOID, TOKUID, FIREWORKY_ID, VIKA_ID]
+export const ADMINS = [TOKU_CHANNEL, TOKU_CHANNEL_2, DARK_HOLE, EGOID, TOKUID, FIREWORKY_ID, VIKA_ID]
 export const ANGELINA_LIST = [
     {
         restricted: ['fun', 'unspoil'],
