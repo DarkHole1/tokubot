@@ -3,7 +3,7 @@ import { autoQuote } from '@roziscoding/grammy-autoquote'
 import debug from 'debug'
 import { Composer, Context } from 'grammy'
 import { ADMINS } from '../constants'
-import { MessageEntity } from 'grammy/types'
+import { Message, MessageEntity } from 'grammy/types'
 
 const log = debug('app:unspoil')
 const ROT_TIME = 5 * 60
@@ -66,6 +66,24 @@ function getSpoilText(text: string, entities: MessageEntity[], sender: string, r
     return fmt`${header}${spoilerEntities(text, entities, range)}`
 }
 
+function getAuthor(reply: Message) {
+    if (reply.sender_chat) {
+        if ('username' in reply.sender_chat && reply.sender_chat.username) {
+            return reply.sender_chat.username
+        }
+        if ('title' in reply.sender_chat) {
+            return reply.sender_chat.title
+        }
+    }
+    if (reply.from) {
+        if (reply.from.username) {
+            return reply.from.username
+        }
+        return reply.from.first_name
+    }
+    return 'Анонимус'
+}
+
 unspoil.command('unspoil', async ctx => {
     const reply = ctx.msg.reply_to_message
     const quote = ctx.msg.quote
@@ -86,7 +104,7 @@ unspoil.command('unspoil', async ctx => {
         return
     }
 
-    const sender = reply.from?.username ?? reply.from?.first_name ?? 'Анонимус'
+    const sender = getAuthor(reply)
     const reason = ctx.match.trim()
     const range = quote ? { offset: quote.position, length: quote.text.length } : undefined
 
