@@ -4,6 +4,7 @@ import debug from 'debug'
 import { Composer, Context } from 'grammy'
 import { ADMINS } from '../constants'
 import { Message, MessageEntity } from 'grammy/types'
+import { isAdmin } from '../utils'
 
 const log = debug('app:unspoil')
 const ROT_TIME = 5 * 60
@@ -93,14 +94,12 @@ unspoil.command('unspoil', async ctx => {
         return
     }
 
-    const isAdmin = ctx.from ? ADMINS.includes(ctx.from.id) : false
-
-    if (Date.now() / 1000 - reply.date > ROT_TIME && !isAdmin) {
+    if (Date.now() / 1000 - reply.date > ROT_TIME && !isAdmin(ctx)) {
         await ctx.reply('Сообщение слишком старое')
         return
     }
 
-    if (reply.from?.id == ctx.me.id && !isAdmin) {
+    if (reply.from?.id == ctx.me.id && !isAdmin(ctx)) {
         return
     }
 
