@@ -8,7 +8,7 @@ import { ParseModeFlavor } from "@grammyjs/parse-mode"
 
 const brsFile = RawBRS.parse(JSON.parse(readFileSync('data/brs.json', { encoding: 'utf-8' })))
 
-export function brs(bot: Bot<ParseModeFlavor<Context>>) {
+export function brs<C extends Context>(bot: Bot<C>) {
     cron.schedule('0 0 10 * * *', async () => {
         const photo = brsFile.queue.shift()
         if (!photo) {

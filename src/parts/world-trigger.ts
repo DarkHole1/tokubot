@@ -7,7 +7,7 @@ import { CountersModel } from '../models/counters'
 import { EverydayPostModel } from '../models/everyday-post'
 
 const type = 'world trigger'
-export function worldTrigger(bot: Bot<ParseModeFlavor<Context>>) {
+export function worldTrigger<C extends Context>(bot: Bot<C>) {
     cron.schedule('0 0 20 * * *', async () => {
         const counters = await CountersModel.findOne()
         const photo = await EverydayPostModel.findOne({ type })

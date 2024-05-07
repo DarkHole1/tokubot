@@ -21,7 +21,7 @@ const SCHEDULE: Post[] = [{
     hours: [8, 16]
 }]
 
-export function everydayPost(bot: Bot<ParseModeFlavor<Context>>) {
+export function everydayPost<C extends Context>(bot: Bot<C>) {
     cron.schedule('0 0 * * * *', async () => {
         const now = new Date()
         const hour = now.getHours()

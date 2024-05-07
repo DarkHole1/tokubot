@@ -10,7 +10,7 @@ import debug from 'debug'
 
 const log = debug('tokubot:sad-anime-watcher')
 
-export function sadAnimeWatcher(config: Config, bot: Bot<ParseModeFlavor<Context>>) {
+export function sadAnimeWatcher<C extends Context>(config: Config, bot: Bot<C>) {
     const animes = Animes.fromFileSafe('data/titles.json', config.ERAI_TOKEN)
     log('Animes loadad %o', animes.list())
 

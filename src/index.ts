@@ -28,6 +28,7 @@ import debug from 'debug'
 import { everydayPost } from './parts/everyday-post'
 import { hanekawa } from './parts/hanekawa'
 import { angelinaList } from './parts/angelina-list'
+import { hydrateUserInfo, UserInfoFlavour } from './parts/user-info'
 
 void (async () => {
     const log = debug('tokubot')
@@ -36,8 +37,9 @@ void (async () => {
 
     await mongoose.connect(config.MONGODB_URI)
 
-    const bot = new Bot<ParseModeFlavor<Context>>(config.TOKEN)
+    const bot = new Bot<UserInfoFlavour<ParseModeFlavor<Context>>>(config.TOKEN)
     bot.use(hydrateReply)
+    bot.use(hydrateUserInfo())
 
     const help = statics.help
 
@@ -91,7 +93,7 @@ void (async () => {
     })
 
     server.listen(9000, () => {
-        log('Server listening on http://localhost:9000/');
+        log('Server listening on http://localhost:9000/')
     })
     bot.start()
 })().then(console.log, console.log)
