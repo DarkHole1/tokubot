@@ -2,7 +2,7 @@ import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { Composer, Context } from 'grammy'
 import { ProfileDocument, ProfileModel } from '../models/profile'
 import debug from 'debug'
-import { UserInfoFlavour } from './user-info'
+import { getUserInfo, UserInfoFlavour } from './user-info'
 
 const log = debug('app:parts:hanekawa')
 
@@ -45,12 +45,14 @@ hanekawa.command('my', async ctx => {
 })
 
 hanekawa.command('yours', async ctx => {
-    if (!ctx.message?.reply_to_message?.from?.id) {
+    const reply = ctx.message?.reply_to_message
+    const userInfo = reply && getUserInfo(reply)
+    if (!userInfo) {
         await ctx.reply('Для использования напишите /yours в ответ на сообщение пользователя')
         return
     }
 
-    const profile = await ProfileModel.findOne({ telegramID: ctx.message.reply_to_message.from.id })
+    const profile = await ProfileModel.findOne({ telegramID: userInfo.id })
     if (!profile || !(profile.shikimoriUsername || profile.anilistUsername || profile.myanimelistUsernme)) {
         await ctx.reply('Я не знаю всего. Я знаю только то, что знаю.')
         return
