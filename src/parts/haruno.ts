@@ -9,7 +9,7 @@ const log = debug('app:parts:haruno')
 
 async function findOrCreate(whoami: number) {
     const data = await HarunoModel.findOne({ whoami })
-    if(data != null) {
+    if (data != null) {
         return data
     }
 
@@ -22,17 +22,26 @@ export const haruno = async () => {
     log('List succesfully fetched, %d entries', list.length)
     const haruno = new Composer()
 
-    haruno.filter(ctx => ctx.chat?.id == TOKU_CHAT).on('message:text', async (ctx, next) => {
-        const text = ctx.msg.text.toLowerCase()
-        for(const user of list) {
-            if(user.whoami == ctx.message.from.id) {
+    haruno.filter(ctx => ctx.chat?.id == TOKU_CHAT).on(['message:text', 'message:caption'], async (ctx, next) => {
+        let text: string
+        if (ctx.msg.text) {
+            text = ctx.msg.text
+        } else if (ctx.msg.caption) {
+            text = ctx.msg.caption
+        } else {
+            await next()
+            return
+        }
+        text = text.toLowerCase()
+        for (const user of list) {
+            if (user.whoami == ctx.message.from.id) {
                 continue
             }
-            for(const word of user.words) {
+            for (const word of user.words) {
                 const match = text.indexOf(word)
-                if(match >= 0) {
+                if (match >= 0) {
                     try {
-                        if(!user.newReply) {
+                        if (!user.newReply) {
                             const message = fmt`В чате ${linkMessage(`упомянули`, ctx.chat.id, ctx.message.message_id)} слово "${word}"`
                             await ctx.api.sendMessage(user.whoami, message.text, {
                                 entities: message.entities,
@@ -45,12 +54,12 @@ export const haruno = async () => {
                                 reply_parameters: {
                                     chat_id: ctx.chat.id,
                                     message_id: ctx.message.message_id,
-                                    quote: ctx.msg.text.slice(match, match + word.length),
+                                    quote: text.slice(match, match + word.length),
                                     quote_position: match
                                 }
                             })
                         }
-                    } catch(e) {
+                    } catch (e) {
                         log('Error %o', e)
                     }
                     break
@@ -65,13 +74,13 @@ export const haruno = async () => {
         'haruno',
         privateGuard,
         async ctx => {
-            if(ctx.match.length == 0) {
+            if (ctx.match.length == 0) {
                 await ctx.reply('Укажи слово за которым ты хочешь смотреть после команды')
                 return
             }
             const word = ctx.match.toLowerCase()
             const user = await findOrCreate(ctx.from!.id)
-            if(user.words.includes(word)) {
+            if (user.words.includes(word)) {
                 await ctx.reply('Слово уже есть в твоём списке')
                 return
             }
@@ -86,13 +95,13 @@ export const haruno = async () => {
         'hayato',
         privateGuard,
         async ctx => {
-            if(ctx.match.length == 0) {
+            if (ctx.match.length == 0) {
                 await ctx.reply('Укажи слово за которым ты хочешь перестать смотреть после команды')
                 return
             }
             const word = ctx.match.toLowerCase()
             const user = await findOrCreate(ctx.from!.id)
-            if(!user.words.includes(word)) {
+            if (!user.words.includes(word)) {
                 await ctx.reply('Слова нет в твоём списке')
                 return
             }
@@ -108,7 +117,7 @@ export const haruno = async () => {
         privateGuard,
         async ctx => {
             const user = await findOrCreate(ctx.from!.id)
-            if(user.words.length == 0) {
+            if (user.words.length == 0) {
                 await ctx.reply('Ты пока ни за чем не следишь')
                 return
             }
