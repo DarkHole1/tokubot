@@ -23,16 +23,16 @@ export const haruno = async () => {
     const haruno = new Composer()
 
     haruno.filter(ctx => ctx.chat?.id == TOKU_CHAT).on(['message:text', 'message:caption'], async (ctx, next) => {
-        let text: string
+        let originalText: string
         if (ctx.msg.text) {
-            text = ctx.msg.text
+            originalText = ctx.msg.text
         } else if (ctx.msg.caption) {
-            text = ctx.msg.caption
+            originalText = ctx.msg.caption
         } else {
             await next()
             return
         }
-        text = text.toLowerCase()
+        let text = originalText.toLowerCase()
         for (const user of list) {
             if (user.whoami == ctx.message.from.id) {
                 continue
@@ -54,7 +54,7 @@ export const haruno = async () => {
                                 reply_parameters: {
                                     chat_id: ctx.chat.id,
                                     message_id: ctx.message.message_id,
-                                    quote: text.slice(match, match + word.length),
+                                    quote: originalText.slice(match, match + word.length),
                                     quote_position: match
                                 }
                             })
