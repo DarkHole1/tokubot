@@ -14,7 +14,7 @@ const quoted = fun.use(autoQuote)
 const drinksCounters = DrinkCounters.fromFileSyncSafe('data/drinks.json')
 const ENABLE_EMOJI = false
 
-const DEBOUNCE_TIME = 5 * 60 * 1000
+const THROTTLE_TIME = 5 * 60 * 1000
 let lastTime = 0
 const debounced = quoted.filter(_ => Date.now() > lastTime + 5 * 60 * 1000)
 
@@ -59,20 +59,20 @@ fun.use(triggerKeeper([
     triggers.regex('не\\s+ешь', actions.preciseReply.text('Ням!')),
     triggers.regex('противоречи', actions.reply.gif(COUNTER)),
     triggers.regex('Руби мяу', actions.reply.voice(RUBY_MEOW)),
-    triggers.debounced(DEBOUNCE_TIME).regex('([^\\d]|^)86([^\\d]|$)|восемьдесят шесть', actions.reply.photo(EIGHTY_SIX)),
-    triggers.debounced(DEBOUNCE_TIME).regex('анлак', actions.reply.sticker([UNDEAD, UNLUCK])),
-    triggers.debounced(DEBOUNCE_TIME).wholeWord('дб', actions.reply.sticker(DRAGONBALL)),
-    triggers.debounced(DEBOUNCE_TIME).regex('драгонбол', actions.reply.video(DRAGONBALL)),
-    triggers.debounced(DEBOUNCE_TIME).regex('триггер', actions.reply.photo(KUGA_YUMA)),
-    triggers.debounced(DEBOUNCE_TIME).regex('нормис', actions.reply.photo(NORMIES)),
-    triggers.debounced(DEBOUNCE_TIME).regex('казахстан|караганд', actions.reply.photo(KAZAKHSTAN)),
-    triggers.debounced(DEBOUNCE_TIME).regex('([^\\d]|^)121([^\\d]|$)|лето первого года', actions.reply.gif(FIRST_YEAR_SUMMER)),
-    triggers.debounced(DEBOUNCE_TIME).regex('виктору', actions.reply.gif(VIK_TORU)),
-    triggers.debounced(DEBOUNCE_TIME).regex('catoru|cattoru|котору', actions.reply.photo(CAT_TORU)),
-    triggers.debounced(DEBOUNCE_TIME).regex('toru|тору', actions.preciseReply.gif(TORU)),
-    triggers.debounced(DEBOUNCE_TIME).regex('mahoako|махоако', actions.reply.sticker(MAHO_AKO)),
-    triggers.debounced(DEBOUNCE_TIME).regex('грех', actions.reply.photo(SIN)),
-    triggers.debounced(DEBOUNCE_TIME).wholeWord('жаль', actions.preciseReply.sticker(BEESAKI))
+    triggers.throttled(THROTTLE_TIME).regex('([^\\d]|^)86([^\\d]|$)|восемьдесят шесть', actions.reply.photo(EIGHTY_SIX)),
+    triggers.throttled(THROTTLE_TIME).regex('анлак', actions.reply.sticker([UNDEAD, UNLUCK])),
+    triggers.throttled(THROTTLE_TIME).wholeWord('дб', actions.reply.sticker(DRAGONBALL)),
+    triggers.throttled(THROTTLE_TIME).regex('драгонбол', actions.reply.video(DRAGONBALL)),
+    triggers.throttled(THROTTLE_TIME).regex('триггер', actions.reply.photo(KUGA_YUMA)),
+    triggers.throttled(THROTTLE_TIME).regex('нормис', actions.reply.photo(NORMIES)),
+    triggers.throttled(THROTTLE_TIME).regex('казахстан|караганд', actions.reply.photo(KAZAKHSTAN)),
+    triggers.throttled(THROTTLE_TIME).regex('([^\\d]|^)121([^\\d]|$)|лето первого года', actions.reply.gif(FIRST_YEAR_SUMMER)),
+    triggers.throttled(THROTTLE_TIME).regex('виктору', actions.reply.gif(VIK_TORU)),
+    triggers.throttled(THROTTLE_TIME).regex('catoru|cattoru|котору', actions.reply.photo(CAT_TORU)),
+    triggers.throttled(THROTTLE_TIME).regex('toru|тору', actions.preciseReply.gif(TORU)),
+    triggers.throttled(THROTTLE_TIME).regex('mahoako|махоако', actions.reply.sticker(MAHO_AKO)),
+    triggers.throttled(THROTTLE_TIME).regex('грех', actions.reply.photo(SIN)),
+    triggers.throttled(THROTTLE_TIME).wholeWord('жаль', actions.preciseReply.sticker(BEESAKI))
 ]))
 
 quoted.hears(/(\P{L}|^)бан(\P{L}|$)/gimu).filter(

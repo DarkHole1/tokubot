@@ -38,7 +38,7 @@ export type Trigger = ({
     type: 'regex',
     regex: string
 } & Flags)) & {
-    debounce?: number,
+    throttle?: number,
     action: Action
 }
 
@@ -149,13 +149,13 @@ export const triggerKeeper = (triggers: Trigger[]) => {
             continue
         }
 
-        if (trigger.debounce) {
+        if (trigger.throttle) {
             let lastTime = 0
-            const debounce = trigger.debounce
+            const throttle = trigger.throttle
             const trueConvertedAction = convertedAction
             convertedAction = async ctx => {
                 const now = Date.now()
-                if (now - lastTime < debounce) {
+                if (now - lastTime < throttle) {
                     return
                 }
                 lastTime = Date.now()
@@ -200,13 +200,13 @@ let simpleTriggers = {
     }
 }
 
-type Triggers = typeof simpleTriggers & { debounced: (time: number) => { [V in keyof typeof simpleTriggers]: (...args: Args<(typeof simpleTriggers)[V]>) => Trigger } }
+type Triggers = typeof simpleTriggers & { throttled: (time: number) => { [V in keyof typeof simpleTriggers]: (...args: Args<(typeof simpleTriggers)[V]>) => Trigger } }
 
-const debounced = (time: number) => Object.fromEntries(Object.entries(simpleTriggers).map(([k, v]) => [k, (...args: any) => ({ ...v(...args as [any, any]), debounce: time })]))
+const throttled = (time: number) => Object.fromEntries(Object.entries(simpleTriggers).map(([k, v]) => [k, (...args: any) => ({ ...v(...args as [any, any]), throttle: time })]))
 
 export const triggers: Triggers = {
     ...simpleTriggers,
-    debounced: debounced as any
+    throttled: throttled as any
 }
 
 type SkipFirst<T> = T extends (t: any, ...args: infer Args) => infer Return ? (...args: Args) => Return : never
