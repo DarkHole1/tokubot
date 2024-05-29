@@ -12,13 +12,19 @@ const log = debug('tokubot:everyday-post')
 type Post = {
     type: string,
     caption: string,
-    hours: number[]
+    hours: number[],
+    since?: Date
 }
 
 const SCHEDULE: Post[] = [{
     type: 'monogatari',
     caption: 'Daily Oddity number {count}',
     hours: [8, 16]
+}, {
+    type: 'miku',
+    caption: 'Miku #{count}',
+    hours: [10],
+    since: new Date('06/01/2024')
 }]
 
 export function everydayPost<C extends Context>(bot: Bot<C>) {
@@ -28,8 +34,11 @@ export function everydayPost<C extends Context>(bot: Bot<C>) {
         const counters = await CountersModel.findOne()
         if (!counters) return
         for (const post of SCHEDULE) {
+            if (post.since && post.since < now) {
+                continue
+            }
             if (!post.hours.includes(hour)) {
-                return
+                continue
             }
 
             let current = counters.genericDays.get(post.type) ?? 0
@@ -37,7 +46,7 @@ export function everydayPost<C extends Context>(bot: Bot<C>) {
             while (true) {
                 const photo = await EverydayPostModel.findOne({ type: post.type })
                 if (!photo) {
-                    return
+                    break
                 }
 
                 try {
