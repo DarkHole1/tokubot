@@ -21,8 +21,8 @@ const SCHEDULE: Post[] = [{
     caption: 'Daily Oddity number {count}',
     hours: [8, 16]
 }, {
-    type: 'miku',
-    caption: 'Miku #{count}',
+    type: 'everlasting summer',
+    caption: 'Бесконечно лето день {count}',
     hours: [10],
     since: new Date('06/01/2024')
 }]
@@ -87,14 +87,14 @@ export function everydayPost<C extends Context>(bot: Bot<C>) {
             const postCount = await EverydayPostModel.countDocuments({ type })
             const counters = await CountersModel.findOne()
 
-            await ctx.reply(`Успешно добавлено на день ${counters!.genericDays.get(type)! + postCount}`, { reply_to_message_id: ctx.msg.message_id })
+            await ctx.reply(`Успешно добавлено на день ${(counters!.genericDays.get(type) ?? 0) + postCount}`, { reply_to_message_id: ctx.msg.message_id })
         }
     )
 
     bot.on(':media').filter(
         ctx => isPrivateChat(ctx) && ctx.from?.id == XANDEX_ID,
         async ctx => {
-            const type = 'miku'
+            const type = 'everlasting summer'
             const photo = ctx.msg.photo
             if (!photo) {
                 await ctx.reply('Чот странное', { reply_to_message_id: ctx.msg.message_id })
@@ -109,7 +109,7 @@ export function everydayPost<C extends Context>(bot: Bot<C>) {
             const postCount = await EverydayPostModel.countDocuments({ type })
             const counters = await CountersModel.findOne()
 
-            await ctx.reply(`Успешно добавлено на день ${counters!.genericDays.get(type)! + postCount}`, { reply_to_message_id: ctx.msg.message_id })
+            await ctx.reply(`Успешно добавлено на день ${(counters!.genericDays.get(type) ?? 0) + postCount}`, { reply_to_message_id: ctx.msg.message_id })
         }
     )
 }
