@@ -22,7 +22,7 @@ const SCHEDULE: Post[] = [{
     hours: [8, 16]
 }, {
     type: 'everlasting summer',
-    caption: 'Бесконечно лето день {count}',
+    caption: 'Бесконечное лето день {count}',
     hours: [10],
     since: new Date('06/01/2024')
 }]
