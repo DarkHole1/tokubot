@@ -22,7 +22,8 @@ const ifCanPost = (cb: Callback) => {
 
 const TAGS = [
     'world trigger',
-    'monogatari'
+    'monogatari',
+    'everlasting summer'
 ] as const
 
 ryo.get('/ryo/tags', (req, res) => {
