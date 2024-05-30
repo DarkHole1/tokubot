@@ -2,7 +2,7 @@ import { Bot, Context, GrammyError } from 'grammy'
 import cron from 'node-cron'
 import { CountersModel } from '../models/counters'
 import { EverydayPostModel } from '../models/everyday-post'
-import { MARVIN_ID, TOKU_CHAT, XANDEX_ID } from '../constants'
+import { DARK_HOLE, MARVIN_ID, TOKU_CHAT, XANDEX_ID } from '../constants'
 import debug from 'debug'
 import { ParseModeFlavor } from '@grammyjs/parse-mode'
 import { isPrivateChat } from 'grammy-guard'
@@ -114,7 +114,7 @@ export function everydayPost<C extends Context>(bot: Bot<C>) {
     )
 
     bot.on(':media').filter(
-        ctx => isPrivateChat(ctx) && ctx.from?.id == XANDEX_ID,
+        ctx => isPrivateChat(ctx) && ctx.from?.id == DARK_HOLE,
         async ctx => {
             const type = 'monogatari'
             const photo = ctx.msg.photo
