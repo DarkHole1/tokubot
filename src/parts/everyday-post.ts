@@ -34,7 +34,7 @@ export function everydayPost<C extends Context>(bot: Bot<C>) {
         const counters = await CountersModel.findOne()
         if (!counters) return
         for (const post of SCHEDULE) {
-            if (post.since && post.since < now) {
+            if (post.since && post.since > now) {
                 continue
             }
             if (!post.hours.includes(hour)) {
