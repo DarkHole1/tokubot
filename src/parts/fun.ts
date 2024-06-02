@@ -128,7 +128,7 @@ quoted.command(
 quoted.command('bingo', ctx => ctx.reply('https://docs.google.com/spreadsheets/d/1QghSAYndgtDBDYPjEO1FNsMsP765zHK-wAFDF9Q1h9Y/edit#gid=0'))
 
 // Tomorrow
-debounced.hears(/(\P{L}|^)завтра(\P{L}|$)/ui, ctx => (lastTime = Date.now(), ctx.replyWithVideo(Math.random() > 0.3 ? NOT_TOMORROW : (Math.random() > 0.3 ? TOMORROW_HAPPY : TOMORROW))))
+// debounced.hears(/(\P{L}|^)завтра(\P{L}|$)/ui, ctx => (lastTime = Date.now(), ctx.replyWithVideo(Math.random() > 0.3 ? NOT_TOMORROW : (Math.random() > 0.3 ? TOMORROW_HAPPY : TOMORROW))))
 
 quoted.filter(ctx => ctx.msg?.sticker?.file_unique_id == 'AgADjRQAAqfaKUs', ctx => ctx.replyWithAnimation(PATPAT))
 
