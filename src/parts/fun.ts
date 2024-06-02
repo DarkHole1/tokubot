@@ -26,6 +26,8 @@ quoted.on('msg').filter(ctx => ctx.message?.sender_chat?.id == LELOUCH_ID, async
     await next()
 })
 
+const or = (a: (ctx: Context) => boolean, b: (ctx: Context) => boolean) => (ctx: Context) => a(ctx) || b(ctx)
+
 const hasCaptionHashtag = (hashtag: string | string[]) => (ctx: Context) => {
     const caption = ctx.msg?.caption
     const entities = ctx.msg?.caption_entities
@@ -35,6 +37,18 @@ const hasCaptionHashtag = (hashtag: string | string[]) => (ctx: Context) => {
     const hastags = Array.isArray(hashtag) ? hashtag : [hashtag]
     return entities.some(v => v.type == 'hashtag' && hastags.includes(caption.slice(v.offset, v.offset + v.length)))
 }
+
+const hasMessageHashtag = (hashtag: string | string[]) => (ctx: Context) => {
+    const caption = ctx.msg?.text
+    const entities = ctx.msg?.entities
+    if (!caption || !entities) {
+        return false
+    }
+    const hastags = Array.isArray(hashtag) ? hashtag : [hashtag]
+    return entities.some(v => v.type == 'hashtag' && hastags.includes(caption.slice(v.offset, v.offset + v.length)))
+}
+
+const hasHashtag = (hashtag: string | string[]) => or(hasMessageHashtag(hashtag), hasCaptionHashtag(hashtag))
 
 quoted.on(':caption_entities:hashtag').filter(hasCaptionHashtag('#dunmeshi'), async (ctx, next) => {
     await ctx.api.setMessageReaction(ctx.msg.chat.id, ctx.msg.message_id, [{
@@ -52,19 +66,22 @@ quoted.on('edit:caption_entities:hashtag').filter(hasCaptionHashtag('#dunmeshi')
     await next()
 })
 
-quoted.on(['::hashtag', 'edit::hashtag']).filter(hasCaptionHashtag(['#Lobotomy_corporation', '#Library_of_ruina', '#Limbus_company']), async (ctx, next) => {
-    if (ctx.msg.reply_to_message && ctx.msg.reply_to_message.photo) {
-        await ctx.api.setMessageReaction(ctx.msg.reply_to_message.chat.id, ctx.msg.reply_to_message.message_id, [{
+const ruinaTags = hasHashtag(['#Lobotomy_corporation', '#Library_of_ruina', '#Limbus_company'])
+quoted.on([':caption_entities:hashtag', 'edit:caption_entities:hashtag', '::hashtag', 'edit::hashtag'])
+    .filter(ruinaTags, async (ctx, next) => {
+        if (ctx.msg.reply_to_message && ctx.msg.reply_to_message.photo) {
+            console.log(ctx.msg.reply_to_message)
+            await ctx.api.setMessageReaction(ctx.msg.reply_to_message.chat.id, ctx.msg.reply_to_message.message_id, [{
+                type: 'emoji',
+                emoji: "❤"
+            }])
+        }
+        await ctx.api.setMessageReaction(ctx.msg.chat.id, ctx.msg.message_id, [{
             type: 'emoji',
             emoji: "❤"
         }])
-    }
-    await ctx.api.setMessageReaction(ctx.msg.chat.id, ctx.msg.message_id, [{
-        type: 'emoji',
-        emoji: "❤"
-    }])
-    await next()
-})
+        await next()
+    })
 
 fun.use(triggerKeeper([
     triggers.regex('п(а|a)т(а|a)л(о|o)к|501\\s?271|область', actions.reply.audio(SHOCK_PATALOCK)),
