@@ -16,7 +16,28 @@ service.on('message:new_chat_members', async ctx => {
 
 service.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == TOKU_CHANNEL, throttle(3 * 60 * 1000, (ctx: ParseModeFlavor<Context>) => {
     ctx.replyFmt(statics.post, {
-        reply_to_message_id: ctx.message?.message_id
+        reply_to_message_id: ctx.message?.message_id,
+        reply_markup: {
+            inline_keyboard: [[{
+                text: 'YouTube',
+                url: 'https://www.youtube.com/c/TokuTonari'
+            }, {
+                text: 'MAL',
+                url: 'https://myanimelist.net/profile/Sanso'
+            }, {
+                text: 'Shiki',
+                url: 'https://shikimori.one/Toku+Tonari'
+            }], [{
+                text: 'Чат',
+                url: 'https://t.me/tokuchatt'
+            }, {
+                text: 'Boosty',
+                url: 'https://boosty.to/tokutonari'
+            }], [{
+                text: 'Остальное',
+                url: 'https://t.me/tokutonari/614'
+            }]]
+        }
     })
 }))
 
