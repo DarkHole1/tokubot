@@ -41,8 +41,6 @@ void (async () => {
     bot.use(hydrateReply)
     bot.use(hydrateUserInfo())
 
-    const help = statics.help
-
     bot.catch(async err => {
         console.error(err.error)
         try {
@@ -58,7 +56,7 @@ void (async () => {
     bot.command('stop').filter(isAdmin, _ => bot.stop())
 
     bot.command('start', (ctx) =>
-        ctx.replyFmt(help, {
+        ctx.replyFmt(statics.start, {
             reply_to_message_id: ctx.msg.message_id
         })
     )
