@@ -26,13 +26,14 @@ quoted.on('msg').filter(ctx => ctx.message?.sender_chat?.id == LELOUCH_ID, async
     await next()
 })
 
-const hasCaptionHashtag = (hashtag: string) => (ctx: Context) => {
+const hasCaptionHashtag = (hashtag: string | string[]) => (ctx: Context) => {
     const caption = ctx.msg?.caption
-    const enttities = ctx.msg?.caption_entities
-    if (!caption || !enttities) {
+    const entities = ctx.msg?.caption_entities
+    if (!caption || !entities) {
         return false
     }
-    return enttities.some(v => v.type == 'hashtag' && caption.slice(v.offset, v.offset + v.length) == hashtag)
+    const hastags = Array.isArray(hashtag) ? hashtag : [hashtag]
+    return entities.some(v => v.type == 'hashtag' && hastags.includes(caption.slice(v.offset, v.offset + v.length)))
 }
 
 quoted.on(':caption_entities:hashtag').filter(hasCaptionHashtag('#dunmeshi'), async (ctx, next) => {
@@ -44,6 +45,20 @@ quoted.on(':caption_entities:hashtag').filter(hasCaptionHashtag('#dunmeshi'), as
 })
 
 quoted.on('edit:caption_entities:hashtag').filter(hasCaptionHashtag('#dunmeshi'), async (ctx, next) => {
+    await ctx.api.setMessageReaction(ctx.msg.chat.id, ctx.msg.message_id, [{
+        type: 'emoji',
+        emoji: "❤"
+    }])
+    await next()
+})
+
+quoted.on(['::hashtag', 'edit::hashtag']).filter(hasCaptionHashtag(['#Lobotomy_corporation', '#Library_of_ruina', '#Limbus_company']), async (ctx, next) => {
+    if (ctx.msg.reply_to_message && ctx.msg.reply_to_message.photo) {
+        await ctx.api.setMessageReaction(ctx.msg.reply_to_message.chat.id, ctx.msg.reply_to_message.message_id, [{
+            type: 'emoji',
+            emoji: "❤"
+        }])
+    }
     await ctx.api.setMessageReaction(ctx.msg.chat.id, ctx.msg.message_id, [{
         type: 'emoji',
         emoji: "❤"
