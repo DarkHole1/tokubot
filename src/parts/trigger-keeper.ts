@@ -4,22 +4,22 @@ import { choice } from '../utils'
 export type Action = {
     type: 'reply' | 'preciseReply' | 'message'
 } & ({
-    text: string | string[]
+    text: string | (() => string)
 } | {
-    sticker: string | string[]
+    sticker: string | (() => string)
 } | {
-    photo: string | string[],
+    photo: string | (() => string),
     caption?: string
 } | {
-    video: string | string[],
+    video: string | (() => string),
     caption?: string
 } | {
-    gif: string | string[],
+    gif: string | (() => string),
     caption?: string
 } | {
-    voice: string | string[]
+    voice: string | (() => string)
 } | {
-    audio: string | string[],
+    audio: string | (() => string),
     caption?: string
 })
 
@@ -74,7 +74,12 @@ export const triggerKeeper = (triggers: Trigger[]) => {
             continue
         }
 
-        const singleOrRandom: <T>(t: T | T[]) => () => T = (t) => Array.isArray(t) ? (() => choice(t)) : (() => t)
+        function singleton<T>(t: T | (() => T)): () => T {
+            if (typeof t == 'function') {
+                return t as () => T
+            }
+            return () => t
+        }
         let convertedAction: (ctx: Context) => Promise<unknown>
 
         const action = trigger.action
@@ -114,37 +119,37 @@ export const triggerKeeper = (triggers: Trigger[]) => {
         }
 
         if ('text' in action) {
-            const text = singleOrRandom(action.text)
+            const text = singleton(action.text)
             convertedAction = ctx => ctx.reply(text(), params(ctx))
         } else if ('sticker' in action) {
-            const sticker = singleOrRandom(action.sticker)
+            const sticker = singleton(action.sticker)
             convertedAction = ctx => ctx.replyWithSticker(sticker(), params(ctx))
         } else if ('photo' in action) {
-            const photo = singleOrRandom(action.photo)
+            const photo = singleton(action.photo)
             convertedAction = ctx => ctx.replyWithPhoto(photo(), {
                 caption: action.caption,
                 ...params(ctx)
             })
         } else if ('video' in action) {
-            const video = singleOrRandom(action.video)
+            const video = singleton(action.video)
             convertedAction = ctx => ctx.replyWithVideo(video(), {
                 caption: action.caption,
                 ...params(ctx)
             })
         } else if ('gif' in action) {
-            const gif = singleOrRandom(action.gif)
+            const gif = singleton(action.gif)
             convertedAction = ctx => ctx.replyWithAnimation(gif(), {
                 caption: action.caption,
                 ...params(ctx)
             })
         } else if ('audio' in action) {
-            const audio = singleOrRandom(action.audio)
+            const audio = singleton(action.audio)
             convertedAction = ctx => ctx.replyWithAudio(audio(), {
                 caption: action.caption,
                 ...params(ctx)
             })
         } else if ('voice' in action) {
-            const voice = singleOrRandom(action.voice)
+            const voice = singleton(action.voice)
             convertedAction = ctx => ctx.replyWithVoice(voice(), params(ctx))
         } else {
             continue
@@ -221,7 +226,7 @@ function decorated<T extends any[], U extends object>(f: (...args: T) => U) {
                 k,
                 (...args: any[]) => ({
                     ...res,
-                    ...v(...args)
+                    ...v.apply(this, args)
                 })
             ]
         })
@@ -239,37 +244,37 @@ type SkipFirst<T> = T extends (t: any, ...args: infer Args) => infer Return ? (.
 type MapSkipFirst<T> = { [K in keyof T]: SkipFirst<T[K]> }
 
 const raw = {
-    text(type: 'reply' | 'preciseReply' | 'message', text: string | string[]) {
+    text(type: 'reply' | 'preciseReply' | 'message', text: string | (() => string)) {
         return {
             type, text
         }
     },
-    sticker(type: 'reply' | 'preciseReply' | 'message', sticker: string | string[]) {
+    sticker(type: 'reply' | 'preciseReply' | 'message', sticker: string | (() => string)) {
         return {
             type, sticker
         }
     },
-    photo(type: 'reply' | 'preciseReply' | 'message', photo: string | string[], caption?: string) {
+    photo(type: 'reply' | 'preciseReply' | 'message', photo: string | (() => string), caption?: string) {
         return {
             type, photo, caption
         }
     },
-    video(type: 'reply' | 'preciseReply' | 'message', video: string | string[], caption?: string) {
+    video(type: 'reply' | 'preciseReply' | 'message', video: string | (() => string), caption?: string) {
         return {
             type, video, caption
         }
     },
-    audio(type: 'reply' | 'preciseReply' | 'message', audio: string | string[], caption?: string) {
+    audio(type: 'reply' | 'preciseReply' | 'message', audio: string | (() => string), caption?: string) {
         return {
             type, audio, caption
         }
     },
-    gif(type: 'reply' | 'preciseReply' | 'message', gif: string | string[], caption?: string) {
+    gif(type: 'reply' | 'preciseReply' | 'message', gif: string | (() => string), caption?: string) {
         return {
             type, gif, caption
         }
     },
-    voice(type: 'reply' | 'preciseReply' | 'message', voice: string | string[]) {
+    voice(type: 'reply' | 'preciseReply' | 'message', voice: string | (() => string)) {
         return {
             type, voice
         }
@@ -283,4 +288,16 @@ const message = Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, (...a
 
 export const actions = {
     raw, reply, preciseReply, message
+}
+
+// Tools
+export const choiced: <T>(choices: T[]) => () => T = (choices) => () => choice(choices)
+
+export function weighted<T>(choices: [T, number][]): () => T {
+    const accumulated = choices.reduce((acc, b) => acc.concat([[b[0], (acc.at(-1)?.[1] ?? 0) + b[1]]]), [] as [T, number][])
+    accumulated.reverse();
+    return () => {
+        const random = Math.random() * accumulated[0][1]
+        return accumulated.find(el => el[1])![0]
+    }
 }

@@ -6,7 +6,7 @@ import { pluralize } from "numeralize-ru"
 import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY, PATPAT, KUGA_YUMA, LELOUCH_ID, UNDEAD, UNLUCK, NORMIES, KAZAKHSTAN, FIRST_YEAR_SUMMER, TORU, MAHO_AKO, CAT_TORU, SIN, VIK_TORU, BEESAKI, RUINA } from "../constants"
 import { DrinkCounters } from "../data"
 import { choice, isAdmin } from '../utils'
-import { actions, triggerKeeper, triggers } from './trigger-keeper'
+import { actions, choiced, triggerKeeper, triggers } from './trigger-keeper'
 
 export const fun = new Composer
 const quoted = fun.use(autoQuote)
@@ -90,12 +90,12 @@ fun.use(triggerKeeper([
     triggers.regex('пидор', actions.reply.text('ОБНАРУЖЕНА ДЕМОНИЧЕСКАЯ УГРОЗА')),
     triggers.regex('не\\s+ешь', actions.preciseReply.text('Ням!')),
     triggers.regex('противоречи', actions.reply.gif(COUNTER)),
-    triggers.regex('Руби мяу', actions.reply.voice(RUBY_MEOW)),
+    triggers.regex('Руби мяу', actions.reply.voice(choiced(RUBY_MEOW))),
     triggers.throttled(THROTTLE_TIME).regex('([^\\d]|^)86([^\\d]|$)|восемьдесят шесть', actions.reply.photo(EIGHTY_SIX)),
-    triggers.throttled(THROTTLE_TIME).regex('анлак', actions.reply.sticker([UNDEAD, UNLUCK])),
+    triggers.throttled(THROTTLE_TIME).regex('анлак', actions.reply.sticker(choiced([UNDEAD, UNLUCK]))),
     triggers.throttled(THROTTLE_TIME).probability(1/20).wholeWord('дб', actions.reply.sticker(DRAGONBALL)),
     triggers.throttled(THROTTLE_TIME).probability(1/20).regex('драгонбол', actions.reply.video(DRAGONBALL)),
-    triggers.throttled(THROTTLE_TIME).probability(1/20).regex('триггер', actions.reply.photo(KUGA_YUMA)),
+    triggers.throttled(THROTTLE_TIME).probability(1/20).regex('триггер', actions.reply.photo(choiced(KUGA_YUMA))),
     triggers.throttled(THROTTLE_TIME).regex('нормис', actions.reply.photo(NORMIES)),
     triggers.throttled(THROTTLE_TIME).regex('казахстан|караганд', actions.reply.photo(KAZAKHSTAN)),
     triggers.throttled(THROTTLE_TIME).regex('([^\\d]|^)121([^\\d]|$)|лето первого года', actions.reply.gif(FIRST_YEAR_SUMMER)),
