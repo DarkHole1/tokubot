@@ -216,7 +216,7 @@ function decorated<T extends any[], U extends object>(f: (...args: T) => U) {
     return function <V extends { [K: string]: (...args: any) => object }>(this: V, ...args: T): V {
         const res = f(...args)
         const entries = Object.entries(this)
-        const throttledEntries = entries.map(([k, v]) => {
+        const decoratedEntries = entries.map(([k, v]) => {
             return [
                 k,
                 (...args: any[]) => ({
@@ -225,13 +225,13 @@ function decorated<T extends any[], U extends object>(f: (...args: T) => U) {
                 })
             ]
         })
-        return Object.fromEntries(throttledEntries)
+        return Object.fromEntries(decoratedEntries)
     }
 }
 
 export const triggers = {
     ...simpleTriggers,
-    throttled: decorated((time: number) => ({ throttled: time })),
+    throttled: decorated((time: number) => ({ throttle: time })),
     probability: decorated((probability: number) => ({ probability }))
 }
 
