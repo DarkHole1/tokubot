@@ -201,38 +201,27 @@ let simpleTriggers = {
     }
 }
 
-function throttled<T extends { [K: string]: (...args: any) => object }>(this: T, seconds: number): T {
-    const entries = Object.entries(this)
-    const throttledEntries = entries.map(([k, v]) => {
-        return [
-            k,
-            (...args: any[]) => ({
-                throttle: seconds,
-                ...v(...args)
-            })
-        ]
-    })
-    return Object.fromEntries(throttledEntries)
+function decorated<T extends any[], U extends object>(f: (...args: T) => U) {
+    return function <V extends { [K: string]: (...args: any) => object }>(this: V, ...args: T): V {
+        const res = f(...args)
+        const entries = Object.entries(this)
+        const throttledEntries = entries.map(([k, v]) => {
+            return [
+                k,
+                (...args: any[]) => ({
+                    ...res,
+                    ...v(...args)
+                })
+            ]
+        })
+        return Object.fromEntries(throttledEntries)
+    }
 }
 
-function probability<T extends { [K: string]: (...args: any) => object }>(this: T, probability: number): T {
-    const entries = Object.entries(this)
-    const throttledEntries = entries.map(([k, v]) => {
-        return [
-            k,
-            (...args: any[]) => ({
-                probability,
-                ...v(...args)
-            })
-        ]
-    })
-    return Object.fromEntries(throttledEntries)
-}
-
-export const triggers= {
+export const triggers = {
     ...simpleTriggers,
-    throttled,
-    probability
+    throttled: decorated((time: number) => ({ throttled: time })),
+    probability: decorated((probability: number) => ({ probability }))
 }
 
 type SkipFirst<T> = T extends (t: any, ...args: infer Args) => infer Return ? (...args: Args) => Return : never
