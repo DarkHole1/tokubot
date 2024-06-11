@@ -102,10 +102,11 @@ export const triggerKeeper = (triggers: Trigger[]) => {
                 if (typeof ctx.match == 'string') {
                     quote = ctx.match
                     offset = (ctx.msg?.text ?? ctx.msg?.caption)?.indexOf(quote)
-                } else {
+                } else { 
                     quote = ctx.match[0]
-                    offset = ctx.match.index
+                    offset = (ctx.msg?.text ?? ctx.msg?.caption)?.search(convertedTrigger)
                 }
+                // TODO: Slice entities
                 return {
                     reply_parameters: ctx.message ? {
                         message_id: ctx.message.message_id,

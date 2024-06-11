@@ -101,7 +101,7 @@ fun.use(triggerKeeper([
     triggers.throttled(THROTTLE_TIME).regex('([^\\d]|^)121([^\\d]|$)|лето первого года', actions.reply.gif(FIRST_YEAR_SUMMER)),
     triggers.throttled(THROTTLE_TIME).regex('виктору', actions.reply.gif(VIK_TORU)),
     triggers.throttled(THROTTLE_TIME).regex('catoru|cattoru|котору', actions.reply.photo(CAT_TORU)),
-    triggers.throttled(THROTTLE_TIME).regex('toru|тору', actions.preciseReply.gif(TORU)),
+    triggers.regex('toru|тору', actions.preciseReply.gif(TORU)),
     triggers.throttled(THROTTLE_TIME).regex('mahoako|махоако', actions.reply.sticker(MAHO_AKO)),
     triggers.throttled(THROTTLE_TIME).regex('грех', actions.reply.photo(SIN)),
     triggers.throttled(THROTTLE_TIME).wholeWord('жаль', actions.preciseReply.sticker(BEESAKI)),
