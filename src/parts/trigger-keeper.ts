@@ -215,9 +215,24 @@ function throttled<T extends { [K: string]: (...args: any) => object }>(this: T,
     return Object.fromEntries(throttledEntries)
 }
 
+function probability<T extends { [K: string]: (...args: any) => object }>(this: T, probability: number): T {
+    const entries = Object.entries(this)
+    const throttledEntries = entries.map(([k, v]) => {
+        return [
+            k,
+            (...args: any[]) => ({
+                probability,
+                ...v(...args)
+            })
+        ]
+    })
+    return Object.fromEntries(throttledEntries)
+}
+
 export const triggers= {
     ...simpleTriggers,
-    throttled
+    throttled,
+    probability
 }
 
 type SkipFirst<T> = T extends (t: any, ...args: infer Args) => infer Return ? (...args: Args) => Return : never
