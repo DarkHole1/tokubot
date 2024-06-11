@@ -150,6 +150,17 @@ export const triggerKeeper = (triggers: Trigger[]) => {
             continue
         }
 
+        if (trigger.probability) {
+            const probability = trigger.probability
+            const trueConvertedAction = convertedAction
+            convertedAction = async ctx => {
+                if (Math.random() > probability) {
+                    return
+                }
+                return await trueConvertedAction(ctx)
+            }
+        }
+
         if (trigger.throttle) {
             let lastTime = 0
             const throttle = trigger.throttle
