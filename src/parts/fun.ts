@@ -95,7 +95,7 @@ fun.use(triggerKeeper([
     triggers.throttled(THROTTLE_TIME).regex('анлак', actions.reply.sticker(choiced([UNDEAD, UNLUCK]))),
     triggers.throttled(THROTTLE_TIME).probability(1/20).wholeWord('дб', actions.reply.sticker(DRAGONBALL)),
     triggers.throttled(THROTTLE_TIME).probability(1/20).regex('драгонбол', actions.reply.video(DRAGONBALL)),
-    triggers.throttled(THROTTLE_TIME).probability(1/20).regex('триггер', actions.reply.photo(choiced(KUGA_YUMA))),
+    triggers.throttled(THROTTLE_TIME).probability(1/3).regex('триггер', actions.reply.photo(choiced(KUGA_YUMA))),
     triggers.throttled(THROTTLE_TIME).regex('нормис', actions.reply.photo(NORMIES)),
     triggers.throttled(THROTTLE_TIME).regex('казахстан|караганд', actions.reply.photo(KAZAKHSTAN)),
     triggers.throttled(THROTTLE_TIME).regex('([^\\d]|^)121([^\\d]|$)|лето первого года', actions.reply.gif(FIRST_YEAR_SUMMER)),
