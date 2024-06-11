@@ -39,6 +39,7 @@ export type Trigger = ({
     regex: string
 } & Flags)) & {
     throttle?: number,
+    probability?: number,
     action: Action
 }
 
@@ -200,13 +201,23 @@ let simpleTriggers = {
     }
 }
 
-type Triggers = typeof simpleTriggers & { throttled: (time: number) => { [V in keyof typeof simpleTriggers]: (...args: Args<(typeof simpleTriggers)[V]>) => Trigger } }
+function throttled<T extends { [K: string]: (...args: any) => object }>(this: T, seconds: number): T {
+    const entries = Object.entries(this)
+    const throttledEntries = entries.map(([k, v]) => {
+        return [
+            k,
+            (...args: any[]) => ({
+                throttle: seconds,
+                ...v(...args)
+            })
+        ]
+    })
+    return Object.fromEntries(throttledEntries)
+}
 
-const throttled = (time: number) => Object.fromEntries(Object.entries(simpleTriggers).map(([k, v]) => [k, (...args: any) => ({ ...v(...args as [any, any]), throttle: time })]))
-
-export const triggers: Triggers = {
+export const triggers= {
     ...simpleTriggers,
-    throttled: throttled as any
+    throttled
 }
 
 type SkipFirst<T> = T extends (t: any, ...args: infer Args) => infer Return ? (...args: Args) => Return : never
