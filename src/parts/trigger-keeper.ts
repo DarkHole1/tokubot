@@ -1,5 +1,6 @@
 import { Composer, Context } from 'grammy'
 import { choice } from '../utils'
+import { MessageEntity } from 'grammy/types'
 
 export type Action = {
     type: 'reply' | 'preciseReply' | 'message'
@@ -102,16 +103,20 @@ export const triggerKeeper = (triggers: Trigger[]) => {
                 if (typeof ctx.match == 'string') {
                     quote = ctx.match
                     offset = (ctx.msg?.text ?? ctx.msg?.caption)?.indexOf(quote)
-                } else { 
+                } else {
                     quote = ctx.match[0]
                     offset = (ctx.msg?.text ?? ctx.msg?.caption)?.search(convertedTrigger)
                 }
-                // TODO: Slice entities
+                let entities = ctx.msg?.entities ?? ctx.msg?.caption_entities
+                if(entities && offset) {
+                    entities = sliceEntities(quote, offset, entities)
+                }
                 return {
                     reply_parameters: ctx.message ? {
                         message_id: ctx.message.message_id,
                         quote,
-                        quote_position: offset
+                        quote_position: offset,
+                        quote_entities: entities
                     } : undefined
                 }
             }
@@ -218,6 +223,24 @@ let simpleTriggers = {
     }
 }
 
+function sliceEntities(quote: string, offset: number, entities: MessageEntity[]) {
+    const start = offset
+    const end = start + quote.length
+    return entities.flatMap(entity => {
+        const eStart = entity.offset
+        const eEnd = eStart + entity.length
+        if(eEnd < start || eStart > end) {
+            return []
+        }
+
+        return {
+            ...entity,
+            offset: Math.max(0, entity.offset),
+            length: Math.min(quote.length - entity.offset, entity.length)
+        }
+    })
+}
+
 function decorated<T extends any[], U extends object>(f: (...args: T) => U) {
     return function <V extends { [K: string]: (...args: any) => object }>(this: V, ...args: T): V {
         const res = f(...args)
@@ -296,7 +319,7 @@ export const choiced: <T>(choices: T[]) => () => T = (choices) => () => choice(c
 
 export function weighted<T>(choices: [T, number][]): () => T {
     const accumulated = choices.reduce((acc, b) => acc.concat([[b[0], (acc.at(-1)?.[1] ?? 0) + b[1]]]), [] as [T, number][])
-    accumulated.reverse();
+    accumulated.reverse()
     return () => {
         const random = Math.random() * accumulated[0][1]
         return accumulated.find(el => el[1])![0]
