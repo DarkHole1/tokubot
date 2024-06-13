@@ -21,6 +21,7 @@ export const ANGELINA_LIST = [
         id: 554683512
     },
     {
+        // Amelia~
         restricted: ['fun'],
         id: 267563558
     },
@@ -32,6 +33,11 @@ export const ANGELINA_LIST = [
     {
         restricted: ['unspoil'],
         id: 982961293
+    },
+    {
+        // Fish
+        restricted: ['fun'],
+        id: 101327935
     }
 ]
 export const SHOCK_PATALOCK = 'CQACAgIAAx0EbgUG4QACARhkQSVHnxcut0o6kWQPtWKq2lsTXwACfywAAr81uUlinNRcNS2fFC8E'
