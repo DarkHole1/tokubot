@@ -3,7 +3,7 @@ import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { Composer, Context, InputFile } from "grammy"
 import type { Sticker } from "grammy/out/types"
 import { pluralize } from "numeralize-ru"
-import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY, PATPAT, KUGA_YUMA, LELOUCH_ID, UNDEAD, UNLUCK, NORMIES, KAZAKHSTAN, FIRST_YEAR_SUMMER, TORU, MAHO_AKO, CAT_TORU, SIN, VIK_TORU, BEESAKI, RUINA, YBbI } from "../constants"
+import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY, PATPAT, KUGA_YUMA, LELOUCH_ID, UNDEAD, UNLUCK, NORMIES, KAZAKHSTAN, FIRST_YEAR_SUMMER, TORU, MAHO_AKO, CAT_TORU, SIN, VIK_TORU, BEESAKI, RUINA, YBbI, TRIGGER_GIRLS } from "../constants"
 import { DrinkCounters } from "../data"
 import { choice, isAdmin } from '../utils'
 import { actions, choiced, triggerKeeper, triggers } from './trigger-keeper'
@@ -95,7 +95,7 @@ fun.use(triggerKeeper([
     triggers.throttled(THROTTLE_TIME).regex('анлак', actions.reply.sticker(choiced([UNDEAD, UNLUCK]))),
     triggers.throttled(THROTTLE_TIME).probability(1/10).wholeWord('дб', actions.reply.sticker(DRAGONBALL)),
     triggers.throttled(THROTTLE_TIME).probability(1/10).regex('драгонбол', actions.reply.video(DRAGONBALL)),
-    triggers.throttled(THROTTLE_TIME).probability(1/4).regex('триггер', actions.reply.photo(choiced(KUGA_YUMA))),
+    triggers.throttled(THROTTLE_TIME).probability(1/4).regex('триггер', actions.reply.photo(choiced(KUGA_YUMA.concat(TRIGGER_GIRLS)))),
     triggers.throttled(THROTTLE_TIME).regex('нормис', actions.reply.photo(NORMIES)),
     triggers.throttled(THROTTLE_TIME).regex('казахстан|караганд', actions.reply.photo(KAZAKHSTAN)),
     triggers.throttled(THROTTLE_TIME).regex('([^\\d]|^)121([^\\d]|$)|лето первого года', actions.reply.gif(FIRST_YEAR_SUMMER)),
