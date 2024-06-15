@@ -140,8 +140,8 @@ const allSlanders = [
 
 quoted.command('slander', ctx => {
     const slander = Number(ctx.match)
-    if (isFinite(slander) && slander >= 0 && slander < allSlanders.length) {
-        return ctx.reply(allSlanders[slander])
+    if (isFinite(slander) && slander > 0 && slander <= allSlanders.length) {
+        return ctx.reply(allSlanders[slander - 1])
     } else {
         return ctx.reply(`Все слендеры:\n${allSlanders.join('\n')}\n\nСледующий слендер: 6 июля.`)
     }
