@@ -93,15 +93,15 @@ fun.use(triggerKeeper([
     triggers.regex('Руби мяу', actions.reply.voice(choiced(RUBY_MEOW))),
     triggers.throttled(THROTTLE_TIME).regex('([^\\d]|^)86([^\\d]|$)|восемьдесят шесть', actions.reply.photo(EIGHTY_SIX)),
     triggers.throttled(THROTTLE_TIME).regex('анлак', actions.reply.sticker(choiced([UNDEAD, UNLUCK]))),
-    triggers.throttled(THROTTLE_TIME).probability(1/10).wholeWord('дб', actions.reply.sticker(DRAGONBALL)),
-    triggers.throttled(THROTTLE_TIME).probability(1/10).regex('драгонбол', actions.reply.video(DRAGONBALL)),
-    triggers.throttled(THROTTLE_TIME).probability(1/4).regex('триггер', actions.reply.photo(choiced(KUGA_YUMA.concat(TRIGGER_GIRLS)))),
+    triggers.throttled(THROTTLE_TIME).probability(1 / 10).wholeWord('дб', actions.reply.sticker(DRAGONBALL)),
+    triggers.throttled(THROTTLE_TIME).probability(1 / 10).regex('драгонбол', actions.reply.video(DRAGONBALL)),
+    triggers.throttled(THROTTLE_TIME).probability(1 / 4).regex('триггер', actions.reply.photo(choiced(KUGA_YUMA.concat(TRIGGER_GIRLS)))),
     triggers.throttled(THROTTLE_TIME).regex('нормис', actions.reply.photo(NORMIES)),
     triggers.throttled(THROTTLE_TIME).regex('казахстан|караганд', actions.reply.photo(KAZAKHSTAN)),
     triggers.throttled(THROTTLE_TIME).regex('([^\\d]|^)121([^\\d]|$)|лето первого года', actions.reply.gif(FIRST_YEAR_SUMMER)),
     triggers.throttled(THROTTLE_TIME).regex('виктору', actions.reply.gif(VIK_TORU)),
     triggers.throttled(THROTTLE_TIME).regex('catoru|cattoru|котору', actions.reply.photo(CAT_TORU)),
-    triggers.throttled(THROTTLE_TIME).probability(1/4).regex('toru|тору', actions.preciseReply.gif(TORU)),
+    triggers.throttled(THROTTLE_TIME).probability(1 / 4).regex('toru|тору', actions.preciseReply.gif(TORU)),
     triggers.throttled(THROTTLE_TIME).regex('mahoako|махоако', actions.reply.sticker(MAHO_AKO)),
     triggers.throttled(THROTTLE_TIME).regex('грех', actions.reply.photo(SIN)),
     triggers.throttled(THROTTLE_TIME).wholeWord('жаль', actions.preciseReply.sticker(BEESAKI)),
@@ -127,6 +127,25 @@ quoted.command(
 )
 
 quoted.command('bingo', ctx => ctx.reply('https://docs.google.com/spreadsheets/d/1QghSAYndgtDBDYPjEO1FNsMsP765zHK-wAFDF9Q1h9Y/edit#gid=0'))
+
+const allSlanders = [
+    'https://t.me/tokuchatt/108',
+    'https://t.me/tokuchatt/109',
+    'https://t.me/tokuchatt/110',
+    'https://t.me/tokuchatt/111',
+    'https://t.me/tokuchatt/112',
+    'https://t.me/tokuchatt/8948',
+    'https://t.me/tokuchatt/97105',
+]
+
+quoted.command('slander', ctx => {
+    const slander = Number(ctx.match)
+    if (isFinite(slander) && slander >= 0 && slander < allSlanders.length) {
+        return ctx.reply(allSlanders[slander])
+    } else {
+        return ctx.reply(`Все слендеры:\n${allSlanders.join('\n')}\n\nСледующий слендер: 6 июля.`)
+    }
+})
 
 // Tomorrow
 // debounced.hears(/(\P{L}|^)завтра(\P{L}|$)/ui, ctx => (lastTime = Date.now(), ctx.replyWithVideo(Math.random() > 0.3 ? NOT_TOMORROW : (Math.random() > 0.3 ? TOMORROW_HAPPY : TOMORROW))))
