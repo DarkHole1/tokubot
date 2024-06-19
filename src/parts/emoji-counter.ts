@@ -12,7 +12,6 @@ export async function emojiCounter() {
     emojiCounter.on('message_reaction', async (ctx, next) => {
         const actorId = ctx.messageReaction.actor_chat?.id ?? ctx.messageReaction.user?.id
         const actorName = getActorName(ctx.messageReaction)
-        log("Emoji from actor %s", actorName)
         if (!actorName || !actorId) {
             return await next()
         }
