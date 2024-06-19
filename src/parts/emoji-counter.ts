@@ -1,14 +1,19 @@
 import { Composer } from "grammy"
-import { EmojiCountersModel } from "../models/emoji-counter"
+import { EmojiCountersModel, UserCounter } from "../models/emoji-counter"
 import { MessageReactionUpdated } from "grammy/types"
+import debug from "debug"
+
+const log = debug('tokubot:emoji-counter')
 
 export async function emojiCounter() {
     const emojiCounter = new Composer
     let counter = await getOrDefault()
 
     emojiCounter.on('message_reaction', async (ctx, next) => {
-        const actor = getActorName(ctx.messageReaction)
-        if (!actor) {
+        const actorId = ctx.messageReaction.actor_chat?.id ?? ctx.messageReaction.user?.id
+        const actorName = getActorName(ctx.messageReaction)
+        log("Emoji from actor %s", actorName)
+        if (!actorName || !actorId) {
             return await next()
         }
 
@@ -16,15 +21,18 @@ export async function emojiCounter() {
             let emoji = reaction.type == 'custom_emoji' ? 'custom' : reaction.emoji
             counter.overall.set(emoji, (counter.overall.get(emoji) ?? 0) + 1)
 
-            let userMap = counter.byUser.get(actor)
-            if (!userMap) {
-                userMap = new Map
-                counter.byUser.set(actor, userMap)
+            let userCounter = counter.byUser.get(actorId.toString())
+            if (!userCounter) {
+                userCounter = new UserCounter()
+                userCounter.counters = new Map([[emoji, 1]])
+                userCounter.name = actorName
+                counter.byUser.set(actorId.toString(), userCounter)
+            } else {
+                userCounter.counters.set(emoji, (userCounter.counters.get(emoji) ?? 0) + 1)
+                userCounter.name = actorName
             }
-            userMap.set(emoji, (userMap.get(emoji) ?? 0) + 1)
         }
-
-        counter.save().catch((e) => console.log(e))
+        counter.save().catch((e) => log(e))
     })
 
     return {
