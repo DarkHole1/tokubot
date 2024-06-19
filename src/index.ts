@@ -29,6 +29,7 @@ import { everydayPost } from './parts/everyday-post'
 import { hanekawa } from './parts/hanekawa'
 import { angelinaList } from './parts/angelina-list'
 import { hydrateUserInfo, UserInfoFlavour } from './parts/user-info'
+import { emojiCounter } from './parts/emoji-counter'
 
 void (async () => {
     const log = debug('tokubot')
@@ -78,6 +79,10 @@ void (async () => {
     worldTrigger(bot)
     everydayPost(bot)
 
+
+    const { emojiCounter: counter, reset } = await emojiCounter()
+    bot.use(counter)
+    
     bot.filter(angelinaList(['fun'], ANGELINA_LIST)).use(fun)
     bot.filter(angelinaList(['unspoil'], ANGELINA_LIST)).use(unspoil)
     bot.use(blessing)
@@ -93,6 +98,27 @@ void (async () => {
     server.listen(9000, () => {
         log('Server listening on http://localhost:9000/')
     })
-    bot.start()
+    bot.start({
+        allowed_updates: [
+            'message',
+            'edited_message',
+            'channel_post',
+            'edited_channel_post',
+            'message_reaction',
+            'message_reaction_count',
+            'inline_query',
+            'chosen_inline_result',
+            'callback_query',
+            'shipping_query',
+            'pre_checkout_query',
+            'poll',
+            'poll_answer',
+            'my_chat_member',
+            'chat_member',
+            'chat_join_request',
+            'chat_boost',
+            'removed_chat_boost'
+        ]
+    })
 })().then(console.log, console.log)
 
