@@ -62,7 +62,9 @@ void (async () => {
         })
     )
 
-    bot.use(allFiction(bot.api))
+    const { emojiCounter: counter, reset } = await emojiCounter()
+    bot.use(counter)
+    bot.use(allFiction(bot.api, reset))
 
     bot.use(recommendations)
     bot.use(hanekawa)
@@ -79,10 +81,6 @@ void (async () => {
     worldTrigger(bot)
     everydayPost(bot)
 
-
-    const { emojiCounter: counter, reset } = await emojiCounter()
-    bot.use(counter)
-    
     bot.filter(angelinaList(['fun'], ANGELINA_LIST)).use(fun)
     bot.filter(angelinaList(['unspoil'], ANGELINA_LIST)).use(unspoil)
     bot.use(blessing)
