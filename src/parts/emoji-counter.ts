@@ -26,7 +26,7 @@ export async function emojiCounter() {
             })) {
                 continue
             }
-            
+
             let emoji = reaction.type == 'custom_emoji' ? 'custom' : reaction.emoji
             counter.overall.set(emoji, (counter.overall.get(emoji) ?? 0) + 1)
 
@@ -79,6 +79,13 @@ export async function emojiCounter() {
             await counter.save()
         }
     }
+}
+
+export function getYesterdayCounter() {
+    const yesterday = new Date()
+    yesterday.setHours(0, 0, 0, 0)
+    yesterday.setDate(yesterday.getDate() - 1)
+    return EmojiCountersModel.findOne({ day: yesterday })
 }
 
 function getCurrentCounter() {

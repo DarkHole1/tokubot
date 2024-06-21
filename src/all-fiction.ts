@@ -2,7 +2,7 @@ import { Api, Composer } from 'grammy'
 import * as cron from 'node-cron'
 import { TOKU_CHAT } from './constants'
 import { AllFictionModel } from './models/all-fiction'
-import { EmojiCountersModel } from './models/emoji-counter'
+import { getYesterdayCounter } from './parts/emoji-counter'
 
 export const allFiction = (api: Api, reset: () => Promise<void>) => {
     const allFiction = new Composer
@@ -29,7 +29,7 @@ export const allFiction = (api: Api, reset: () => Promise<void>) => {
 
     cron.schedule('0 0 0 * * *', async () => {
         const doc = await findOrCreate()
-        const emoji = await EmojiCountersModel.findOne()
+        const emoji = await getYesterdayCounter()
         const yesterday = new Date()
         yesterday.setDate(yesterday.getDate() - 1)
         const yesterdayFormatted = [
