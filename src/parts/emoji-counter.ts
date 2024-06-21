@@ -34,6 +34,34 @@ export async function emojiCounter() {
         counter.save().catch((e) => log(e))
     })
 
+    emojiCounter.command('emoji', async ctx => {
+        const fromId = ctx.msg.sender_chat?.id ?? ctx.msg.from?.id
+        if (!fromId) {
+            return
+        }
+
+        const counter = await getCurrentCounter()
+        if (!counter) {
+            return
+        }
+        const userCounter = counter.byUser.get(fromId.toString())
+        if (userCounter) {
+            const total = Array.from(userCounter.counters.values()).reduce((a, b) => a + b)
+            const reactions = Array.from(userCounter.counters.entries()).map(([emoji, count]) => `${count} ${emoji}`).join(', ')
+            await ctx.reply(`За сегодня ${total} реакций: ${reactions}`, {
+                reply_parameters: {
+                    message_id: ctx.msg.message_id
+                }
+            })
+        } else {
+            await ctx.reply('Севодня без реакций', {
+                reply_parameters: {
+                    message_id: ctx.msg.message_id
+                }
+            })
+        }
+    })
+
     return {
         emojiCounter,
         reset: async () => {
@@ -41,6 +69,10 @@ export async function emojiCounter() {
             await counter.save()
         }
     }
+}
+
+function getCurrentCounter() {
+    return EmojiCountersModel.findOne({ day: new Date().setHours(0, 0, 0, 0) })
 }
 
 async function getOrDefault() {
