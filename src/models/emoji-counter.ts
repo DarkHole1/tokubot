@@ -9,6 +9,9 @@ export class UserCounter {
 }
 
 class EmojiCounters {
+    @prop({ default: () => new Date().setHours(0, 0, 0, 0) })
+    day?: Date
+
     @prop({ required: true, default: () => new Map, type: () => Number })
     overall!: Map<string, number>
 

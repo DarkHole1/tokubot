@@ -37,14 +37,14 @@ export async function emojiCounter() {
     return {
         emojiCounter,
         reset: async () => {
-            counter = new EmojiCountersModel
+            counter = await getOrDefault()
             await counter.save()
         }
     }
 }
 
 async function getOrDefault() {
-    const res = await EmojiCountersModel.findOne()
+    const res = await EmojiCountersModel.findOne({ day: new Date().setHours(0, 0, 0, 0) })
     if (res) {
         return res
     }
