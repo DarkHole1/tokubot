@@ -17,6 +17,16 @@ export async function emojiCounter() {
         }
 
         for (const reaction of ctx.messageReaction.new_reaction) {
+            if (ctx.messageReaction.old_reaction.find(r => {
+                if (reaction.type == 'custom_emoji') {
+                    return r.type == 'custom_emoji' && r.custom_emoji_id == reaction.custom_emoji_id
+                } else {
+                    return r.type == 'emoji' && r.emoji == reaction.emoji
+                }
+            })) {
+                continue
+            }
+            
             let emoji = reaction.type == 'custom_emoji' ? 'custom' : reaction.emoji
             counter.overall.set(emoji, (counter.overall.get(emoji) ?? 0) + 1)
 
