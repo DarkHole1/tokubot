@@ -57,14 +57,17 @@ export async function emojiCounter() {
         const userCounter = counter.byUser.get(fromId.toString())
         if (userCounter) {
             const total = Array.from(userCounter.counters.values()).reduce((a, b) => a + b)
-            const reactions = Array.from(userCounter.counters.entries()).map(([emoji, count]) => `${count} ${emoji}`).join(', ')
-            await ctx.reply(`За сегодня ${total} реакций: ${reactions}`, {
+            const reactions = Array.from(userCounter.counters.entries())
+                .sort((a, b) => b[1] - a[1])
+            const maxLength = reactions[0][1].toString().length
+            const reactionsFormatted = reactions.map(([emoji, count]) => `${count.toString().padStart(maxLength, '0')} — ${emoji}`).join('\n')
+            await ctx.reply(`За сегодня ${total} реакций:\n${reactionsFormatted}`, {
                 reply_parameters: {
                     message_id: ctx.msg.message_id
                 }
             })
         } else {
-            await ctx.reply('Севодня без реакций', {
+            await ctx.reply('Вы ещё не ставили реакции сегодня', {
                 reply_parameters: {
                     message_id: ctx.msg.message_id
                 }
