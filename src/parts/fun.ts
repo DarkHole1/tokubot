@@ -107,7 +107,7 @@ fun.use(triggerKeeper([
     triggers.throttled(THROTTLE_TIME).wholeWord('жаль', actions.preciseReply.sticker(BEESAKI)),
     triggers.throttled(THROTTLE_TIME).regex('руина', actions.reply.sticker(RUINA)),
     // triggers.throttled(THROTTLE_TIME).regex('🌱🌸🍉|йомока', actions.reply.sticker(YBbI)),
-    triggers.throttled(THROTTLE_TIME).wholeWord('увы', actions.reply.sticker(YBbI_2))
+    triggers.wholeWord('увы', actions.reply.sticker(YBbI_2))
 ]))
 
 quoted.hears(/(\P{L}|^)бан(\P{L}|$)/gimu).filter(
