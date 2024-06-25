@@ -91,7 +91,7 @@ export function getYesterdayCounter() {
     return EmojiCountersModel.findOne({ day: yesterday })
 }
 
-function getCurrentCounter() {
+export function getCurrentCounter() {
     return EmojiCountersModel.findOne({ day: new Date().setHours(0, 0, 0, 0) })
 }
 
