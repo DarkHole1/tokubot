@@ -3,7 +3,7 @@ import { getCurrentCounter } from "../parts/emoji-counter"
 
 export const emoji = Router()
 
-emoji.get('emoji', async (req, res) => {
+emoji.get('/emoji', async (req, res) => {
     if (typeof req.query.id != 'string') {
         return res.json({})
     }
