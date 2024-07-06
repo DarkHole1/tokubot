@@ -57,8 +57,8 @@ export async function emojiCounter() {
         const userCounter = counter.byUser.get(fromId.toString())
         if (userCounter) {
             const total = Array.from(userCounter.counters.values()).reduce((a, b) => a + b)
-            const botapp = `tokutonarinotofficialbot/tokubot`
-            // const botapp = `test1920341_bot/tokubot`
+            // const botapp = `tokutonarinotofficialbot/tokubot`
+            const botapp = `test1920341_bot/tokubot`
             await ctx.reply(`За сегодня вы отправили ${total} реакций`, {
                 reply_parameters: {
                     message_id: ctx.msg.message_id
@@ -66,7 +66,7 @@ export async function emojiCounter() {
                 reply_markup: {
                     inline_keyboard: [[{
                         text: 'Узнать какие',
-                        url: `https://t.me/${botapp}?startapp=emoji/${fromId}`
+                        url: `https://t.me/${botapp}?startapp=emoji_${fromId}`
                     }]]
                 }
             })
