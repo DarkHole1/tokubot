@@ -8,20 +8,20 @@ import { EverydayPostModel } from '../models/everyday-post'
 
 const type = 'world trigger'
 export function worldTrigger<C extends Context>(bot: Bot<C>) {
-    cron.schedule('0 0 20 * * *', async () => {
-        const counters = await CountersModel.findOne()
-        const photo = await EverydayPostModel.findOne({ type })
-        if (!counters || !photo) {
-            return
-        }
+    // cron.schedule('0 0 20 * * *', async () => {
+    //     const counters = await CountersModel.findOne()
+    //     const photo = await EverydayPostModel.findOne({ type })
+    //     if (!counters || !photo) {
+    //         return
+    //     }
 
-        counters.worldTriggerDays++
-        await bot.api.sendPhoto(TOKU_CHAT, photo.fileId, {
-            caption: 'Постим World Trigger день ' + counters.worldTriggerDays
-        })
-        await counters.save()
-        await photo.deleteOne()
-    })
+    //     counters.worldTriggerDays++
+    //     await bot.api.sendPhoto(TOKU_CHAT, photo.fileId, {
+    //         caption: 'Постим World Trigger день ' + counters.worldTriggerDays
+    //     })
+    //     await counters.save()
+    //     await photo.deleteOne()
+    // })
 
     bot.on(':media').filter(
         ctx => isPrivateChat(ctx) && ctx.from?.id == DARK_HOLE,

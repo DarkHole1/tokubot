@@ -25,6 +25,10 @@ const SCHEDULE: Post[] = [{
     caption: 'Бесконечное лето день {count}',
     hours: [10],
     since: new Date('06/01/2024')
+}, {
+    type: 'world trigger',
+    caption: 'Постим World Trigger день {count}',
+    hours: [20]
 }]
 
 export function everydayPost<C extends Context>(bot: Bot<C>) {
