@@ -139,6 +139,7 @@ const allSlanders = [
     'https://t.me/tokuchatt/112',
     'https://t.me/tokuchatt/8948',
     'https://t.me/tokuchatt/97105',
+    'https://t.me/tokuchatt/204238',
 ]
 
 quoted.command('slander', ctx => {
@@ -146,7 +147,7 @@ quoted.command('slander', ctx => {
     if (isFinite(slander) && slander > 0 && slander <= allSlanders.length) {
         return ctx.reply(allSlanders[slander - 1])
     } else {
-        return ctx.reply(`Все слендеры:\n${allSlanders.join('\n')}\n\nСледующий слендер: 6 июля.`)
+        return ctx.reply(`Все слендеры:\n${allSlanders.join('\n')}\n\nСледующий слендер: ???`)
     }
 })
 
