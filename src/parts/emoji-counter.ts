@@ -44,8 +44,8 @@ export async function emojiCounter() {
         counter.save().catch((e) => log(e))
     })
 
-    // const botapp = `tokutonarinotofficialbot/tokubot`
-    const botapp = `test1920341_bot/tokubot`
+    const botapp = `tokutonarinotofficialbot/tokubot`
+    // const botapp = `test1920341_bot/tokubot`
 
     emojiCounter.command('emoji', async ctx => {
         const fromId = ctx.msg.sender_chat?.id ?? ctx.msg.from?.id
