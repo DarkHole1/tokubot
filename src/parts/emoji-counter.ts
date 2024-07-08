@@ -44,6 +44,9 @@ export async function emojiCounter() {
         counter.save().catch((e) => log(e))
     })
 
+    // const botapp = `tokutonarinotofficialbot/tokubot`
+    const botapp = `test1920341_bot/tokubot`
+
     emojiCounter.command('emoji', async ctx => {
         const fromId = ctx.msg.sender_chat?.id ?? ctx.msg.from?.id
         if (!fromId) {
@@ -57,8 +60,6 @@ export async function emojiCounter() {
         const userCounter = counter.byUser.get(fromId.toString())
         if (userCounter) {
             const total = Array.from(userCounter.counters.values()).reduce((a, b) => a + b)
-            const botapp = `tokutonarinotofficialbot/tokubot`
-            // const botapp = `test1920341_bot/tokubot`
             await ctx.reply(`За сегодня вы отправили ${total} реакций`, {
                 reply_parameters: {
                     message_id: ctx.msg.message_id
@@ -78,6 +79,20 @@ export async function emojiCounter() {
             })
         }
     })
+
+    emojiCounter.command('emoji_rating', ctx =>
+        ctx.reply(`Рейтинг пользователей по реакциями😏`, {
+            reply_parameters: {
+                message_id: ctx.msg.message_id
+            },
+            reply_markup: {
+                inline_keyboard: [[{
+                    text: 'Узнать',
+                    url: `https://t.me/${botapp}?startapp=emoji_rating`
+                }]]
+            }
+        })
+    )
 
     return {
         emojiCounter,
