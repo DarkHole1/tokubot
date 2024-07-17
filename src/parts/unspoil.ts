@@ -17,7 +17,7 @@ type Range = {
 
 function spoilerEntities(text: string, entities: MessageEntity[], range?: Range): FormattedString {
     const { offset, length } = range ?? { offset: 0, length: text.length }
-    let start = offset, end = offset + length
+    let start = offset, end = Math.min(offset + length, text.length)
 
     const filteredEntities = entities.filter(entity => {
         // Telegram forcefully unspoils monotype
@@ -43,6 +43,19 @@ function spoilerEntities(text: string, entities: MessageEntity[], range?: Range)
             return false
 
         return true
+    }).flatMap(entity => {
+        const offset = Math.max(0, entity.offset)
+        const length = Math.min(text.length - offset, entity.length - (offset - entity.offset) + offset)
+
+        if (length <= 0)
+            return []
+
+
+        return {
+            ...entity,
+            offset,
+            length
+        }
     })
 
     return new FormattedString(
