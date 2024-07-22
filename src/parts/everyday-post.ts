@@ -117,25 +117,26 @@ export function everydayPost<C extends Context>(bot: Bot<C>) {
         }
     )
 
-    // bot.on(':media').filter(
-    //     ctx => isPrivateChat(ctx) && ctx.from?.id == DARK_HOLE,
-    //     async ctx => {
-    //         const type = 'monogatari'
-    //         const photo = ctx.msg.photo
-    //         if (!photo) {
-    //             await ctx.reply('Чот странное', { reply_to_message_id: ctx.msg.message_id })
-    //             return
-    //         }
-    //         const post = new EverydayPostModel({
-    //             type,
-    //             fileId: photo.slice(-1)[0].file_id
-    //         })
-    //         await post.save()
+    const DARKHOLE_TYPE = 'world trigger'
+    bot.on(':media').filter(
+        ctx => isPrivateChat(ctx) && ctx.from?.id == DARK_HOLE,
+        async ctx => {
+            const type = DARKHOLE_TYPE
+            const photo = ctx.msg.photo
+            if (!photo) {
+                await ctx.reply('Чот странное', { reply_to_message_id: ctx.msg.message_id })
+                return
+            }
+            const post = new EverydayPostModel({
+                type,
+                fileId: photo.slice(-1)[0].file_id
+            })
+            await post.save()
 
-    //         const postCount = await EverydayPostModel.countDocuments({ type })
-    //         const counters = await CountersModel.findOne()
+            const postCount = await EverydayPostModel.countDocuments({ type })
+            const counters = await CountersModel.findOne()
 
-    //         await ctx.reply(`Успешно добавлено на день ${(counters!.genericDays.get(type) ?? 0) + postCount}`, { reply_to_message_id: ctx.msg.message_id })
-    //     }
-    // )
+            await ctx.reply(`Успешно добавлено на день ${(counters!.genericDays.get(type) ?? 0) + postCount}`, { reply_to_message_id: ctx.msg.message_id })
+        }
+    )
 }
