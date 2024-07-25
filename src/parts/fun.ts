@@ -132,14 +132,14 @@ quoted.command(
 quoted.command('bingo', ctx => ctx.reply('https://docs.google.com/spreadsheets/d/1QghSAYndgtDBDYPjEO1FNsMsP765zHK-wAFDF9Q1h9Y/edit#gid=0'))
 
 const allSlanders = [
-    'https://t.me/tokuchatt/108',
-    'https://t.me/tokuchatt/109',
-    'https://t.me/tokuchatt/110',
-    'https://t.me/tokuchatt/111',
-    'https://t.me/tokuchatt/112',
-    'https://t.me/tokuchatt/8948',
-    'https://t.me/tokuchatt/97105',
-    'https://t.me/tokuchatt/204238',
+    'https://t.me/2000257215/108',
+    'https://t.me/2000257215/109',
+    'https://t.me/2000257215/110',
+    'https://t.me/2000257215/111',
+    'https://t.me/2000257215/112',
+    'https://t.me/2000257215/8948',
+    'https://t.me/2000257215/97105',
+    'https://t.me/2000257215/204238',
 ]
 
 quoted.command('slander', ctx => {
