@@ -14,7 +14,7 @@ service.on('message:new_chat_members', async ctx => {
     await ctx.replyFmt(statics.greeting)
 })
 
-service.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == TOKU_CHANNEL, throttle(3 * 60 * 1000, (ctx: ParseModeFlavor<Context>) => {
+service.on('message:is_automatic_forward').filter(ctx => true, throttle(3 * 60 * 1000, (ctx: ParseModeFlavor<Context>) => {
     ctx.replyFmt(statics.post, {
         reply_to_message_id: ctx.message?.message_id,
         reply_markup: {
