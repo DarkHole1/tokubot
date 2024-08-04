@@ -34,8 +34,8 @@ service.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == T
                 text: 'Boosty',
                 url: 'https://boosty.to/tokutonari'
             }], [{
-                text: 'Остальное',
-                url: 'https://t.me/tokutonari/614'
+                text: 'Mini Wiki',
+                url: 'https://pushy-galaxy-071.notion.site/Toku-Tonari-Mini-Wiki-1a56a63628a1409db87106378126aac3'
             }]]
         }
     })
