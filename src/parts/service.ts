@@ -1,6 +1,6 @@
 import { ParseModeFlavor } from '@grammyjs/parse-mode'
 import { Composer, Context } from 'grammy'
-import { OLD_TOKU_CHAT, TOKU_CHANNEL } from '../constants'
+import { LINKS_PHOTO, OLD_TOKU_CHAT, TOKU_CHANNEL } from '../constants'
 import * as statics from '../static'
 import { throttle } from '../utils'
 
@@ -15,7 +15,7 @@ service.on('message:new_chat_members', async ctx => {
 })
 
 service.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == TOKU_CHANNEL, throttle(3 * 60 * 1000, (ctx: ParseModeFlavor<Context>) => {
-    ctx.replyFmt(statics.post, {
+    ctx.replyWithPhoto(LINKS_PHOTO, {
         reply_to_message_id: ctx.message?.message_id,
         reply_markup: {
             inline_keyboard: [[{
