@@ -30,6 +30,7 @@ import { hanekawa } from './parts/hanekawa'
 import { angelinaList } from './parts/angelina-list'
 import { hydrateUserInfo, UserInfoFlavour } from './parts/user-info'
 import { emojiCounter } from './parts/emoji-counter'
+import { validateHelper } from './serverParts/validate-helper'
 
 void (async () => {
     const log = debug('tokubot')
@@ -93,7 +94,7 @@ void (async () => {
         }
     })
 
-    server.listen(9000, () => {
+    server(validateHelper(bot.token)).listen(9000, () => {
         log('Server listening on http://localhost:9000/')
     })
     bot.start({
