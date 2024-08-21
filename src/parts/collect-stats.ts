@@ -14,6 +14,7 @@ const GetAnimesInList = `
       anime {
         status
         name
+        id
         episodesAired
         episodes
         duration
@@ -60,19 +61,20 @@ export function collectStats() {
                 let userStats = await StatsModel.findOne({ telegramID: profile.telegramID })
                 if(!userStats) {
                     userStats = new StatsModel({
-                        telegramID: { telegramID: profile.telegramID }
+                        telegramID: profile.telegramID
                     })
                 }
                 let statsEntry = new StatsEntryModel({
                     watchedMinutes: 0,
                     plannedMinutes: 0,
+                    date: new Date(),
                     telegramID: profile.telegramID
                 })
 
                 let page = 1
                 while(true) {
                     log(`Fetching page %d of user list`, page)
-                    const data: any = request(`https://shikimori.one/api/graphql`, GetAnimesInList, {
+                    const data: any = await request(`https://shikimori.one/api/graphql`, GetAnimesInList, {
                         targetType: 'Anime',
                         userId,
                         limit: 50,
@@ -81,11 +83,15 @@ export function collectStats() {
                     if (data.userRates.length <= 0) break
 
                     for (const rate of data.userRates) {
-                        const episodesReleased = rate.anime.status == 'Released' ? rate.anime.episodes : rate.anime.episodesAired
+                        const episodesReleased = rate.anime.status == 'released' ? rate.anime.episodes : rate.anime.episodesAired
                         const episodesWatched = rate.episodes
                         const minutesTotal = episodesReleased * rate.anime.duration
                         const minutesWatched = episodesWatched * rate.anime.duration
                         const minutesLeft = (episodesReleased - episodesWatched) * rate.anime.duration
+                        if(minutesLeft < 0) {
+                            log(`Abnormal anime %s [%d] (%d/%d)`, rate.anime.name, rate.anime.id, episodesWatched, episodesReleased)
+                            log(rate)
+                        }
 
                         statsEntry.watchedMinutes += minutesWatched
                         statsEntry.plannedMinutes += minutesLeft

@@ -7,6 +7,9 @@ class StatsEntry {
     plannedMinutes!: number
 
     @prop({ required: true })
+    date!: Date
+
+    @prop({ required: true })
     telegramID!: number
 }
 
