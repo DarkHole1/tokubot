@@ -6,6 +6,8 @@ class Profile {
 
     @prop()
     shikimoriUsername?: string
+    @prop()
+    shikimoriId?: number
 
     @prop()
     anilistUsername?: string
