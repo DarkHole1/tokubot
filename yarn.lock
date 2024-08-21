@@ -509,10 +509,10 @@
   resolved "https://registry.yarnpkg.com/@grammyjs/parse-mode/-/parse-mode-1.5.0.tgz#7cef50a68e41b45d084dee4a980757b3caae2cb1"
   integrity sha512-6M1aM1CZh2JxTLuE/M7sUqTvjc3/SQHrlwCZq2kZDlprDYQGBFBiRr3F5SKN4u5MMP1iHYfWMDbcWiDzSPxmaA==
 
-"@grammyjs/types@3.4.4":
-  version "3.4.4"
-  resolved "https://registry.yarnpkg.com/@grammyjs/types/-/types-3.4.4.tgz#6f6fca693bc35dccba22f12966d9ee3ef920e399"
-  integrity sha512-r/m54PnAb1Yh76SNlU/3uc2K9t0cYfZXiYZ6IqJfb245m7QeIH7DnjFTg/OtymybKehdkm3PFlw7QODJNyDqhQ==
+"@grammyjs/types@3.13.0":
+  version "3.13.0"
+  resolved "https://registry.yarnpkg.com/@grammyjs/types/-/types-3.13.0.tgz#3316a809b4faf6cc61cff0c7d7a5a671ec0bd776"
+  integrity sha512-Oyq6fBuVPyX6iWvxT/0SxJvNisC9GHUEkhZ60qJBHRmwNX4hIcOfhrNEahicn3K9SYyreGPVw3d9wlLRds83cw==
 
 "@graphql-codegen/add@^5.0.0":
   version "5.0.0"
@@ -2300,12 +2300,12 @@ grammy-guard@^0.5.0:
   dependencies:
     callback-data "^1.0.0"
 
-grammy@^1.20.2:
-  version "1.20.2"
-  resolved "https://registry.yarnpkg.com/grammy/-/grammy-1.20.2.tgz#bf260869fd4b4f92aa6b522fcbe97dd0fc4a2841"
-  integrity sha512-hZ2ZIB8n9rcglpcnerqOgn+duVvB144mdbLAgKfE18Nj/ZBi+6SzXT/P5dIz89F56Q6YynzrwUFN8+uCPVuc1A==
+grammy@^1.29.0:
+  version "1.29.0"
+  resolved "https://registry.yarnpkg.com/grammy/-/grammy-1.29.0.tgz#5413af877fc031c4f4a7db78dccb3717fa2209dc"
+  integrity sha512-lj/6K6TGmVAdOpHj0PVFK7N37EGe76bpkbgvN+yqCqXYBIwuQosTe7qLhCls7/4pbDxf2+UVSqSXcOILgGGKWQ==
   dependencies:
-    "@grammyjs/types" "3.4.4"
+    "@grammyjs/types" "3.13.0"
     abort-controller "^3.0.0"
     debug "^4.3.4"
     node-fetch "^2.7.0"

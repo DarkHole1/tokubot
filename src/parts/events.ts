@@ -4,7 +4,7 @@ import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { EventModel } from '../models/events'
 import { TOKUID, TOKU_CHAT } from '../constants'
 import { schedule } from 'node-cron'
-import { Chat, InputFile } from 'grammy/types'
+import { Chat, ChatFullInfo, InputFile } from 'grammy/types'
 import debug from 'debug'
 import { Config } from '../config'
 import axios from 'axios'
@@ -123,7 +123,7 @@ export const events = (cache: Cache, bot: Bot, config: Config) => {
             const event = await EventModel.findOne({ approved: true })
             if (event) {
                 log('Event found: %o', event)
-                const chatInfo = await bot.api.getChat(TOKU_CHAT) as Chat.SupergroupGetChat
+                const chatInfo = await bot.api.getChat(TOKU_CHAT) as ChatFullInfo.SupergroupChat
                 if (event.name && !cache.name.is_event) {
                     cache.startNameEvent(chatInfo.title)
                 }
@@ -137,7 +137,7 @@ export const events = (cache: Cache, bot: Bot, config: Config) => {
                 }
                 if (event.pic && chatInfo.photo?.big_file_id != event.pic) {
                     await bot.api.setChatPhoto(TOKU_CHAT, await id2input(event.pic))
-                    const newChatInfo = await bot.api.getChat(TOKU_CHAT) as Chat.SupergroupGetChat
+                    const newChatInfo = await bot.api.getChat(TOKU_CHAT) as ChatFullInfo.SupergroupChat
                     event.pic = newChatInfo.photo!.big_file_id
                 }
 

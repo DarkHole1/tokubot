@@ -17,6 +17,9 @@ export async function emojiCounter() {
         }
 
         for (const reaction of ctx.messageReaction.new_reaction) {
+            if (reaction.type == 'paid') {
+                continue
+            }
             if (ctx.messageReaction.old_reaction.find(r => {
                 if (reaction.type == 'custom_emoji') {
                     return r.type == 'custom_emoji' && r.custom_emoji_id == reaction.custom_emoji_id
