@@ -32,6 +32,7 @@ import { hydrateUserInfo, UserInfoFlavour } from './parts/user-info'
 import { emojiCounter } from './parts/emoji-counter'
 import { validateHelper } from './serverParts/validate-helper'
 import { collectStats } from './parts/collect-stats'
+import { stats } from './parts/stats'
 
 void (async () => {
     const log = debug('tokubot')
@@ -76,6 +77,7 @@ void (async () => {
     bot.use(backArrow(config))
     bot.use(solidScript)
     bot.use(autoMultiLink)
+    bot.use(stats)
 
     bot.use(events(cache, bot as any, config))
 
