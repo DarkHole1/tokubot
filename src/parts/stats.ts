@@ -11,7 +11,7 @@ stats.command('weekly', (ctx) => ctx.reply(`Вот ваша статистика
     },
     reply_markup: {
         inline_keyboard: [[{
-            text: 'Узнать какие',
+            text: 'Тык',
             url: `https://t.me/${botapp}?startapp=stats_${ctx.msg.sender_chat?.id ?? ctx.msg.from?.id}`
         }]]
     }
