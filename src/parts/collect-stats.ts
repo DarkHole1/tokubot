@@ -94,7 +94,7 @@ export function collectStats() {
                         }
 
                         statsEntry.watchedMinutes += minutesWatched
-                        statsEntry.plannedMinutes += minutesLeft
+                        statsEntry.plannedMinutes += Math.max(0, minutesLeft)
                     }
 
                     await delay(800)
