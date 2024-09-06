@@ -3,6 +3,7 @@ import * as cron from 'node-cron'
 import { TOKU_CHAT } from './constants'
 import { AllFictionModel } from './models/all-fiction'
 import { getYesterdayCounter } from './parts/emoji-counter'
+import { differenceInCalendarDays, differenceInDays } from 'date-fns'
 
 export const allFiction = (api: Api, reset: () => Promise<void>) => {
     const allFiction = new Composer
@@ -49,8 +50,10 @@ export const allFiction = (api: Api, reset: () => Promise<void>) => {
             emojiSummary = `\n\nЗа сегодня было отправлено ${overallEmojiCount} эмодзи!\n\nСамый популярный эмодзи: ${theMostPopularEmoji}!\n\nСамый активный пользователь эмодзи: ${theMostActiveEmojiUser}!`
         }
 
+        const animelytics = `\n\nПрошло ${differenceInDays(new Date(), new Date(2024, 9, 8, 10, 8))} дней с последнего поста в Анимелитике!`
+
         try {
-            await api.sendMessage(TOKU_CHAT, `Последнее сообщение на ${yesterdayFormatted} было под номером ${lastMessageId}!\n\nЗа сегодня было написано ${lastMessageId - doc.lastStartMessage} сообщений!\n\nДо тепловой смерти чата осталось ${1_000_000 - lastMessageId} сообщений!\n\n${estimated}${emojiSummary}`)
+            await api.sendMessage(TOKU_CHAT, `Последнее сообщение на ${yesterdayFormatted} было под номером ${lastMessageId}!\n\nЗа сегодня было написано ${lastMessageId - doc.lastStartMessage} сообщений!\n\nДо тепловой смерти чата осталось ${1_000_000 - lastMessageId} сообщений!\n\n${estimated}${animelytics}`)
             await reset()
         } catch(e) {
             // Nothing
