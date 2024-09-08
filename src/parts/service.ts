@@ -14,7 +14,7 @@ service.on('message:new_chat_members', async ctx => {
     await ctx.replyFmt(statics.greeting)
 })
 
-service.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == TOKU_CHANNEL, throttle(3 * 60 * 1000, (ctx: ParseModeFlavor<Context>) => {
+service.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == TOKU_CHANNEL, throttle(3 * 60 * 1000, (ctx: ParseModeFlavor<Context>) => 
     ctx.replyWithPhoto(`AgACAgIAAx0EbgUG4QACB7JmxlTOuua6I1pTUghx7Z0V9llhygAC7ecxG7lngEkS0Zyg4alAtQEAAwIAA3gAAzUE`, {
         reply_to_message_id: ctx.message?.message_id,
         caption: statics.post,
@@ -40,7 +40,7 @@ service.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == T
             }]]
         }
     })
-}))
+))
 
 service.on('message').filter(
     ctx => ctx.chat.id == OLD_TOKU_CHAT && !ctx.message.is_automatic_forward && !ctx.message.message_thread_id,
