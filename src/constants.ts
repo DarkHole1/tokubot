@@ -92,4 +92,4 @@ export const SIN = 'AgACAgIAAx0CbgUG4QACBXpmMTn3T0IYrDUaQnra8trUDIqBjAACV9cxG7Om
 export const RUINA = 'CAACAgIAAx0CbgUG4QACBepmXEm0oKV5Re07_KA3QUbbK6CnxQACg0UAAhmmsEjN_8E1Va9SdjUE'
 export const YBbI = 'CAACAgIAAx0CbgUG4QACBgRmaxnRnQABiS6RMAzqairiGyi21MQAApU2AAKySBFI2a7AYscanJY1BA'
 export const YBbI_2 = 'CAACAgIAAx0CdzmAvwABAsk4ZnlqFjp1qQP42oolgDtbfWxhXhAAAo0tAAIqtRFIw0HxXr9Q2p81BA'
-export const LINKS_PHOTO = 'https://files.catbox.moe/tqu627.jpg'
+export const LINKS_PHOTO = 'AgACAgIAAx0CbgUG4QACB9pm3ddsROLCbSoFTC98_xZb3gRhswACMuIxG5nE8EpW9Ydqm5r-hQEAAwIAA3gAAzYE'

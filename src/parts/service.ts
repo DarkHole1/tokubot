@@ -15,7 +15,7 @@ service.on('message:new_chat_members', async ctx => {
 })
 
 service.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == TOKU_CHANNEL, throttle(3 * 60 * 1000, (ctx: ParseModeFlavor<Context>) => 
-    ctx.replyWithPhoto(`AgACAgIAAx0EbgUG4QACB7JmxlTOuua6I1pTUghx7Z0V9llhygAC7ecxG7lngEkS0Zyg4alAtQEAAwIAA3gAAzUE`, {
+    ctx.replyWithPhoto(LINKS_PHOTO, {
         reply_to_message_id: ctx.message?.message_id,
         caption: statics.post,
         reply_markup: {
