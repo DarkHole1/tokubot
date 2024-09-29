@@ -107,7 +107,7 @@ fun.use(triggerKeeper([
     triggers.throttled(THROTTLE_TIME).regex('грех', actions.reply.photo(SIN)),
     triggers.throttled(THROTTLE_TIME).wholeWord('жаль', actions.preciseReply.sticker(BEESAKI)),
     triggers.throttled(THROTTLE_TIME).regex('руина', actions.reply.sticker(RUINA)),
-    triggers.wholeWord('увы', actions.reply.sticker(YBbI_2))
+    // triggers.wholeWord('увы', actions.reply.sticker(YBbI_2))
 ]))
 
 quoted.hears(/🌱🌸🍉|йомока/gimu).filter(isUserHasId(SHOCK_ID), (ctx) => ctx.replyWithSticker(YBbI))
