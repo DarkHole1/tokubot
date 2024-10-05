@@ -39,6 +39,11 @@ export const ANGELINA_LIST = [
         // Fish
         restricted: ['fun'],
         id: 101327935
+    },
+    {
+        // Viktor
+        restricted: ['fun'],
+        id: 1354427866
     }
 ]
 export const SHOCK_PATALOCK = 'CQACAgIAAx0EbgUG4QACARhkQSVHnxcut0o6kWQPtWKq2lsTXwACfywAAr81uUlinNRcNS2fFC8E'
