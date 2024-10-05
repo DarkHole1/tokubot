@@ -101,13 +101,10 @@ fun.use(triggerKeeper([
     triggers.throttled(THROTTLE_TIME).regex('казахстан|караганд', actions.reply.photo(KAZAKHSTAN)),
     triggers.throttled(THROTTLE_TIME).regex('([^\\d]|^)121([^\\d]|$)|лето первого года', actions.reply.gif(FIRST_YEAR_SUMMER)),
     triggers.throttled(THROTTLE_TIME).regex('виктору', actions.reply.gif(VIK_TORU)),
-    triggers.throttled(THROTTLE_TIME).regex('catoru|cattoru|котору', actions.reply.photo(CAT_TORU)),
-    triggers.throttled(THROTTLE_TIME).probability(1 / 4).regex('toru|тору', actions.preciseReply.gif(TORU)),
     triggers.throttled(THROTTLE_TIME).regex('mahoako|махоако', actions.reply.sticker(MAHO_AKO)),
     triggers.throttled(THROTTLE_TIME).regex('грех', actions.reply.photo(SIN)),
     triggers.throttled(THROTTLE_TIME).wholeWord('жаль', actions.preciseReply.sticker(BEESAKI)),
     triggers.throttled(THROTTLE_TIME).regex('руина', actions.reply.sticker(RUINA)),
-    // triggers.wholeWord('увы', actions.reply.sticker(YBbI_2))
 ]))
 
 quoted.hears(/🌱🌸🍉|йомока/gimu).filter(isUserHasId(SHOCK_ID), (ctx) => ctx.replyWithSticker(YBbI))
