@@ -16,7 +16,7 @@ unfun.on('msg', async (ctx, next) => {
     const receiverId = ctx.message.reply_to_message.from.id
 
     try {
-        if (UNFUN_IDS.includes(senderId) && UNFUN_IDS.includes(receiverId)) {
+        if (senderId != receiverId && UNFUN_IDS.includes(senderId) && UNFUN_IDS.includes(receiverId)) {
             log('Found ids %d %d', senderId, receiverId)
             await ctx.api.deleteMessage(ctx.message.chat.id, ctx.message.message_id)
             await ctx.api.restrictChatMember(ctx.message.chat.id, senderId, {
