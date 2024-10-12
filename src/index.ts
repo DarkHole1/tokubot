@@ -33,6 +33,7 @@ import { emojiCounter } from './parts/emoji-counter'
 import { validateHelper } from './serverParts/validate-helper'
 import { collectStats } from './parts/collect-stats'
 import { stats } from './parts/stats'
+import { unfun } from './parts/unfun'
 
 void (async () => {
     const log = debug('tokubot')
@@ -68,6 +69,8 @@ void (async () => {
     const { emojiCounter: counter, reset } = await emojiCounter()
     bot.use(counter)
     bot.use(allFiction(bot.api, reset))
+
+    bot.use(unfun)
 
     bot.use(recommendations)
     bot.use(hanekawa)

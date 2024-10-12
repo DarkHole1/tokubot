@@ -21,6 +21,8 @@ unfun.on('msg', async (ctx, next) => {
             await ctx.api.deleteMessage(ctx.message.chat.id, ctx.message.message_id)
             await ctx.api.restrictChatMember(ctx.message.chat.id, senderId, {
                 can_send_messages: false
+            }, {
+                until_date: Math.floor(Date.now() / 1000) + 60 * 60
             })
         }
     } catch (e) {
