@@ -43,12 +43,20 @@ export const ANGELINA_LIST = [
     {
         // Viktor
         restricted: ['fun', 'unfun'],
+        unfun: [5124729802, 6430689231],
         id: 1354427866
     },
     {
         // Test Account
         restricted: ['unfun'],
+        unfun: [1354427866],
         id: 5124729802
+    },
+    {
+        // Sayka
+        restricted: ['unfun'],
+        unfun: [1354427866],
+        id: 6430689231
     }
 ]
 export const SHOCK_PATALOCK = 'CQACAgIAAx0EbgUG4QACARhkQSVHnxcut0o6kWQPtWKq2lsTXwACfywAAr81uUlinNRcNS2fFC8E'

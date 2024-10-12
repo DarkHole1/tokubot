@@ -4,7 +4,7 @@ import debug from "debug"
 
 export const unfun = new Composer()
 
-const UNFUN_IDS = ANGELINA_LIST.filter(e => e.restricted.includes('unfun')).map(e => e.id)
+const UNFUN_IDS = ANGELINA_LIST.filter(e => e.restricted.includes('unfun'))
 const log = debug('app:parts:unfun')
 
 unfun.on('msg', async (ctx, next) => {
@@ -16,7 +16,8 @@ unfun.on('msg', async (ctx, next) => {
     const receiverId = ctx.message.reply_to_message.from.id
 
     try {
-        if (senderId != receiverId && UNFUN_IDS.includes(senderId) && UNFUN_IDS.includes(receiverId)) {
+        const unid = UNFUN_IDS.find(e => e.id == senderId)
+        if (senderId != receiverId && unid && unid.unfun && unid.unfun.includes(receiverId)) {
             log('Found ids %d %d', senderId, receiverId)
             await ctx.api.deleteMessage(ctx.message.chat.id, ctx.message.message_id)
             await ctx.api.restrictChatMember(ctx.message.chat.id, senderId, {
