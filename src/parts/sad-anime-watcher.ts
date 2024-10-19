@@ -122,6 +122,7 @@ export function sadAnimeWatcher<C extends Context>(config: Config, bot: Bot<C>) 
         console.log("Successfully ended")
     }, async (err) => {
         try {
+            log(err)
             bot.api.sendMessage(DARK_HOLE, (err as Error).toString())
         } catch (_) { }
     })
