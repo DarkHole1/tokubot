@@ -14,8 +14,9 @@ export const XANDEX_ID = 221399639
 export const BOT_ID = 5627801063
 export const TOKUID = 332320628
 export const SHOCK_ID = 1276409228
+export const BEZMAR_ID = 717413371
 // export const TOKUID = DARK_HOLE
-export const ADMINS = [TOKU_CHANNEL, TOKU_CHANNEL_2, DARK_HOLE, EGOID, TOKUID, FIREWORKY_ID, VIKA_ID]
+export const ADMINS = [TOKU_CHANNEL, TOKU_CHANNEL_2, DARK_HOLE, EGOID, TOKUID, FIREWORKY_ID, VIKA_ID, BEZMAR_ID]
 export const ANGELINA_LIST = [
     {
         restricted: ['fun', 'unspoil'],
