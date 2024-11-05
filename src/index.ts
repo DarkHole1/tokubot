@@ -34,6 +34,7 @@ import { validateHelper } from './serverParts/validate-helper'
 import { collectStats } from './parts/collect-stats'
 import { stats } from './parts/stats'
 import { unfun } from './parts/unfun'
+import { bingo } from './parts/bingo'
 
 void (async () => {
     const log = debug('tokubot')
@@ -88,6 +89,7 @@ void (async () => {
     worldTrigger(bot)
     everydayPost(bot)
 
+    bot.use(bingo)
     bot.filter(angelinaList(['fun'], ANGELINA_LIST)).use(fun)
     bot.filter(angelinaList(['unspoil'], ANGELINA_LIST)).use(unspoil)
     bot.use(blessing)

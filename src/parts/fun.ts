@@ -126,8 +126,6 @@ quoted.command(
     }
 )
 
-quoted.command('bingo', ctx => ctx.reply('https://docs.google.com/spreadsheets/d/1QghSAYndgtDBDYPjEO1FNsMsP765zHK-wAFDF9Q1h9Y/edit#gid=0'))
-
 const allSlanders = [
     'https://t.me/c/2000257215/108',
     'https://t.me/c/2000257215/109',
