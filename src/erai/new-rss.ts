@@ -43,7 +43,7 @@ export function makeLink(config?: Partial<LinkConfig> & { token: string }): stri
             url += '/raws'
             break
     }
-    url += '/feed?'
+    url += '/feed/?'
     switch (fullConfig.resolution) {
         case 'all':
             break
@@ -73,7 +73,7 @@ export function makeLink(config?: Partial<LinkConfig> & { token: string }): stri
     if (!fullConfig.v0) {
         url += 'v0=no&'
     }
-    url += fullConfig.token
+    url += `token=${fullConfig.token}`
     return url
 }
 
