@@ -113,7 +113,7 @@ export async function parseFeed(link: string): Promise<RSSItem[]> {
         const title = item.title.replace(/\[.+?\]/g, '').trim()
         const titleParsed = title.match(/^(.+) \- (?:(\d+(?:\.\d)?)|(\d+ ~ \d+)|(SP\d*|Special))(?:v\d+)?( END)?(?: \((.+)\))?$/)
         if (!titleParsed) {
-            if(item['erai:category'] == '[Movie or Special Episode]') {
+            if (item['erai:category'] == '[Movie or Special Episode]') {
                 // TODO: Parsing movies
                 return []
             }
