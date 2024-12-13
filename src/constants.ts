@@ -43,18 +43,18 @@ export const ANGELINA_LIST = [
     },
     {
         // Viktor
-        restricted: ['fun', 'unfun'],
+        restricted: ['fun'],
         unfun: [5124729802, 6430689231],
         id: 1354427866
     },
     {
-        restricted: ['fun', 'unfun'],
+        restricted: ['fun'],
         unfun: [5124729802, 6430689231],
         id: -1002166944789
     },
     {
         // Test Account
-        restricted: ['unfun'],
+        restricted: [],
         unfun: [1354427866, -1002166944789],
         id: 5124729802
     },
