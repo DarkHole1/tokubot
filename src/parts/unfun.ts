@@ -12,8 +12,10 @@ unfun.on('msg', async (ctx, next) => {
         return await next()
     }
 
-    const senderId = ctx.message.from.id
-    const receiverId = ctx.message.reply_to_message.from.id
+    const msg = ctx.message
+    const reply = ctx.message.reply_to_message
+    const senderId = msg.sender_chat?.id ?? msg.from.id
+    const receiverId = reply.sender_chat?.id ?? reply.from!.id
 
     try {
         const unid = UNFUN_IDS.find(e => e.id == senderId)
