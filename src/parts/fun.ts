@@ -108,8 +108,6 @@ fun.use(triggerKeeper([
     triggers.throttled(THROTTLE_TIME).wholeWord('центр|центризм|', actions.reply.photo(choiced(CENTER_PHOTOS)))
 ]))
 
-quoted.hears(/🌱🌸🍉|йомока/gimu).filter(isUserHasId(SHOCK_ID), (ctx) => ctx.replyWithSticker(YBbI))
-
 quoted.hears(/(\P{L}|^)бан(\P{L}|$)/gimu).filter(
     isAdmin,
     ctx => ctx.replyWithAnimation(MONOKUMA)
