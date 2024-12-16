@@ -105,7 +105,7 @@ fun.use(triggerKeeper([
     triggers.throttled(THROTTLE_TIME).regex('грех', actions.reply.photo(SIN)),
     triggers.throttled(THROTTLE_TIME).wholeWord('жаль', actions.preciseReply.sticker(BEESAKI)),
     triggers.throttled(THROTTLE_TIME).regex('руина', actions.reply.sticker(RUINA)),
-    triggers.throttled(THROTTLE_TIME).wholeWord('центр|центризм|', actions.reply.photo(choiced(CENTER_PHOTOS)))
+    triggers.throttled(THROTTLE_TIME).wholeWord('центр|центризм', actions.reply.photo(choiced(CENTER_PHOTOS)))
 ]))
 
 quoted.hears(/(\P{L}|^)бан(\P{L}|$)/gimu).filter(
