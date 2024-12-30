@@ -81,7 +81,7 @@ export const events = (cache: Cache, bot: Bot, config: Config) => {
             pic: reply.photo.at(-1)!.file_id
         })
         await event.save()
-        await ctx.reply('Дождитесь одобрения @tokutonariwa', {
+        await ctx.reply('Дождитесь одобрения @toku_tonari', {
             reply_markup: new InlineKeyboard([[{
                 text: 'Approve',
                 callback_data: `approve:${event.id}`
@@ -106,7 +106,7 @@ export const events = (cache: Cache, bot: Bot, config: Config) => {
             pic: reply.photo.at(-1)!.file_id,
         })
         await event.save()
-        await ctx.reply('Дождитесь одобрения @tokutonariwa', {
+        await ctx.reply('Дождитесь одобрения @toku_tonari', {
             reply_markup: new InlineKeyboard([[{
                 text: 'Approve',
                 callback_data: `approve:${event.id}`
