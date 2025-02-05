@@ -11,7 +11,21 @@ service.on('message:new_chat_members', async ctx => {
         await ctx.replyFmt(statics.greetingOld)
         return
     }
-    await ctx.replyFmt(statics.greeting)
+    await ctx.replyFmt(statics.greeting, {
+        reply_markup: {
+            inline_keyboard: [[{
+                text: `Правила`, 
+                url: `https://t.me/c/2000257215/361`
+            }, {
+                text: `К просмотру`,
+                url: `https://t.me/c/2000257215/410`
+            }],
+            [{
+                text: `Каналы участников`,
+                url: `https://t.me/addlist/GRDMBpfvBW5mYTRi`
+            }]]
+        }
+    })
 })
 
 service.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == TOKU_CHANNEL, throttle(3 * 60 * 1000, (ctx: ParseModeFlavor<Context>) => 
