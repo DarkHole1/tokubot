@@ -105,7 +105,6 @@ fun.use(triggerKeeper([
     triggers.throttled(THROTTLE_TIME).regex('грех', actions.reply.photo(SIN)),
     triggers.throttled(THROTTLE_TIME).wholeWord('жаль', actions.preciseReply.sticker(BEESAKI)),
     triggers.throttled(THROTTLE_TIME).regex('руина', actions.reply.sticker(RUINA)),
-    triggers.wholeWord('центр|центризм', actions.reply.photo(choiced(CENTER_PHOTOS))),
     triggers.throttled(THROTTLE_TIME).regex('([^\\d]|^)52([^\\d]|$)|пятьдесят два|писятдва', actions.reply.gif(FIFTY_TWO))
 ]))
 
