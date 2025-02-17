@@ -135,6 +135,7 @@ const allSlanders = [
     'https://t.me/c/2000257215/8948',
     'https://t.me/c/2000257215/97105',
     'https://t.me/c/2000257215/204238',
+    'https://t.me/c/2000257215/539144',
 ]
 
 quoted.command('slander', ctx => {
@@ -145,9 +146,6 @@ quoted.command('slander', ctx => {
         return ctx.reply(`Все слендеры:\n${allSlanders.join('\n')}\n\nСледующий слендер: ???`)
     }
 })
-
-// Tomorrow
-// debounced.hears(/(\P{L}|^)завтра(\P{L}|$)/ui, ctx => (lastTime = Date.now(), ctx.replyWithVideo(Math.random() > 0.3 ? NOT_TOMORROW : (Math.random() > 0.3 ? TOMORROW_HAPPY : TOMORROW))))
 
 quoted.filter(ctx => ctx.msg?.sticker?.file_unique_id == 'AgADjRQAAqfaKUs', ctx => ctx.replyWithAnimation(PATPAT))
 
