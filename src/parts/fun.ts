@@ -16,7 +16,7 @@ const ENABLE_EMOJI = false
 
 const THROTTLE_TIME = 5 * 60 * 1000
 let lastTime = 0
-const debounced = quoted.filter(_ => Date.now() > lastTime + 0.1 * 60 * 1000)
+const debounced = quoted.filter(_ => Date.now() > lastTime + 0.5 * 60 * 1000)
 
 const CENTER_QUOTES = [
     "Сдаться и держать центр вместе с нами",
