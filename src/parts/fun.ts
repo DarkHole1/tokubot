@@ -7,7 +7,6 @@ import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER
 import { DrinkCounters } from "../data"
 import { choice, isAdmin } from '../utils'
 import { actions, choiced, triggerKeeper, triggers } from './trigger-keeper'
-import { isUserHasId } from 'grammy-guard'
 
 export const fun = new Composer
 const quoted = fun.use(autoQuote)
@@ -17,7 +16,36 @@ const ENABLE_EMOJI = false
 
 const THROTTLE_TIME = 5 * 60 * 1000
 let lastTime = 0
-const debounced = quoted.filter(_ => Date.now() > lastTime + 5 * 60 * 1000)
+const debounced = quoted.filter(_ => Date.now() > lastTime + 0.5 * 60 * 1000)
+
+const CENTER_QUOTES = [
+    "Сдаться и держать центр вместе с нами",
+    "Цп продолжает жить и все больше укрепляет свое положение в центре",
+    "Какие же вы все завистники. Сами мечтают научиться держать центр, но не можете",
+    "Вы не сломите нашу веру в центр",
+    "Очевидно, держать центр",
+    "Ждём текст в вордовском файле о том, почему ты придерживаешься центра и почему мы должны тебя принять",
+    "Держишь центр",
+    "Центр это синоним к слову \"лучшее\"",
+    "Напишите почему вы придерживаетесь центра и покажите, что вы несмотря ни на что готовы его держать",
+    "Нужно же как-то держать центр",
+    "Даже тут не держишь центр",
+    "Короче, Ксандекс всё больше отдаляется от центра",
+    "Борьба за справедливость это держать центр",
+    "Ребят, держим центр, голосуем за субботу",
+    "В этом человек хороший и тайтл тоже, значит если следовать идеологии центра ему не понравится аниме, которое я загадал",
+    "Чел, сейчас самое мемное время: Тест и Витя, Копатель, девочки, центр",
+    "Держишь центр?",
+    "Типа шок центр",
+    "Держим центр",
+    "Да, держат центр",
+    "Вот именно, достаточно просто понимать, что нужно держать центр",
+]
+
+debounced.on('msg', ctx => {
+    lastTime = Date.now()
+    return ctx.reply(choice(CENTER_QUOTES))
+})
 
 quoted.on('msg').filter(ctx => ctx.message?.sender_chat?.id == LELOUCH_ID, async (ctx, next) => {
     await ctx.api.setMessageReaction(ctx.msg.chat.id, ctx.msg.message_id, [{
