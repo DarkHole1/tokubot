@@ -42,10 +42,10 @@ const CENTER_QUOTES = [
     "Вот именно, достаточно просто понимать, что нужно держать центр",
 ]
 
-debounced.on('msg', ctx => {
-    lastTime = Date.now()
-    return ctx.reply(choice(CENTER_QUOTES))
-})
+// debounced.on('msg', ctx => {
+//     lastTime = Date.now()
+//     return ctx.reply(choice(CENTER_QUOTES))
+// })
 
 quoted.on('msg').filter(ctx => ctx.message?.sender_chat?.id == LELOUCH_ID, async (ctx, next) => {
     await ctx.api.setMessageReaction(ctx.msg.chat.id, ctx.msg.message_id, [{
