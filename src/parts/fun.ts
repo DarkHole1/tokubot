@@ -194,6 +194,10 @@ quoted.hears(/^Руби,? (.+?) или (.+?)\??$/i, async ctx => {
     await ctx.reply(res)
 })
 
+quoted.hears(/^Руби,? вероятность/i, async ctx => {
+    await ctx.reply(`Я думаю, что вероятность равна ${Math.round(Math.random()*100)}`)
+})
+
 quoted.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
     let drink: string
     let count: number
