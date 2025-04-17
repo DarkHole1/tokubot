@@ -6,7 +6,8 @@ const RawConfig = z.object({
     ERAI_TOKEN: z.string().min(1),
     SAGIRI_TOKEN: z.string().min(1),
     VK_SERVICE_KEY: z.string().min(1),
-    MONGODB_URI: z.string().min(1)
+    MONGODB_URI: z.string().min(1),
+    PROXYAPI_TOKEN: z.string().min(1)
 })
 type RawConfig = z.infer<typeof RawConfig>
 
@@ -16,6 +17,7 @@ export class Config implements RawConfig {
     SAGIRI_TOKEN: string
     VK_SERVICE_KEY: string
     MONGODB_URI: string
+    PROXYAPI_TOKEN: string
 
     constructor() {
         const config = dotenv.config()
@@ -28,5 +30,6 @@ export class Config implements RawConfig {
         this.SAGIRI_TOKEN = parsed.SAGIRI_TOKEN
         this.VK_SERVICE_KEY = parsed.VK_SERVICE_KEY
         this.MONGODB_URI = parsed.MONGODB_URI
+        this.PROXYAPI_TOKEN = parsed.PROXYAPI_TOKEN
     }
 }

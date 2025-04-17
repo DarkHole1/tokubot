@@ -69,7 +69,7 @@ void (async () => {
 
     const { emojiCounter: counter, reset } = await emojiCounter()
     bot.use(counter)
-    bot.use(allFiction(bot.api, reset))
+    bot.use(allFiction(bot.api, reset, config))
 
     bot.use(unfun)
 

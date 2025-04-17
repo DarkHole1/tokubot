@@ -3,9 +3,15 @@ import * as cron from 'node-cron'
 import { TOKU_CHAT } from './constants'
 import { AllFictionModel } from './models/all-fiction'
 import { getYesterdayCounter } from './parts/emoji-counter'
-import { differenceInCalendarDays, differenceInDays } from 'date-fns'
+import { differenceInDays } from 'date-fns'
+import OpenAI from 'openai'
+import { Config } from './config'
 
-export const allFiction = (api: Api, reset: () => Promise<void>) => {
+export const allFiction = (api: Api, reset: () => Promise<void>, config: Config) => {
+    const openai = new OpenAI({
+        apiKey: config.PROXYAPI_TOKEN,
+        baseURL: 'https://api.proxyapi.ru/openai'
+    })
     const allFiction = new Composer
 
     let lastMessageId = 0
@@ -15,7 +21,7 @@ export const allFiction = (api: Api, reset: () => Promise<void>) => {
         async (ctx, next) => {
             if (ctx.msg?.message_id && ctx.msg.message_id > lastMessageId) {
                 lastMessageId = ctx.msg.message_id
-                if(lastMessageId % 10_000 == 0) {
+                if (lastMessageId % 10_000 == 0) {
                     await ctx.reply(`Это было ${lastMessageId} сообщение`, {
                         reply_parameters: {
                             message_id: lastMessageId
@@ -38,10 +44,13 @@ export const allFiction = (api: Api, reset: () => Promise<void>) => {
             yesterday.getMonth() + 1,
             yesterday.getFullYear()
         ].map(n => n.toString().padStart(2, '0')).join('.')
-        const estimatedDays = (1_000_000 - lastMessageId) * (doc.lastStats.length + 1) / doc.lastStats.concat(lastMessageId - doc.lastStartMessage).reduce((a, b) => a + b)
+        const messagesLeft = 1000000 - lastMessageId
+        const dailyMessages = lastMessageId - doc.lastStartMessage
+        const weeklyAverage = doc.lastStats.concat(dailyMessages).reduce((a, b) => a + b) / (doc.lastStats.length + 1)
+        const estimatedDays = messagesLeft / weeklyAverage
         let estimated = `Этого хватит приблизительно на ${estimatedDays.toFixed(0)} дней!`
         let emojiSummary = ''
-        if(emoji) {
+        if (emoji) {
             const sum = (a: Iterable<number>) => Array.from(a).reduce((a, b) => a + b)
             const maximum = <T>(a: Iterable<[T, number]>): T => Array.from(a).reduce((a, b) => a[1] >= b[1] ? a : b)[0]
             const overallEmojiCount = sum(emoji.overall.values())
@@ -51,12 +60,23 @@ export const allFiction = (api: Api, reset: () => Promise<void>) => {
             emojiSummary = `\n\nЗа сегодня было отправлено ${overallEmojiCount} эмодзи!\n\nСамый популярный эмодзи: ${theMostPopularEmoji}!`
         }
 
+        let comment = ''
+        try {
+            const res = await openai.responses.create({
+                model: 'gpt-4o-mini-2024-07-18',
+                input: `Сгенерируй короткое предложение, комментирующее количество сообщений за сутки в чате. Не надо упоминать количество сообщений. Тематика чата: [аниме, манга, общение], количество сообщений: ${dailyMessages}, среднее количество сообщений за последнюю неделю: ${weeklyAverage}`
+            })
+            comment = res.output_text
+        } catch (e) {
+            // Ignore error of generation
+        }
+
         const animelytics = `\n\nПрошло ${differenceInDays(new Date(), new Date(2023, 9, 8, 10, 8))} дней с последнего поста в Анимелитике!`
 
         try {
-            await api.sendMessage(TOKU_CHAT, `Последнее сообщение на ${yesterdayFormatted} было под номером ${lastMessageId}!\n\nЗа сегодня было написано ${lastMessageId - doc.lastStartMessage} сообщений!\n\nДо тепловой смерти чата осталось ${1_000_000 - lastMessageId} сообщений!\n\n${estimated}${emojiSummary}${animelytics}`)
+            await api.sendMessage(TOKU_CHAT, `Последнее сообщение на ${yesterdayFormatted} было под номером ${lastMessageId}! ${comment}\n\nЗа сегодня было написано ${dailyMessages} сообщений!\n\nДо тепловой смерти чата осталось ${messagesLeft} сообщений!\n\n${estimated}${emojiSummary}${animelytics}`)
             await reset()
-        } catch(e) {
+        } catch (e) {
             // Nothing
         }
 
