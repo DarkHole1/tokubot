@@ -6,11 +6,14 @@ import { getYesterdayCounter } from './parts/emoji-counter'
 import { differenceInDays } from 'date-fns'
 import OpenAI from 'openai'
 import { Config } from './config'
+import debug from 'debug'
+
+const log = debug('tokubot:parts:all-fiction')
 
 export const allFiction = (api: Api, reset: () => Promise<void>, config: Config) => {
     const openai = new OpenAI({
         apiKey: config.PROXYAPI_TOKEN,
-        baseURL: 'https://api.proxyapi.ru/openai'
+        baseURL: 'https://api.proxyapi.ru/openai/v1'
     })
     const allFiction = new Composer
 
@@ -35,6 +38,7 @@ export const allFiction = (api: Api, reset: () => Promise<void>, config: Config)
     )
 
     cron.schedule('0 0 0 * * *', async () => {
+        log('Started daily processing')
         const doc = await findOrCreate()
         const emoji = await getYesterdayCounter()
         const yesterday = new Date()
@@ -68,13 +72,14 @@ export const allFiction = (api: Api, reset: () => Promise<void>, config: Config)
             })
             comment = res.output_text
         } catch (e) {
+            log('Error %o', e)
             // Ignore error of generation
         }
 
         const animelytics = `\n\nПрошло ${differenceInDays(new Date(), new Date(2023, 9, 8, 10, 8))} дней с последнего поста в Анимелитике!`
 
         try {
-            await api.sendMessage(TOKU_CHAT, `Последнее сообщение на ${yesterdayFormatted} было под номером ${lastMessageId}! ${comment}\n\nЗа сегодня было написано ${dailyMessages} сообщений!\n\nДо тепловой смерти чата осталось ${messagesLeft} сообщений!\n\n${estimated}${emojiSummary}${animelytics}`)
+            await api.sendMessage(TOKU_CHAT, `Последнее сообщение на ${yesterdayFormatted} было под номером ${lastMessageId}!\n\nЗа сегодня было написано ${dailyMessages} сообщений! ${comment}\n\nДо тепловой смерти чата осталось ${messagesLeft} сообщений!\n\n${estimated}${emojiSummary}${animelytics}`)
             await reset()
         } catch (e) {
             // Nothing
