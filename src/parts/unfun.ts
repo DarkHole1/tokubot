@@ -48,3 +48,23 @@ unfun.on('msg', async (ctx, next) => {
     }
     return await next()
 })
+
+unfun.on('edit', async (ctx, next) => {
+    if (!ctx.msg) {
+        return await next()
+    }
+
+    const msg = ctx.msg
+    const senderId = msg.sender_chat?.id ?? msg.from?.id
+    try {
+        const unid = UNLINK_IDS.find(e => e.id == senderId)
+        if (unid && msg.entities?.find(e => e.type == 'text_link' || e.type == 'url')) {
+            log('Found id %d', senderId)
+            await ctx.api.deleteMessage(msg.chat.id, msg.message_id)
+        }
+    } catch(e) {
+        log(e);
+    }
+
+    return await next()
+})
