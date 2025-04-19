@@ -21,7 +21,7 @@ unfun.on('msg', async (ctx, next) => {
             log('Found id %d', senderId)
             await ctx.api.deleteMessage(ctx.message.chat.id, ctx.message.message_id)
         }
-        await ctx.api.deleteMessage(ctx.message.chat.id, ctx.message.message_id)
+        // await ctx.api.deleteMessage(ctx.message.chat.id, ctx.message.message_id)
     } catch(e) {
         log(e);
     }
