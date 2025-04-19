@@ -17,11 +17,10 @@ unfun.on('msg', async (ctx, next) => {
     const senderId = msg.sender_chat?.id ?? msg.from.id
     try {
         const unid = UNLINK_IDS.find(e => e.id == senderId)
-        if (unid) {
+        if (unid && msg.entities?.find(e => e.type == 'text_link' || e.type == 'url')) {
             log('Found id %d', senderId)
             await ctx.api.deleteMessage(ctx.message.chat.id, ctx.message.message_id)
         }
-        // await ctx.api.deleteMessage(ctx.message.chat.id, ctx.message.message_id)
     } catch(e) {
         log(e);
     }
