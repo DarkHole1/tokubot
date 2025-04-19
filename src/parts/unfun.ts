@@ -5,16 +5,32 @@ import debug from "debug"
 export const unfun = new Composer()
 
 const UNFUN_IDS = ANGELINA_LIST.filter(e => e.restricted.includes('unfun'))
+const UNLINK_IDS = ANGELINA_LIST.filter(e => e.restricted.includes('unlink'))
 const log = debug('app:parts:unfun')
 
 unfun.on('msg', async (ctx, next) => {
-    if (!ctx.message?.reply_to_message || !ctx.message.reply_to_message.from?.id) {
+    if (!ctx.message) {
         return await next()
     }
 
     const msg = ctx.message
-    const reply = ctx.message.reply_to_message
     const senderId = msg.sender_chat?.id ?? msg.from.id
+    try {
+        const unid = UNLINK_IDS.find(e => e.id == senderId)
+        if (unid) {
+            log('Found id %d', senderId)
+            await ctx.api.deleteMessage(ctx.message.chat.id, ctx.message.message_id)
+        }
+        await ctx.api.deleteMessage(ctx.message.chat.id, ctx.message.message_id)
+    } catch(e) {
+        log(e);
+    }
+
+    if (!ctx.message?.reply_to_message || !ctx.message.reply_to_message.from?.id) {
+        return await next()
+    }
+
+    const reply = ctx.message.reply_to_message
     const receiverId = reply.sender_chat?.id ?? reply.from!.id
 
     try {
