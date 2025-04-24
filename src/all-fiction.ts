@@ -68,7 +68,7 @@ export const allFiction = (api: Api, reset: () => Promise<void>, config: Config)
         try {
             const res = await openai.responses.create({
                 model: 'gpt-4o-mini-2024-07-18',
-                temperature: 2,
+                temperature: 1.2,
                 input: `Сгенерируй короткое предложение, комментирующее количество сообщений за сутки в чате. Не надо упоминать количество сообщений. Тематика чата: [аниме, манга, общение], количество сообщений: ${dailyMessages}, среднее количество сообщений за последнюю неделю: ${weeklyAverage}`
             })
             comment = res.output_text
