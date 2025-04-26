@@ -77,7 +77,7 @@ export const allFiction = (api: Api, reset: () => Promise<void>, config: Config)
         const animelytics = `\n\nПрошло ${differenceInDays(new Date(), new Date(2023, 9, 8, 10, 8))} дней с последнего поста в Анимелитике!`
 
         const generateResult = (output: Output) => 
-            `Последнее сообщение на ${yesterdayFormatted} было под номером ${lastMessageId}!\n\nЗа сегодня было написано ${dailyMessages} сообщений! ${output.messageCount}\n\nДо тепловой смерти чата осталось ${messagesLeft} сообщений! ${output.heatDeath}\n\n${estimated}${emojiSummary(output.emojiCount)}${animelytics}${output.animelytic}`
+            `Последнее сообщение на ${yesterdayFormatted} было под номером ${lastMessageId}!\n\nЗа сегодня было написано ${dailyMessages} сообщений! ${output.messageCount}\n\nДо тепловой смерти чата осталось ${messagesLeft} сообщений! ${output.heatDeath}\n\n${estimated}${emojiSummary(output.emojiCount)}${animelytics} ${output.animelytic}`
         let result = generateResult({
             messageCount: '', heatDeath: '', emojiCount: '', animelytic: ''
         })
@@ -86,7 +86,7 @@ export const allFiction = (api: Api, reset: () => Promise<void>, config: Config)
             const response = await openai.responses.parse({
                 model: "gpt-4o-mini-2024-07-18",
                 input: [
-                  { role: "system", content: "Напиши небольшой комментарий на каждое предложение из списка. Необходимо писать в повседневном тоне и быть кратким. Тематика чата: общение 90%, аниме 19%, манга 1%." },
+                  { role: "system", content: "Напиши небольшой комментарий на каждое предложение из списка. Необходимо писать в повседневном тоне, быть кратким и не упоминать число в комментарии. Тематика чата: общение 90%, аниме 19%, манга 1%." },
                   {
                     role: "user",
                     content: result,
