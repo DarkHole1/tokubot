@@ -5,10 +5,20 @@ import { AllFictionModel } from './models/all-fiction'
 import { getYesterdayCounter } from './parts/emoji-counter'
 import { differenceInDays } from 'date-fns'
 import OpenAI from 'openai'
+import { zodTextFormat } from "openai/helpers/zod";
 import { Config } from './config'
 import debug from 'debug'
+import { z } from 'zod'
 
 const log = debug('tokubot:parts:all-fiction')
+
+const Output = z.object({
+    messageCount: z.string(),
+    heatDeath: z.string(),
+    emojiCount: z.string(),
+    animelytic: z.string()
+})
+type Output = z.infer<typeof Output>  
 
 export const allFiction = (api: Api, reset: () => Promise<void>, config: Config) => {
     const openai = new OpenAI({
@@ -53,7 +63,7 @@ export const allFiction = (api: Api, reset: () => Promise<void>, config: Config)
         const weeklyAverage = doc.lastStats.concat(dailyMessages).reduce((a, b) => a + b) / (doc.lastStats.length + 1)
         const estimatedDays = messagesLeft / weeklyAverage
         let estimated = `Этого хватит приблизительно на ${estimatedDays.toFixed(0)} дней!`
-        let emojiSummary = ''
+        let emojiSummary = (comment: string) => ''
         if (emoji) {
             const sum = (a: Iterable<number>) => Array.from(a).reduce((a, b) => a + b)
             const maximum = <T>(a: Iterable<[T, number]>): T => Array.from(a).reduce((a, b) => a[1] >= b[1] ? a : b)[0]
@@ -61,26 +71,42 @@ export const allFiction = (api: Api, reset: () => Promise<void>, config: Config)
             const theMostPopularEmoji = maximum(emoji.overall.entries())
             const theMostActiveEmojiUser = maximum(Array.from(emoji.byUser.values()).map(user => [user.name, sum(user.counters.values())] as [string, number]))
             // emojiSummary = `\n\nЗа сегодня было отправлено ${overallEmojiCount} эмодзи!\n\nСамый популярный эмодзи: ${theMostPopularEmoji}!\n\nСамый активный пользователь эмодзи: ${theMostActiveEmojiUser}!`
-            emojiSummary = `\n\nЗа сегодня было отправлено ${overallEmojiCount} эмодзи!\n\nСамый популярный эмодзи: ${theMostPopularEmoji}!`
+            emojiSummary = (comment: string) => `\n\nЗа сегодня было отправлено ${overallEmojiCount} эмодзи! ${comment}\n\nСамый популярный эмодзи: ${theMostPopularEmoji}!`
         }
 
-        let comment = ''
+        const animelytics = `\n\nПрошло ${differenceInDays(new Date(), new Date(2023, 9, 8, 10, 8))} дней с последнего поста в Анимелитике!`
+
+        const generateResult = (output: Output) => 
+            `Последнее сообщение на ${yesterdayFormatted} было под номером ${lastMessageId}!\n\nЗа сегодня было написано ${dailyMessages} сообщений! ${output.messageCount}\n\nДо тепловой смерти чата осталось ${messagesLeft} сообщений! ${output.heatDeath}\n\n${estimated}${emojiSummary(output.emojiCount)}${animelytics}${output.animelytic}`
+        let result = generateResult({
+            messageCount: '', heatDeath: '', emojiCount: '', animelytic: ''
+        })
+        
         try {
-            const res = await openai.responses.create({
-                model: 'gpt-4o-mini-2024-07-18',
-                temperature: 1.2,
-                input: `Сгенерируй короткое предложение, комментирующее количество сообщений за сутки в чате. Не надо упоминать количество сообщений. Тематика чата: [аниме, манга, общение], количество сообщений: ${dailyMessages}, среднее количество сообщений за последнюю неделю: ${weeklyAverage}`
-            })
-            comment = res.output_text
+            const response = await openai.responses.parse({
+                model: "gpt-4o-mini-2024-07-18",
+                input: [
+                  { role: "system", content: "Напиши небольшой комментарий на каждое предложение из списка. Необходимо писать в повседневном тоне и быть кратким. Тематика чата: общение 90%, аниме 19%, манга 1%." },
+                  {
+                    role: "user",
+                    content: result,
+                  },
+                ],
+                text: {
+                  format: zodTextFormat(Output, "output"),
+                },
+              })
+          
+              if (response.output_parsed) {
+                  result = generateResult(response.output_parsed)
+              }
         } catch (e) {
             log('Error %o', e)
             // Ignore error of generation
         }
 
-        const animelytics = `\n\nПрошло ${differenceInDays(new Date(), new Date(2023, 9, 8, 10, 8))} дней с последнего поста в Анимелитике!`
-
         try {
-            await api.sendMessage(TOKU_CHAT, `Последнее сообщение на ${yesterdayFormatted} было под номером ${lastMessageId}!\n\nЗа сегодня было написано ${dailyMessages} сообщений! ${comment}\n\nДо тепловой смерти чата осталось ${messagesLeft} сообщений!\n\n${estimated}${emojiSummary}${animelytics}`)
+            await api.sendMessage(TOKU_CHAT, result)
             await reset()
         } catch (e) {
             // Nothing
