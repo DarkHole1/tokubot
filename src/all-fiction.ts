@@ -1,6 +1,6 @@
 import { Api, Composer } from 'grammy'
 import { CronJob } from 'cron'
-import { TOKU_CHAT } from './constants'
+import { ANIME_LIST, TOKU_CHAT } from './constants'
 import { AllFictionModel } from './models/all-fiction'
 import { getYesterdayCounter } from './parts/emoji-counter'
 import { differenceInDays } from 'date-fns'
@@ -74,7 +74,7 @@ export const allFiction = (api: Api, reset: () => Promise<void>, config: Config)
                 emojiSummary = (comment: string) => `За сегодня было отправлено ${overallEmojiCount} эмодзи! ${comment}\n\nСамый популярный эмодзи: ${theMostPopularEmoji}!`
             }
 
-            const day = differenceInDays(new Date(), new Date(2025, 5, 31))
+            const day = differenceInDays(new Date(), new Date(2025, 4, 31))
             const dailyWisdom = `Ежедневная мудрость №${day}:`
 
             const generateResult = (output: Output) => [
@@ -88,13 +88,13 @@ export const allFiction = (api: Api, reset: () => Promise<void>, config: Config)
             let result = generateResult({
                 messageCount: '', heatDeath: '', emojiCount: '', wisdom: ''
             })
-            const todayAnime = 'Toaru Kagaku no Railgun';
+            const todayAnime = ANIME_LIST.at(day % ANIME_LIST.length)!;
             
             try {
                 const response = await openai.responses.parse({
-                    model: "gpt-4o-mini-2024-07-18",
+                    model: "gpt-4o-2024-11-20",
                     input: [
-                    { role: "system", content: `Напиши небольшой комментарий на каждое предложение из списка. Необходимо писать в повседневном тоне, быть кратким и не упоминать число в комментарии. Тематика чата: общение 90%, аниме 19%, манга 1%. Сегодняшнее аниме: ${todayAnime}` },
+                    { role: "system", content: `Напиши небольшой комментарий на каждое предложение из списка. Необходимо писать в повседневном тоне, быть кратким и не упоминать число в комментарии. Для ежедневной мудрости необходимо привести цитату из сегодняшнего аниме, но не упоминать название аниме или персонажа. Тематика чата: общение 90%, аниме 19%, манга 1%. Сегодняшнее аниме: ${todayAnime}` },
                     {
                         role: "user",
                         content: result,
