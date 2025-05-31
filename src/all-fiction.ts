@@ -16,7 +16,7 @@ const Output = z.object({
     messageCount: z.string(),
     heatDeath: z.string(),
     emojiCount: z.string(),
-    animelytic: z.string()
+    wisdom: z.string()
 })
 type Output = z.infer<typeof Output>
 
@@ -71,34 +71,40 @@ export const allFiction = (api: Api, reset: () => Promise<void>, config: Config)
                 const maximum = <T>(a: Iterable<[T, number]>): T => Array.from(a).reduce((a, b) => a[1] >= b[1] ? a : b)[0]
                 const overallEmojiCount = sum(emoji.overall.values())
                 const theMostPopularEmoji = maximum(emoji.overall.entries())
-                const theMostActiveEmojiUser = maximum(Array.from(emoji.byUser.values()).map(user => [user.name, sum(user.counters.values())] as [string, number]))
-                // emojiSummary = `\n\nЗа сегодня было отправлено ${overallEmojiCount} эмодзи!\n\nСамый популярный эмодзи: ${theMostPopularEmoji}!\n\nСамый активный пользователь эмодзи: ${theMostActiveEmojiUser}!`
-                emojiSummary = (comment: string) => `\n\nЗа сегодня было отправлено ${overallEmojiCount} эмодзи! ${comment}\n\nСамый популярный эмодзи: ${theMostPopularEmoji}!`
+                emojiSummary = (comment: string) => `За сегодня было отправлено ${overallEmojiCount} эмодзи! ${comment}\n\nСамый популярный эмодзи: ${theMostPopularEmoji}!`
             }
 
-            const animelytics = `\n\nПрошло ${differenceInDays(new Date(), new Date(2023, 9, 8, 10, 8))} дней с последнего поста в Анимелитике!`
+            const day = differenceInDays(new Date(), new Date(2025, 5, 31))
+            const dailyWisdom = `Ежедневная мудрость №${day}:`
 
-            const generateResult = (output: Output) =>
-                `Последнее сообщение на ${yesterdayFormatted} было под номером ${lastMessageId}!\n\nЗа сегодня было написано ${dailyMessages} сообщений! ${output.messageCount}\n\nДо тепловой смерти чата осталось ${messagesLeft} сообщений! ${output.heatDeath}\n\n${estimated}${emojiSummary(output.emojiCount)}${animelytics} ${output.animelytic}`
+            const generateResult = (output: Output) => [
+                `Последнее сообщение на ${yesterdayFormatted} было под номером ${lastMessageId}!`, 
+                `За сегодня было написано ${dailyMessages} сообщений! ${output.messageCount}`, 
+                `До тепловой смерти чата осталось ${messagesLeft} сообщений! ${output.heatDeath}`, 
+                estimated,
+                emojiSummary(output.emojiCount), 
+                `${dailyWisdom} ${output.wisdom}`
+            ].join('\n\n')
             let result = generateResult({
-                messageCount: '', heatDeath: '', emojiCount: '', animelytic: ''
+                messageCount: '', heatDeath: '', emojiCount: '', wisdom: ''
             })
-
+            const todayAnime = 'Toaru Kagaku no Railgun';
+            
             try {
                 const response = await openai.responses.parse({
                     model: "gpt-4o-mini-2024-07-18",
                     input: [
-                        { role: "system", content: "Напиши небольшой комментарий на каждое предложение из списка. Необходимо писать в повседневном тоне, быть кратким и не упоминать число в комментарии. Тематика чата: общение 90%, аниме 19%, манга 1%." },
-                        {
-                            role: "user",
-                            content: result,
-                        },
+                    { role: "system", content: `Напиши небольшой комментарий на каждое предложение из списка. Необходимо писать в повседневном тоне, быть кратким и не упоминать число в комментарии. Тематика чата: общение 90%, аниме 19%, манга 1%. Сегодняшнее аниме: ${todayAnime}` },
+                    {
+                        role: "user",
+                        content: result,
+                    },
                     ],
                     text: {
-                        format: zodTextFormat(Output, "output"),
+                    format: zodTextFormat(Output, "output"),
                     },
                 })
-
+            
                 if (response.output_parsed) {
                     result = generateResult(response.output_parsed)
                 }
