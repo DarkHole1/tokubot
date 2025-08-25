@@ -126,7 +126,7 @@ fun.use(triggerKeeper([
     triggers.throttled(THROTTLE_TIME).probability(1 / 10).regex('драгонбол', actions.reply.video(DRAGONBALL)),
     triggers.throttled(THROTTLE_TIME).probability(1 / 4).regex('триггер', actions.reply.photo(choiced(KUGA_YUMA.concat(TRIGGER_GIRLS)))),
     triggers.throttled(THROTTLE_TIME).regex('нормис', actions.reply.photo(NORMIES)),
-    triggers.throttled(THROTTLE_TIME).regex('казахстан|караганд', actions.reply.photo(KAZAKHSTAN)),
+    triggers.throttled(THROTTLE_TIME).regex('казахстан|караганд', actions.reply.photo(choiced(KAZAKHSTAN))),
     triggers.throttled(THROTTLE_TIME).regex('([^\\d]|^)121([^\\d]|$)|лето первого года', actions.reply.gif(FIRST_YEAR_SUMMER)),
     triggers.throttled(THROTTLE_TIME).regex('виктору', actions.reply.gif(VIK_TORU)),
     triggers.throttled(THROTTLE_TIME).regex('mahoako|махоако', actions.reply.sticker(MAHO_AKO)),
@@ -147,7 +147,7 @@ quoted.command(
     ctx => {
         const text = JSON.stringify(ctx.msg.reply_to_message, null, 2)
         if (text.length > 2048) {
-            return ctx.replyWithDocument(new InputFile(Buffer.from(text), 'inspect.json'))
+            return ctx.replyWithDocument(new InputFile(Buffer.from(text) as any, 'inspect.json'))
         }
         const msg = pre(JSON.stringify(ctx.msg.reply_to_message, null, 2), 'json')
         return ctx.reply(msg.toString(), { entities: msg.entities })
