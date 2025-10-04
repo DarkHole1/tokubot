@@ -15,7 +15,7 @@ service.on('message:new_chat_members', async ctx => {
         reply_markup: {
             inline_keyboard: [[{
                 text: `Правила`, 
-                url: `https://t.me/c/2000257215/361`
+                url: `https://t.me/c/2000257215/800280`
             }, {
                 text: `К просмотру`,
                 url: `https://t.me/c/2000257215/410`
