@@ -81,7 +81,7 @@ export class Animes {
             if (res.length != 0) update(res)
         }, {
             initial: true,
-            every: 90
+            every: 300
         }, err)
     }
 }
