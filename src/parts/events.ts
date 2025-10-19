@@ -44,7 +44,7 @@ export const events = (cache: Cache, bot: Bot, config: Config) => {
     })
 
     events.callbackQuery(/decline:(.+)/, async ctx => {
-        if (ctx.from.id != TOKUID) {
+        if (ctx.from.id != DARK_HOLE) {
             await ctx.answerCallbackQuery('Ты не Току -_-')
             return
         }
