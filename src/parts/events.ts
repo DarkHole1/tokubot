@@ -2,7 +2,7 @@ import { Bot, Composer, InlineKeyboard, Keyboard } from 'grammy'
 import { Cache } from '../models/cache'
 import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { EventModel } from '../models/events'
-import { TOKUID, TOKU_CHAT } from '../constants'
+import { TOKUID, DARK_HOLE, TOKU_CHAT } from '../constants'
 import { schedule } from 'node-cron'
 import { Chat, ChatFullInfo, InputFile } from 'grammy/types'
 import debug from 'debug'
@@ -16,8 +16,8 @@ export const events = (cache: Cache, bot: Bot, config: Config) => {
     const quoted = events.use(autoQuote)
 
     events.callbackQuery(/approve:(.+)/, async ctx => {
-        if (ctx.from.id != TOKUID) {
-            await ctx.answerCallbackQuery('Ты не Току -_-')
+        if (ctx.from.id != DARK_HOLE) {
+            await ctx.answerCallbackQuery('Ты не Дарк -_-')
             return
         }
 
@@ -81,7 +81,7 @@ export const events = (cache: Cache, bot: Bot, config: Config) => {
             pic: reply.photo.at(-1)!.file_id
         })
         await event.save()
-        await ctx.reply('Вы поставите аватарку на 1 день. Дождитесь одобрения @toku_tonari', {
+        await ctx.reply('Вы поставите аватарку на 1 день. Дождитесь одобрения @darkhole1', {
             reply_markup: new InlineKeyboard([[{
                 text: 'Approve',
                 callback_data: `approve:${event.id}`
