@@ -7,6 +7,7 @@ import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER
 import { DrinkCounters } from "../data"
 import { choice, isAdmin } from '../utils'
 import { actions, choiced, triggerKeeper, triggers } from './trigger-keeper'
+import { API } from 'shikimori'
 
 export const fun = new Composer
 const quoted = fun.use(autoQuote)
@@ -175,6 +176,30 @@ quoted.command('slander', ctx => {
     }
 })
 
+quoted.command('random_shikimori', async ctx => {
+    const api = new API({
+        baseURL: 'https://shikimori.one/api',
+        axios: {
+            headers: {
+                'Accept-Encoding': '*'
+            }
+        }
+    })
+
+    while (true) {
+        try {
+            const commentId = Math.ceil(Math.random() * 12477860)
+            await api.comments.getById({
+                id: commentId
+            })
+            return await ctx.reply(`https://shikimori.one/comments/${commentId}`)
+        } catch (_) {
+            // Nothing
+        }
+    }
+
+})
+
 quoted.filter(ctx => ctx.msg?.sticker?.file_unique_id == 'AgADjRQAAqfaKUs', ctx => ctx.replyWithAnimation(PATPAT))
 
 quoted.hears(/^Руби,? (.+?) или (.+?)\??$/i, async ctx => {
@@ -195,7 +220,7 @@ quoted.hears(/^Руби,? (.+?) или (.+?)\??$/i, async ctx => {
 })
 
 quoted.hears(/^Руби,? вероятность/i, async ctx => {
-    await ctx.reply(`Я думаю, что вероятность равна ${Math.round(Math.random()*100)}%`)
+    await ctx.reply(`Я думаю, что вероятность равна ${Math.round(Math.random() * 100)}%`)
 })
 
 quoted.on(':sticker').filter(ctx => ctx.msg.chat.id == TOKU_CHAT, async ctx => {
