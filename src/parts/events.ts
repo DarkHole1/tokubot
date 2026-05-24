@@ -106,7 +106,7 @@ export const events = (cache: Cache, bot: Bot, config: Config) => {
             pic: reply.photo.at(-1)!.file_id,
         })
         await event.save()
-        await ctx.reply(`Вы поставите аватарку${reply.caption ? `и название` : ``} на ${reply.caption ? `1 день` : `7 дней`}. Дождитесь одобрения @toku_tonari`, {
+        await ctx.reply(`Вы поставите аватарку${reply.caption ? `и название` : ``} на ${reply.caption ? `1 день` : `7 дней`}. Дождитесь одобрения @darkhole1`, {
             reply_markup: new InlineKeyboard([[{
                 text: 'Approve',
                 callback_data: `approve:${event.id}`
