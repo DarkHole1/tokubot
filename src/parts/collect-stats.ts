@@ -25,7 +25,7 @@ const GetAnimesInList = `
 `
 
 const shikimori = new API({
-    baseURL: 'https://shikimori.one/api',
+    baseURL: 'https://shikimori.io/api',
     axios: {
         headers: {
             'Accept-Encoding': '*'
@@ -74,7 +74,7 @@ export function collectStats() {
                 let page = 1
                 while(true) {
                     log(`Fetching page %d of user list`, page)
-                    const data: any = await request(`https://shikimori.one/api/graphql`, GetAnimesInList, {
+                    const data: any = await request(`https://shikimori.io/api/graphql`, GetAnimesInList, {
                         targetType: 'Anime',
                         userId,
                         limit: 50,

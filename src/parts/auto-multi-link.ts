@@ -33,7 +33,7 @@ const findById = graphql(`
 `)
 
 const shikimori = new API({
-    baseURL: 'https://shikimori.one/api/',
+    baseURL: 'https://shikimori.io/api/',
     userAgent: 'Toku-bot',
     axios: {
         headers: { "Accept-Encoding": "gzip,deflate,compress" }
@@ -89,7 +89,7 @@ const handlers: { [key: string]: Handler } = {
         },
 
         name: 'Shiki',
-        link: (id) => `https://shikimori.one/animes/${id}`
+        link: (id) => `https://shikimori.io/animes/${id}`
     },
     myanimelist: {
         extractor(url) {

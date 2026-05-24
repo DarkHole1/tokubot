@@ -178,7 +178,7 @@ quoted.command('slander', ctx => {
 
 quoted.command('random_shikimori', async ctx => {
     const api = new API({
-        baseURL: 'https://shikimori.one/api',
+        baseURL: 'https://shikimori.io/api',
         axios: {
             headers: {
                 'Accept-Encoding': '*'
@@ -192,7 +192,7 @@ quoted.command('random_shikimori', async ctx => {
             await api.comments.getById({
                 id: commentId
             })
-            return await ctx.reply(`https://shikimori.one/comments/${commentId}`)
+            return await ctx.reply(`https://shikimori.io/comments/${commentId}`)
         } catch (_) {
             // Nothing
         }

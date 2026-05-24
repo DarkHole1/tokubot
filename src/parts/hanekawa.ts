@@ -62,7 +62,7 @@ hanekawa.command('yours', async ctx => {
 
     const results = [] as string[]
     if (profile.shikimoriUsername) {
-        results.push(`https://shikimori.one/${profile.shikimoriUsername}`)
+        results.push(`https://shikimori.io/${profile.shikimoriUsername}`)
     }
     if (profile.anilistUsername) {
         results.push(`https://anilist.co/user/${profile.anilistUsername}/`)

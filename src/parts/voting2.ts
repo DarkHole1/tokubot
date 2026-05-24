@@ -8,7 +8,7 @@ import debug from 'debug'
 export const voting2 = new Composer
 const log = debug("tokubot:voting")
 const shikimori = new API({
-    baseURL: 'https://shikimori.one/api',
+    baseURL: 'https://shikimori.io/api',
     axios: {
         headers: {
             'Accept-Encoding': '*'
@@ -325,5 +325,5 @@ function addFinal(final: boolean) {
 }
 
 function makeMessage(anime: { russian: string, name: string, url: string }) {
-    return `${anime.russian} / ${anime.name}\nhttps://shikimori.one${anime.url}`
+    return `${anime.russian} / ${anime.name}\nhttps://shikimori.io${anime.url}`
 }

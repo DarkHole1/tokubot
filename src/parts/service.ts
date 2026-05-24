@@ -41,7 +41,7 @@ service.on('message:is_automatic_forward').filter(ctx => ctx.senderChat?.id == T
                 url: 'https://myanimelist.net/profile/Sanso'
             }, {
                 text: 'Shiki',
-                url: 'https://shikimori.one/Toku+Tonari'
+                url: 'https://shikimori.io/Toku+Tonari'
             }], [{
                 text: 'Чат',
                 url: 'https://t.me/+OmoqFQZUVs03MjVi'

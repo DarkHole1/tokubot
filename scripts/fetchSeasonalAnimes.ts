@@ -2,7 +2,7 @@ import { outputFile } from "fs-extra"
 import { AnimeKind, AnimesGetParams, API } from "shikimori"
 
 const shikimori = new API({
-    baseURL: 'https://shikimori.one/api',
+    baseURL: 'https://shikimori.io/api',
     axios: {
         headers: {
             'Accept-Encoding': '*'

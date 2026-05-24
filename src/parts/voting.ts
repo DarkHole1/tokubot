@@ -127,5 +127,5 @@ function makeKeyboard(id: number, added?: boolean, final: boolean = false) {
 }
 
 function makeMessage(anime: { russian: string, name: string, url: string }) {
-    return `${anime.russian} / ${anime.name}\nhttps://shikimori.one${anime.url}`
+    return `${anime.russian} / ${anime.name}\nhttps://shikimori.io${anime.url}`
 }
