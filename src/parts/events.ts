@@ -124,21 +124,21 @@ export const events = (cache: Cache, bot: Bot, config: Config) => {
             if (event) {
                 log('Event found: %o', event)
                 const chatInfo = await bot.api.getChat(TOKU_CHAT) as ChatFullInfo.SupergroupChat
-                if (event.name && !cache.name.is_event) {
-                    cache.startNameEvent(chatInfo.title)
-                }
                 if (event.pic && !cache.pic.is_event) {
                     cache.startPicEvent()
                 }
+                if (event.name && !cache.name.is_event) {
+                    cache.startNameEvent(chatInfo.title)
+                }
                 await cache.save()
 
-                if (event.name && chatInfo.title != event.name) {
-                    await bot.api.setChatTitle(TOKU_CHAT, event.name)
-                }
                 if (event.pic && chatInfo.photo?.big_file_id != event.pic) {
                     await bot.api.setChatPhoto(TOKU_CHAT, await id2input(event.pic))
                     const newChatInfo = await bot.api.getChat(TOKU_CHAT) as ChatFullInfo.SupergroupChat
                     event.pic = newChatInfo.photo!.big_file_id
+                }
+                if (event.name && chatInfo.title != event.name) {
+                    await bot.api.setChatTitle(TOKU_CHAT, event.name)
                 }
 
                 event.duration -= 1

@@ -43,7 +43,14 @@ void (async () => {
 
     await mongoose.connect(config.MONGODB_URI)
 
-    const bot = new Bot<UserInfoFlavour<ParseModeFlavor<Context>>>(config.TOKEN)
+    const bot = new Bot<UserInfoFlavour<ParseModeFlavor<Context>>>(config.TOKEN, {
+        client: {
+            baseFetchConfig: {
+                compress: true,
+                agent
+            }
+        }
+    })
     bot.use(hydrateReply)
     bot.use(hydrateUserInfo())
 
