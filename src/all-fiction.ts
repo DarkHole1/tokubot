@@ -117,7 +117,7 @@ export const allFiction = (api: Api, reset: () => Promise<void>, config: Config)
                 await api.sendMessage(TOKU_CHAT, result)
                 await reset()
             } catch (e) {
-                // Nothing
+                log('Error sending message %o', e)
             }
 
             doc.lastStats.push(lastMessageId - doc.lastStartMessage)
