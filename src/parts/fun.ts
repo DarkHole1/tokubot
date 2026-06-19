@@ -1,13 +1,13 @@
 import { pre } from '@grammyjs/parse-mode'
 import { autoQuote } from '@roziscoding/grammy-autoquote'
 import { Composer, Context, InputFile } from "grammy"
-import type { Sticker } from "grammy/out/types"
 import { pluralize } from "numeralize-ru"
 import { COFFEE_STICKERS, SHOCK_PATALOCK, TEA_STICKERS, TOKU_CHAT, WORLD_TRIGGER, PON_STICKER, ALCO_STICKERS, TEA_EMOJIS, ALCO_EMOJIS, COFFEE_EMOJIS, NOT_TOMORROW, NADEKO_CALLING, TOMORROW, ADMINS, MONOKUMA, COUNTER, RUBY_MEOW, EIGHTY_SIX, DRAGONBALL, TOMORROW_HAPPY, PATPAT, KUGA_YUMA, LELOUCH_ID, UNDEAD, UNLUCK, NORMIES, KAZAKHSTAN, FIRST_YEAR_SUMMER, TORU, MAHO_AKO, CAT_TORU, SIN, VIK_TORU, BEESAKI, RUINA, YBbI, TRIGGER_GIRLS, YBbI_2, SHOCK_ID, CENTER_PHOTOS, FIFTY_TWO, THIS_IS_SECOND } from "../constants"
 import { DrinkCounters } from "../data"
 import { choice, isAdmin } from '../utils'
 import { actions, choiced, triggerKeeper, triggers } from './trigger-keeper'
 import { API } from 'shikimori'
+import { Sticker } from 'grammy/types'
 
 export const fun = new Composer
 const quoted = fun.use(autoQuote)

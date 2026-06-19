@@ -7,7 +7,8 @@ const RawConfig = z.object({
     SAGIRI_TOKEN: z.string().min(1),
     VK_SERVICE_KEY: z.string().min(1),
     MONGODB_URI: z.string().min(1),
-    PROXYAPI_TOKEN: z.string().min(1)
+    PROXYAPI_TOKEN: z.string().min(1),
+    HTTP_PROXY: z.string().optional(),
 })
 type RawConfig = z.infer<typeof RawConfig>
 
@@ -18,6 +19,7 @@ export class Config implements RawConfig {
     VK_SERVICE_KEY: string
     MONGODB_URI: string
     PROXYAPI_TOKEN: string
+    HTTP_PROXY?: string
 
     constructor() {
         const config = dotenv.config()
@@ -31,5 +33,6 @@ export class Config implements RawConfig {
         this.VK_SERVICE_KEY = parsed.VK_SERVICE_KEY
         this.MONGODB_URI = parsed.MONGODB_URI
         this.PROXYAPI_TOKEN = parsed.PROXYAPI_TOKEN
+        this.HTTP_PROXY = parsed.HTTP_PROXY
     }
 }

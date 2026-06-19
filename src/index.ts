@@ -35,6 +35,7 @@ import { collectStats } from './parts/collect-stats'
 import { stats } from './parts/stats'
 import { unfun } from './parts/unfun'
 import { bingo } from './parts/bingo'
+import { SocksProxyAgent } from 'socks-proxy-agent'
 
 void (async () => {
     const log = debug('tokubot')
@@ -43,7 +44,18 @@ void (async () => {
 
     await mongoose.connect(config.MONGODB_URI)
 
-    const bot = new Bot<UserInfoFlavour<ParseModeFlavor<Context>>>(config.TOKEN)
+    let bot = new Bot<UserInfoFlavour<ParseModeFlavor<Context>>>(config.TOKEN)
+    if (config.HTTP_PROXY) {
+        const socksAgent = new SocksProxyAgent(config.HTTP_PROXY)
+        bot = new Bot<UserInfoFlavour<ParseModeFlavor<Context>>>(config.TOKEN, {
+            client: {
+                baseFetchConfig: {
+                    agent: socksAgent,
+                    compress: true,
+                },
+            },
+        })
+    }
     bot.use(hydrateReply)
     bot.use(hydrateUserInfo())
 

@@ -168,7 +168,8 @@ export const events = (cache: Cache, bot: Bot, config: Config) => {
         const file_path = `https://api.telegram.org/file/bot${config.TOKEN}/${(file as any).file_path}`
         const res = await axios.get(file_path, { responseType: 'arraybuffer' })
         const buffer = res.data
-        return new InputFile(Buffer.from(buffer), 'image')
+        // TODO: Fix typings
+        return new InputFile(Buffer.from(buffer) as any, 'image')
     }
 
     return events

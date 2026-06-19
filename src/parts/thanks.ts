@@ -6,7 +6,7 @@ import { isAdmin } from '../utils'
 export const thanks = new Composer
 const thanksStickers = ThanksStickers.fromFileSyncSafe('data/thanks.json')
 
-thanks.hears(/(с)?пасиб(о|a)/gim).filter(async (ctx) => ctx.message?.reply_to_message?.from?.id == ctx.me.id ?? false, async (ctx) => {
+thanks.hears(/(с)?пасиб(о|a)/gim).filter(async (ctx) => ctx.message?.reply_to_message?.from?.id == ctx.me.id, async (ctx) => {
     ctx.api.sendSticker(
         ctx.chat.id,
         thanksStickers.getRandomSticker().fileId,

@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES2018",
-    "module": "commonjs", /* Specify what module code is generated. */
+    "module": "nodenext", /* Specify what module code is generated. */
     "rootDir": "./src",
+    "moduleResolution": "nodenext",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,

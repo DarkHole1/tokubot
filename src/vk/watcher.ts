@@ -1,12 +1,11 @@
-import { VK } from 'vk-io'
-import { WallWallpostFull } from 'vk-io/lib/api/schemas/objects'
+import { Objects, VK } from 'vk-io'
 
 const watchGroupsDefaultArgs = {
     every: 5 * 60,
     wait: 0.1
 }
 
-export async function watchGroups(token: string, groupIds: number[], cb: (newPosts: WallWallpostFull[]) => void, config?: Partial<typeof watchGroupsDefaultArgs>) {
+export async function watchGroups(token: string, groupIds: number[], cb: (newPosts: Objects.WallWallpostFull[]) => void, config?: Partial<typeof watchGroupsDefaultArgs>) {
     const fullConfig = Object.assign({}, watchGroupsDefaultArgs, config)
     const vk = new VK({
         token
@@ -27,7 +26,7 @@ export async function watchGroups(token: string, groupIds: number[], cb: (newPos
     // Check
     setInterval(async () => {
         try {
-            let newPosts = [] as WallWallpostFull[]
+            let newPosts = [] as Objects.WallWallpostFull[]
             for (const [i, group] of groupIds.entries()) {
                 const res = await vk.api.wall.get({
                     owner_id: group,
