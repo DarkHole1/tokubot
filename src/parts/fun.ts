@@ -143,7 +143,7 @@ quoted.hears(/(\P{L}|^)бан(\P{L}|$)/gimu).filter(
     ctx => ctx.replyWithAnimation(MONOKUMA)
 )
 
-quoted.hears(/рыжая/gimu).filter( 
+quoted.hears(/рыжая|рыжие|рыжей|рыжих|рыжим|рыжую|рыжими/gimu).filter( 
     ctx => [VACE_ID, DARK_HOLE].includes(ctx.from?.id ?? 0),
     ctx => ctx.replyWithSticker(RED_HAIR, {
     receiver_user_id: ctx.from?.id
