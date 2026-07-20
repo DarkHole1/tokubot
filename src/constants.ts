@@ -15,6 +15,7 @@ export const BOT_ID = 5627801063
 export const TOKUID = 332320628
 export const SHOCK_ID = 1276409228
 export const BEZMAR_ID = 717413371
+export const VACE_ID = 982961293
 // export const TOKUID = DARK_HOLE
 export const ADMINS = [TOKU_CHANNEL, TOKU_CHANNEL_2, DARK_HOLE, EGOID, TOKUID, FIREWORKY_ID, VIKA_ID, BEZMAR_ID]
 export const ANGELINA_LIST = [
@@ -135,6 +136,7 @@ export const CENTER_PHOTOS = [
 export const FIFTY_TWO = "CgACAgQAAx0CbgUG4QACCCBnaGUJu0dHSxLkq7APe8aJg-o7RwACpQQAAi_FrFL03tXmAy_m0zYE"
 export const THIS_IS_SECOND = "CgACAgIAAx0CdzmAvwABCPJ_Z7O8tYU6nfA363hVebEZq10p33EAAt1kAAKSLqBJRCDk8g0Cur02BA"
 export const LIGHTING = 'AgACAgIAAx0CbgUG4QACCC9nuE1dWHPYul_j9DjL0J2aRhAVgwAC9OoxG7D2sEkyA-m8MdDSGQEAAwIAA3gAAzYE'
+export const RED_HAIR = 'CAACAgIAAx0CbgUG4QACCypqXgnKiKE35sTmaWclEp-YzGFgIgACDp8AAmPD8EuqZQLtFuXKtz0E'
 export const ANIME_LIST = [
     "[Oshi no Ko]",
     "86: Eighty Six",
